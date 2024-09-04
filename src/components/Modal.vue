@@ -12,9 +12,10 @@
         Copiez puis collez le code suivant dans le terminal et appuyez sur
         <kbd>⮐</kbd> pour que la magie opère
       </p>
-      <textarea readonly
-        >{{ installBrew }}{{ store.apps.join(" ") }}
-      </textarea>
+      <textarea readonly id="install-command">{{ command }}</textarea>
+      <button type="button" class="btn3d" @click="copy">
+        Copier la commande
+      </button>
       <slot></slot>
     </div>
   </div>
@@ -33,13 +34,39 @@ export default defineComponent({
     };
 
     const installBrew =
-      "/bin/bash -c '$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)' \
-&& brew install ";
+      '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"';
+
+    const caskApps = store.apps.filter((app) => app.startsWith("--cask"));
+    const nonCaskApps = store.apps.filter((app) => !app.startsWith("--cask"));
+
+    const caskAppsCleaned = caskApps.map((app) => app.replace("--cask ", ""));
+
+    const caskCommand =
+      caskAppsCleaned.length > 0 ? `--cask ${caskAppsCleaned.join(" ")}` : "";
+    const nonCaskCommand =
+      nonCaskApps.length > 0 ? `${nonCaskApps.join(" ")}` : "";
+
+    const command = [installBrew, caskCommand, nonCaskCommand]
+      .filter((part) => part !== "")
+      .join(" && brew install ");
+
+    const copy = () => {
+      const textarea = document.getElementById(
+        "install-command"
+      ) as HTMLTextAreaElement;
+      if (textarea) {
+        textarea.select();
+        textarea.setSelectionRange(0, textarea.value.length); // For mobile devices
+        navigator.clipboard.writeText(textarea.value.trimEnd());
+      }
+    };
 
     return {
       store,
       closeModal,
       installBrew,
+      copy,
+      command,
     };
   },
 });
@@ -131,7 +158,45 @@ textarea {
   border: 1px solid #eee;
   border-radius: 4px;
   box-sizing: border-box;
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
   resize: none;
+  user-select: none;
+}
+
+.btn3d {
+  position: relative;
+  top: -6px;
+  border: 0;
+  color: #666666;
+  /* box-shadow: 0 0 0 1px #ebebeb inset, 0 0 0 2px rgba(255, 255, 255, 0.1) inset,
+    0 8px 0 0 #bebebe, 0 8px 8px 1px rgba(0, 0, 0, 0.2); ORIGINAL */
+  box-shadow: 0 0 0 1px #50b280 inset, 0 0 0 2px rgba(200, 255, 204, 0.1) inset,
+    0 8px 0 0 #50b280, 0 8px 8px 1px rgba(0, 0, 0, 0.2);
+  background-color: #f9f9f9;
+  transition: all 40ms linear;
+  margin-top: 10px;
+  color: #50b280;
+  margin-bottom: 10px;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.btn3d:active:focus,
+.btn3d:focus:hover,
+.btn3d:focus {
+  -moz-outline-style: none;
+  outline-style: none;
+  outline: medium none;
+}
+
+.btn3d:active,
+.btn3d.active {
+  top: 2px;
+  color: #50b280;
+  /* box-shadow: 0 0 0 1px #ebebeb inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+    0 1px 3px 1px rgba(0, 0, 0, 0.1); ORIGINAL */
+  box-shadow: 0 0 0 1px #50b280 inset, 0 0 0 1px rgb(80, 178, 128, 0.15) inset,
+    0 1px 3px 1px rgb(80, 178, 128, 0.1);
+  background-color: #f9f9f9;
 }
 </style>

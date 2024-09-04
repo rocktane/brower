@@ -18,8 +18,8 @@
     "logo": "https://alt-tab-macos.netlify.app/images/alt-tab-icon.png"
   },
   {
-    "name": "JordanBaird ICE",
-    "description": "JordanBaird ICE est une alternative à iCloud Drive.",
+    "name": "ICE",
+    "description": "ICE permet de masquer les icônes de la barre de menu.",
     "brew": "--cask jordanbaird-ice",
     "logo": "https://raw.githubusercontent.com/jordanbaird/ice/master/assets/logo.png"
   },
@@ -31,7 +31,7 @@
   },
   {
     "name": "Ferdium",
-    "description": "Ferdium est une application de messagerie unifiée.",
+    "description": "Ferdium réunie toutes vos apps de messagerie.",
     "brew": "--cask ferdium",
     "logo": "https://raw.githubusercontent.com/ferdium/ferdium-app/develop/build-helpers/images/icon.png"
   },
@@ -43,13 +43,13 @@
   },
   {
     "name": "Warp",
-    "description": "Warp est un terminal moderne pour macOS.",
+    "description": "Warp est un terminal moderne avec une IA intégré.",
     "brew": "--cask warp",
     "logo": "https://assets.warp.dev/warp_logo.png"
   },
   {
     "name": "iTerm2",
-    "description": "iTerm2 est un terminal pour macOS.",
+    "description": "iTerm2 est un terminal alternatif.",
     "brew": "--cask iterm2",
     "logo": "https://iterm2.com/images/logo.png"
   },
@@ -73,7 +73,7 @@
   },
   {
     "name": "Obsidian",
-    "description": "Obsidian est un éditeur de notes basé sur Markdown.",
+    "description": "Obsidian est une alternative à Notion.",
     "brew": "--cask obsidian",
     "logo": "https://obsidian.md/images/obsidian-logo.svg"
   },
@@ -133,7 +133,7 @@
   },
   {
     "name": "Bruno",
-    "description": "Bruno est une application pour calendriers.",
+    "description": "Bruno est une alternative à Postman.",
     "brew": "--cask bruno",
     "logo": "https://example.com/bruno-logo.png"
   },
@@ -157,7 +157,7 @@
   },
   {
     "name": "Alfred",
-    "description": "Alfred est une application de productivité pour macOS.",
+    "description": "Alfred est un lanceur de commandes pour macOS.",
     "brew": "--cask alfred",
     "logo": "https://www.alfredapp.com/media/logo.png"
   },
@@ -235,7 +235,7 @@
   },
   {
     "name": "Scroll Reverser",
-    "description": "Scroll Reverser est une application pour inverser le sens de défilement.",
+    "description": "Scroll Reverser est une application pour inverser le sens de défilement d'une souris mais pas du trackpad.",
     "brew": "--cask scroll-reverser",
     "logo": "https://static.macupdate.com/products/37872/m/scroll-reverser-logo.webp?v=1646848571"
   },
