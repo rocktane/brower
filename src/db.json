@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Google Chrome",
+    "brew": "--cask google-chrome",
+    "logo": "https://www.google.com/chrome/static/images/chrome-logo.svg"
+  },
+  {
+    "name": "Bitwarden",
+    "brew": "--cask bitwarden",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Bitwarden_logo.svg/2880px-Bitwarden_logo.svg.png"
+  },
+  {
+    "name": "Google Chrome",
+    "brew": "--cask google-chrome",
+    "logo": "https://www.google.com/chrome/static/images/chrome-logo.svg"
+  }
+]
