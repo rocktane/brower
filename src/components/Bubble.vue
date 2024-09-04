@@ -1,8 +1,11 @@
 <template>
   <div class="bubble-container">
-    <span class="info-icon" @click="toggleBubble">i</span>
+    <span class="info-icon" @mouseover="toggleBubble" @mouseleave="toggleBubble"
+      >ℹ️</span
+    >
+    <!-- <span class="bubble">{{ props.description }}</span> -->
     <div v-if="showBubble" class="bubble">
-      {{ props }}
+      {{ props.description }}
     </div>
   </div>
 </template>
@@ -29,25 +32,28 @@ const toggleBubble = () => {
 
 .info-icon {
   cursor: pointer;
-  font-weight: bold;
+  /* font-weight: bold;
   background-color: #e0e0e0;
   border-radius: 50%;
   padding: 0.2rem 0.4rem;
-  font-size: 1rem;
-  user-select: none;
+  font-size: 1rem; */
+  /* user-select: none; */
 }
 
 .bubble {
   position: absolute;
-  top: 100%;
+  bottom: 50px;
+  width: 180px;
+  text-wrap: balance;
+  height: fit-content;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #333;
-  color: #fff;
-  padding: 0.5rem;
+  background-color: #e3e3e3;
+  border: #cccccc solid 1px;
+  color: #5a5a5a;
+  padding: 1rem;
   border-radius: 0.25rem;
-  white-space: nowrap;
-  z-index: 10;
+  z-index: 1000;
   margin-top: 0.5rem;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
 }

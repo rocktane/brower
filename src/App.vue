@@ -17,13 +17,51 @@ watch(
 
 <template>
   <div class="navbar">
-    <h1>yTools</h1>
-    <button :disabled="store.checkedCount === 0" @click="showModal = true">
-      Installer {{ store.checkedCount }} {{ ref(singularPlural) }}
-    </button>
-    <Modal v-if="showModal" @close="showModal = false"> </Modal>
+    <div class="elements">
+      <a href="/"><h1>yTools</h1></a>
+      <button
+        class="btn3d"
+        :disabled="store.checkedCount === 0"
+        @click="showModal = true"
+      >
+        Installer {{ store.checkedCount }} {{ ref(singularPlural) }}
+      </button>
+    </div>
   </div>
+  <Modal v-if="showModal" @close="showModal = false" />
   <List />
 </template>
 
-<style scoped></style>
+<style scoped>
+.navbar {
+  position: sticky;
+  border-bottom: 1px solid black;
+  top: 0;
+  left: 0;
+  padding: 0.5em 0em;
+  width: 100%;
+  z-index: 999;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.elements {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  margin: 0 auto;
+}
+
+h1 {
+  font-family: "Bungee Shade", display;
+  margin: 0;
+  color: black;
+  text-align: center;
+  display: inline-block;
+}
+
+button:disabled {
+  opacity: 0.7;
+  pointer-events: none;
+}
+</style>

@@ -3,7 +3,6 @@
     <div class="modal-content" @click.stop>
       <button class="close-button" @click="closeModal">X</button>
       <h2>Dernière étape</h2>
-      <h3>Instructions d'intallation</h3>
       <p>
         Dans le terminal macOS → <kbd>⌘</kbd> + <kbd>Espace</kbd> puis tapez
         <code>terminal</code> et <kbd>⮐</kbd>
@@ -51,14 +50,14 @@ export default defineComponent({
       .join(" && brew install ");
 
     const copy = () => {
-      const textarea = document.getElementById(
-        "install-command"
-      ) as HTMLTextAreaElement;
-      if (textarea) {
-        textarea.select();
-        textarea.setSelectionRange(0, textarea.value.length); // For mobile devices
-        navigator.clipboard.writeText(textarea.value.trimEnd());
-      }
+      // const textarea = document.getElementById(
+      //   "install-command"
+      // ) as HTMLTextAreaElement;
+      // if (textarea) {
+      //   textarea.select();
+      //   textarea.setSelectionRange(0, textarea.value.length); // For mobile devices
+      navigator.clipboard.writeText(command.trimEnd());
+      // }
     };
 
     return {
@@ -147,7 +146,7 @@ code {
 textarea {
   width: 100%;
   height: auto;
-  margin-top: 10px;
+  margin-bottom: 1em;
   padding: 12px 21px;
   font-size: 14px;
   /* color: #666; */
