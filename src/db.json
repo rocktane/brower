@@ -1,17 +1,248 @@
 [
   {
     "name": "Google Chrome",
+    "description": "Google Chrome est le navigateur web de référence de Google",
     "brew": "--cask google-chrome",
     "logo": "https://www.google.com/chrome/static/images/chrome-logo.svg"
   },
   {
     "name": "Bitwarden",
+    "description": "Bitwarden est un gestionnaire de mots de passe gratuit et open-source.",
     "brew": "--cask bitwarden",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Bitwarden_logo.svg/2880px-Bitwarden_logo.svg.png"
   },
   {
-    "name": "Google Chrome",
-    "brew": "--cask google-chrome",
-    "logo": "https://www.google.com/chrome/static/images/chrome-logo.svg"
+    "name": "Alt-Tab",
+    "description": "Alt-Tab est un switcher d'application pour macOS.",
+    "brew": "--cask alt-tab",
+    "logo": "https://alt-tab-macos.netlify.app/images/alt-tab-icon.png"
+  },
+  {
+    "name": "JordanBaird ICE",
+    "description": "JordanBaird ICE est une alternative à iCloud Drive.",
+    "brew": "--cask jordanbaird-ice",
+    "logo": "https://raw.githubusercontent.com/jordanbaird/ice/master/assets/logo.png"
+  },
+  {
+    "name": "Stats",
+    "description": "Stats est une application pour surveiller les performances du système.",
+    "brew": "--cask stats",
+    "logo": "https://github.com/exelban/stats/raw/master/Icons/AppIcon.png"
+  },
+  {
+    "name": "Ferdium",
+    "description": "Ferdium est une application de messagerie unifiée.",
+    "brew": "--cask ferdium",
+    "logo": "https://raw.githubusercontent.com/ferdium/ferdium-app/develop/build-helpers/images/icon.png"
+  },
+  {
+    "name": "Visual Studio Code",
+    "description": "Visual Studio Code est un éditeur de code développé par Microsoft.",
+    "brew": "--cask visual-studio-code",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg"
+  },
+  {
+    "name": "Warp",
+    "description": "Warp est un terminal moderne pour macOS.",
+    "brew": "--cask warp",
+    "logo": "https://assets.warp.dev/warp_logo.png"
+  },
+  {
+    "name": "iTerm2",
+    "description": "iTerm2 est un terminal pour macOS.",
+    "brew": "--cask iterm2",
+    "logo": "https://iterm2.com/images/logo.png"
+  },
+  {
+    "name": "Firefox",
+    "description": "Firefox est un navigateur web open-source.",
+    "brew": "--cask firefox",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/67/Firefox_Logo%2C_2017.svg"
+  },
+  {
+    "name": "Rectangle",
+    "description": "Rectangle est une application de gestion des fenêtres pour macOS.",
+    "brew": "--cask rectangle",
+    "logo": "https://rectangleapp.com/assets/img/icon.png"
+  },
+  {
+    "name": "VLC",
+    "description": "VLC est un lecteur multimédia open-source.",
+    "brew": "--cask vlc",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/VLC_Icon.svg/1024px-VLC_Icon.svg.png"
+  },
+  {
+    "name": "Obsidian",
+    "description": "Obsidian est un éditeur de notes basé sur Markdown.",
+    "brew": "--cask obsidian",
+    "logo": "https://obsidian.md/images/obsidian-logo.svg"
+  },
+  {
+    "name": "Brave Browser",
+    "description": "Brave est un navigateur web axé sur la confidentialité.",
+    "brew": "--cask brave-browser",
+    "logo": "https://brave.com/static-assets/images/brave-logo-2x.png"
+  },
+  {
+    "name": "Discord",
+    "description": "Discord est une application de communication pour les communautés.",
+    "brew": "--cask discord",
+    "logo": "https://discord.com/assets/ee7c382c9326fa76acec1521ce948d30.png"
+  },
+  {
+    "name": "Slack",
+    "description": "Slack est une application de messagerie pour les équipes.",
+    "brew": "--cask slack",
+    "logo": "https://a.slack-edge.com/80588/marketing/img/icons/icon_slack_hash_colored.png"
+  },
+  {
+    "name": "Raycast",
+    "description": "Raycast est un lanceur de commandes pour macOS.",
+    "brew": "--cask raycast",
+    "logo": "https://raw.githubusercontent.com/raycast/media/main/logos/raycast.png"
+  },
+  {
+    "name": "Zed",
+    "description": "Zed est un éditeur de texte rapide et minimaliste.",
+    "brew": "--cask zed",
+    "logo": "https://zed.dev/favicon-32x32.png"
+  },
+  {
+    "name": "Notion",
+    "description": "Notion est une application de prise de notes et de gestion de projet.",
+    "brew": "--cask notion",
+    "logo": "https://www.notion.so/front-static/logo-ios.png"
+  },
+  {
+    "name": "Maccy",
+    "description": "Maccy est un gestionnaire de presse-papiers pour macOS.",
+    "brew": "--cask maccy",
+    "logo": "https://maccy.app/media/icon.png"
+  },
+  {
+    "name": "Arc",
+    "description": "Arc est un navigateur web moderne.",
+    "brew": "--cask arc",
+    "logo": "https://arc.net/logo.png"
+  },
+  {
+    "name": "WhatsApp",
+    "description": "WhatsApp est une application de messagerie.",
+    "brew": "--cask whatsapp",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+  },
+  {
+    "name": "Bruno",
+    "description": "Bruno est une application pour calendriers.",
+    "brew": "--cask bruno",
+    "logo": "https://example.com/bruno-logo.png"
+  },
+  {
+    "name": "Telegram",
+    "description": "Telegram est une application de messagerie sécurisée.",
+    "brew": "--cask telegram",
+    "logo": "https://telegram.org/img/t_logo.png"
+  },
+  {
+    "name": "IINA",
+    "description": "IINA est un lecteur multimédia moderne pour macOS.",
+    "brew": "--cask iina",
+    "logo": "https://iina.io/images/iina-icon.png"
+  },
+  {
+    "name": "Signal",
+    "description": "Signal est une application de messagerie sécurisée.",
+    "brew": "--cask signal",
+    "logo": "https://signal.org/assets/og/og-image.png"
+  },
+  {
+    "name": "Alfred",
+    "description": "Alfred est une application de productivité pour macOS.",
+    "brew": "--cask alfred",
+    "logo": "https://www.alfredapp.com/media/logo.png"
+  },
+  {
+    "name": "Google Drive",
+    "description": "Google Drive est un service de stockage en ligne.",
+    "brew": "--cask google-drive",
+    "logo": "https://ssl.gstatic.com/images/branding/product/2x/hh_drive_96dp.png"
+  },
+  {
+    "name": "Figma",
+    "description": "Figma est un outil de conception d'interface utilisateur.",
+    "brew": "--cask figma",
+    "logo": "https://static.figma.com/app/icon/1/favicon.png"
+  },
+  {
+    "name": "BalenaEtcher",
+    "description": "BalenaEtcher est un outil pour flasher des cartes SD et des clés USB.",
+    "brew": "--cask balenaetcher",
+    "logo": "https://www.balena.io/etcher/static/images/icons/icon-96x96.png"
+  },
+  {
+    "name": "Transmission",
+    "description": "Transmission est un client BitTorrent léger.",
+    "brew": "--cask transmission",
+    "logo": "https://transmissionbt.com/images/transmission-logo.svg"
+  },
+  {
+    "name": "The Unarchiver",
+    "description": "The Unarchiver est un outil de décompression de fichiers.",
+    "brew": "--cask the-unarchiver",
+    "logo": "https://theunarchiver.com/assets/appIcon-2x.png"
+  },
+  {
+    "name": "Caffeine",
+    "description": "Caffeine est une application pour empêcher le Mac de se mettre en veille.",
+    "brew": "--cask caffeine",
+    "logo": "https://example.com/caffeine-logo.png"
+  },
+  {
+    "name": "AlDente",
+    "description": "AlDente est une application pour gérer la charge de la batterie du Mac.",
+    "brew": "--cask aldente",
+    "logo": "https://example.com/aldente-logo.png"
+  },
+  {
+    "name": "LuLu",
+    "description": "LuLu est un pare-feu open source pour macOS.",
+    "brew": "--cask lulu",
+    "logo": "https://framalibre.org/images/logo/Lulu.png"
+  },
+  {
+    "name": "Shottr",
+    "description": "Shottr est une application de capture d'écran rapide.",
+    "brew": "--cask shottr",
+    "logo": "https://example.com/shottr-logo.png"
+  },
+  {
+    "name": "Itsycal",
+    "description": "Itsycal est un calendrier pour la barre de menu de macOS.",
+    "brew": "--cask itsycal",
+    "logo": "https://example.com/itsycal-logo.png"
+  },
+  {
+    "name": "CoconutBattery",
+    "description": "CoconutBattery est une application pour surveiller l'état de la batterie.",
+    "brew": "--cask coconutbattery",
+    "logo": "https://example.com/coconutbattery-logo.png"
+  },
+  {
+    "name": "Battery",
+    "description": "Battery est une application pour surveiller l'état de la batterie.",
+    "brew": "--cask battery",
+    "logo": "https://example.com/battery-logo.png"
+  },
+  {
+    "name": "Scroll Reverser",
+    "description": "Scroll Reverser est une application pour inverser le sens de défilement.",
+    "brew": "--cask scroll-reverser",
+    "logo": "https://static.macupdate.com/products/37872/m/scroll-reverser-logo.webp?v=1646848571"
+  },
+  {
+    "name": "CotEditor",
+    "description": "CotEditor est un éditeur de texte léger pour macOS.",
+    "brew": "--cask coteditor",
+    "logo": "https://coteditor.com/img/appicon/256@2x.png"
   }
 ]

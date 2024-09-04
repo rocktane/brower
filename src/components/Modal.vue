@@ -4,8 +4,17 @@
       <button class="close-button" @click="closeModal">X</button>
       <h2>Dernière étape</h2>
       <h3>Instructions d'intallation</h3>
-      <p>Sur macOS <kbd>⌘</kbd> + <kbd>Space</kbd> puis tapez :</p>
-      <pre>{{ store.apps.join(" ") }}</pre>
+      <p>
+        Dans le terminal macOS → <kbd>⌘</kbd> + <kbd>Espace</kbd> puis tapez
+        <code>terminal</code> et <kbd>⮐</kbd>
+      </p>
+      <p>
+        Copiez puis collez le code suivant dans le terminal et appuyez sur
+        <kbd>⮐</kbd> pour que la magie opère
+      </p>
+      <textarea readonly
+        >{{ installBrew }}{{ store.apps.join(" ") }}
+      </textarea>
       <slot></slot>
     </div>
   </div>
@@ -23,9 +32,14 @@ export default defineComponent({
       emit("close");
     };
 
+    const installBrew =
+      "/bin/bash -c '$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)' \
+&& brew install ";
+
     return {
       store,
       closeModal,
+      installBrew,
     };
   },
 });
@@ -41,7 +55,7 @@ export default defineComponent({
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
   z-index: 1000;
 }
 .modal-content {
@@ -49,6 +63,9 @@ export default defineComponent({
   padding: 20px;
   border-radius: 8px;
   position: relative;
+  width: 90%;
+  height: fit-content;
+  margin-top: 9rem;
 }
 .close-button {
   position: absolute;
@@ -58,5 +75,63 @@ export default defineComponent({
   border: none;
   font-size: 16px;
   cursor: pointer;
+}
+
+p:has(kbd) {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+kbd,
+code {
+  background-color: #eee;
+  border-radius: 3px;
+  border: 1px solid #b4b4b4;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2),
+    0 2px 0 0 rgba(255, 255, 255, 0.7) inset;
+  color: #333;
+  display: inline-block;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  line-height: 1.4;
+  margin: 0 0.5em;
+  padding: 0.1em 0.6em;
+  text-shadow: 0 1px 0 #fff;
+  white-space: nowrap;
+}
+
+code {
+  background-color: #f0f0f0;
+  /* border: 1px solid #eee;
+  border-radius: 4px; */
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2),
+    0 2px 0 0 rgba(255, 255, 255, 0.7) inset;
+  color: #333;
+  display: inline-block;
+  font-family: Courier, monospace;
+  font-size: 13px;
+  line-height: 20px;
+  margin: 0 0.5em;
+  padding: 0.1em 0.6em;
+  white-space: nowrap;
+}
+
+textarea {
+  width: 100%;
+  height: auto;
+  margin-top: 10px;
+  padding: 12px 21px;
+  font-size: 14px;
+  /* color: #666; */
+  background-color: #f0f0f0;
+  font-family: verdana, "microsoft yahei";
+  letter-spacing: 0.05em;
+  line-height: 20px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  box-sizing: border-box;
+  overflow-y: hidden;
+  resize: none;
 }
 </style>

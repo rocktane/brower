@@ -56,6 +56,7 @@ export default defineComponent({
 ul {
   list-style: none;
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
   li {
     display: flex;
