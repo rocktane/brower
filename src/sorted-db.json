@@ -63,7 +63,7 @@
     "star": true
   },
   {
-    "name": "Brave Browser",
+    "name": "Brave",
     "description": "Brave est un navigateur axé sur la confidentialité.",
     "brew": "--cask brave-browser",
     "logo": "https://cdn.icon-icons.com/icons2/2552/PNG/512/brave_browser_logo_icon_153013.png",
@@ -99,6 +99,16 @@
     "star": false
   },
   {
+    "name": "Zen",
+    "description": "Orion est une alternative à Safari, les extensions en plus.",
+    "tap": "zen-browser/browser https://github.com/zen-browser/desktop.git",
+    "brew": "--cask zen-browser",
+    "logo": "https://pic.clubic.com/v1/images/1944009/raw",
+    "category": "internet",
+    "url": "https://browser.kagi.com/",
+    "star": false
+  },
+  {
     "name": "Discord",
     "description": "Discord est une application de communication pour les communautés.",
     "brew": "--cask discord",
@@ -106,6 +116,15 @@
     "category": "messaging",
     "url": "https://discord.com/",
     "star": false
+  },
+  {
+    "name": "Beeper",
+    "description": "Beeper réunie toutes vos apps de messagerie.",
+    "brew": "--cask beeper",
+    "logo": "https://cdn.mcauto-images-production.sendgrid.net/52f9e94e4cd3e19f/dcdebc87-a332-42f0-b40c-0fc61152eb9a/288x288.png",
+    "category": "messaging",
+    "url": "https://www.beeper.com/",
+    "star": true
   },
   {
     "name": "Ferdium",
@@ -120,7 +139,7 @@
     "name": "Signal",
     "description": "Signal est une application de messagerie sécurisée.",
     "brew": "--cask signal",
-    "logo": "https://logodownload.org/wp-content/uploads/2023/05/signal-logo-0.png",
+    "logo": "https://seeklogo.com/images/S/signal-logo-20A1616F60-seeklogo.com.png",
     "category": "messaging",
     "url": "https://signal.org/",
     "star": false
@@ -246,7 +265,7 @@
     "name": "Raycast",
     "description": "Raycast est un lanceur de commandes pour macOS.",
     "brew": "--cask raycast",
-    "logo": "https://miro.medium.com/v2/resize:fit:1024/1*ThvbH5hKHEM4jpuAqRNfBQ.png",
+    "logo": "https://cdn.prod.website-files.com/5f15081919fdf673994ab5fd/645c5e8934a9295452699391_Raycast-Logo.svg",
     "category": "productivity",
     "url": "https://www.raycast.com/",
     "star": true
@@ -264,7 +283,7 @@
     "name": "Setapp",
     "description": "Setapp est un service payant regroupant plusieurs applications.",
     "brew": "--cask setapp",
-    "logo": "https://cdn.setapp.com/master/80765ea8397dc14ad7ecb823ebaab2855dfbf5b8/static/main/images/components/logo/setapp-icon.svg",
+    "logo": "https://i0.wp.com/www.appletips.nl/wp-content/uploads/2024/05/setapp-icon.png?h=135&w=135&ssl=1&zoom=2&quality=80",
     "category": "productivity",
     "url": "https://setapp.com/",
     "star": false

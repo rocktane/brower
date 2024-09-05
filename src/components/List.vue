@@ -45,6 +45,7 @@ import Bubble from "./Bubble.vue";
 interface Item {
   name: string;
   brew: string;
+  tap?: string;
   logo: string;
   category: string;
   url: string;
@@ -85,6 +86,7 @@ export default defineComponent({
     const updateCount = () => {
       const checked = items.value.filter((item) => item.checked);
       store.checkedCount = checked.length;
+      store.tapApps = checked.filter((app) => app.tap).map((app) => app.tap);
       store.apps = checked.map((app) => app.brew);
     };
 

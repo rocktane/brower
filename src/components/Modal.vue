@@ -11,10 +11,15 @@
         Copiez puis collez le code suivant dans le terminal et appuyez sur
         <kbd>⮐</kbd> pour que la magie opère
       </p>
-      <textarea readonly id="install-command">{{ command }}</textarea>
-      <button type="button" class="btn3d" @click="copy">
-        Copier la commande
-      </button>
+      <textarea readonly id="install-command">{{ commandWithBrew }}</textarea>
+      <div class="buttons">
+        <button type="button" class="btn3d" @click="copyWithBrew">
+          Copier la commande
+        </button>
+        <button type="button" class="btn3d btn3d-gold" @click="copyWithoutBrew">
+          J'ai déjà brew !
+        </button>
+      </div>
       <slot></slot>
     </div>
   </div>
@@ -33,32 +38,47 @@ export default defineComponent({
     };
 
     const installBrew =
-      '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"';
+      'command -v brew &> /dev/null && brew update || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" ';
 
+    const tapApps = store.tapApps;
     const caskApps = store.apps.filter((app) => app.startsWith("--cask"));
     const nonCaskApps = store.apps.filter((app) => !app.startsWith("--cask"));
 
     const caskAppsCleaned = caskApps.map((app) => app.replace("--cask ", ""));
 
+    const tapCommand =
+      tapApps.length > 0 ? `brew tap ${tapApps.join(" && brew tap")}` : "";
     const caskCommand =
       caskAppsCleaned.length > 0 ? `--cask ${caskAppsCleaned.join(" ")}` : "";
     const nonCaskCommand =
       nonCaskApps.length > 0 ? `${nonCaskApps.join(" ")}` : "";
 
-    const command = [installBrew, caskCommand, nonCaskCommand]
+    const commandWithBrew =
+      installBrew +
+      [tapCommand, caskCommand, nonCaskCommand]
+        .filter((part) => part !== "")
+        .join(" && brew install ");
+
+    const commandWithoutBrew = [tapCommand, caskCommand, nonCaskCommand]
       .filter((part) => part !== "")
       .join(" && brew install ");
 
-    const copy = () => {
-      navigator.clipboard.writeText(command.trimEnd());
+    const copyWithBrew = () => {
+      navigator.clipboard.writeText(commandWithBrew.trimEnd());
+    };
+
+    const copyWithoutBrew = () => {
+      navigator.clipboard.writeText(commandWithoutBrew.trimEnd());
     };
 
     return {
       store,
       closeModal,
       installBrew,
-      copy,
-      command,
+      copyWithBrew,
+      copyWithoutBrew,
+      commandWithBrew,
+      commandWithoutBrew,
     };
   },
 });
@@ -154,5 +174,10 @@ textarea {
   /* overflow-y: hidden; */
   resize: none;
   user-select: none;
+}
+
+.buttons {
+  display: flex;
+  gap: 1em;
 }
 </style>
