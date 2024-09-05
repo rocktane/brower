@@ -1,14 +1,17 @@
 {
   "name": "ytools",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "node server.js",
+    "postinstall": "npm run build"
   },
   "dependencies": {
+    "express": "^4.19.2",
     "vue": "^3.4.37"
   },
   "devDependencies": {
