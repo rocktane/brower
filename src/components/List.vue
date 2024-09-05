@@ -7,17 +7,29 @@
         <label
           v-for="(item, index) in groupedItems[category]"
           :key="index"
-          :class="item.checked ? 'btn3d checked' : 'btn3d'"
+          :class="{ btn3d: true, checked: item.checked }"
         >
           <input type="checkbox" v-model="item.checked" @change="updateCount" />
-          <Bubble :description="item.description" />
+          <Bubble :description="item.description" v-if="showBubble" />
           <img
             :src="item.logo"
             :alt="item.name + ' logo'"
-            :width="48"
-            :ratio="1"
+            :height="48"
+            :ratio="1 / 1"
           />
-          <span>{{ item.name }}</span>
+          <span
+            class="name"
+            @mouseover="toggleBubble"
+            @mouseleave="toggleBubble"
+            >{{ item.name }}</span
+          >
+          <img
+            v-if="item.star"
+            src="https://www.svgrepo.com/show/13695/star.svg"
+            alt="star"
+            class="star"
+            :height="16"
+          />
         </label>
       </div>
     </div>
@@ -64,6 +76,12 @@ export default defineComponent({
       updateCount();
     });
 
+    const showBubble = ref(false);
+
+    const toggleBubble = () => {
+      showBubble.value = !showBubble.value;
+    };
+
     const updateCount = () => {
       const checked = items.value.filter((item) => item.checked);
       store.checkedCount = checked.length;
@@ -82,7 +100,14 @@ export default defineComponent({
 
     watch(items, updateCount, { deep: true });
 
-    return { items, groupedItems, orderedCategories, updateCount };
+    return {
+      items,
+      groupedItems,
+      orderedCategories,
+      updateCount,
+      toggleBubble,
+      showBubble,
+    };
   },
 });
 </script>
@@ -102,7 +127,7 @@ export default defineComponent({
   & h3 {
     position: absolute;
     top: -40px;
-    background-color: white;
+    background-color: var(--background-color);
     left: 30px;
     padding: 5px;
     color: rgb(112, 112, 112);
@@ -115,7 +140,7 @@ export default defineComponent({
   flex-flow: row wrap;
   gap: 1.354492rem;
   width: 100%;
-  /* margin-bottom: 5em; */
+  margin-top: 6px;
   .card {
     display: flex;
     border: grey solid 1px;
@@ -133,7 +158,7 @@ export default defineComponent({
     padding: 1em;
     & img {
       justify-self: center;
-      max-height: 48px;
+      max-height: inherit;
       -webkit-user-drag: none;
       user-select: none;
       -moz-user-select: none;
@@ -143,18 +168,42 @@ export default defineComponent({
     & span {
       justify-self: center;
     }
+    &:hover .bubble {
+      display: block;
+    }
+    &:hover .name:after {
+      opacity: 1;
+    }
     &.checked {
       background-color: rgba(161, 229, 161, 0.5);
       top: 2px;
-      box-shadow: 0 0 0 2px #50b280 inset,
-        0 0 0 1px rgb(80, 178, 128, 0.15) inset,
-        0 1px 3px 1px rgb(80, 178, 128, 0.1);
-      /* border: rgb(107, 206, 107) 1px solid; */
+      box-shadow: 0 0 0 1px #50b280 inset,
+        0 0 0 2px rgba(200, 255, 204, 0.1) inset, 0 1px 0 0 #50b280,
+        0 1px 1px 1px rgba(0, 0, 0, 0.2);
     }
     &.checked:hover {
       background-color: rgba(161, 229, 161, 0.8);
-      /* border: rgb(85, 170, 85) 1px solid; */
     }
+    .star {
+      position: absolute;
+      right: 0;
+      top: 0;
+      padding: 8px;
+      opacity: 0.6;
+    }
+  }
+  .name {
+    position: relative;
+  }
+  .name:after {
+    opacity: 0;
+    content: "";
+    width: 100%;
+    border-bottom: 1px dashed #333;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transition: opacity 300ms ease;
   }
   input {
     display: none;

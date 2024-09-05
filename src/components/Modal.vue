@@ -4,7 +4,7 @@
       <button class="close-button" @click="closeModal">X</button>
       <h2>Dernière étape</h2>
       <p>
-        Dans le terminal macOS → <kbd>⌘</kbd> + <kbd>Espace</kbd> puis tapez
+        Sur macOS → <kbd>⌘</kbd> + <kbd>Espace</kbd> puis tapez
         <code>terminal</code> et <kbd>⮐</kbd>
       </p>
       <p>
@@ -50,14 +50,7 @@ export default defineComponent({
       .join(" && brew install ");
 
     const copy = () => {
-      // const textarea = document.getElementById(
-      //   "install-command"
-      // ) as HTMLTextAreaElement;
-      // if (textarea) {
-      //   textarea.select();
-      //   textarea.setSelectionRange(0, textarea.value.length); // For mobile devices
       navigator.clipboard.writeText(command.trimEnd());
-      // }
     };
 
     return {
@@ -81,12 +74,13 @@ export default defineComponent({
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
-  /* align-items: center; */
+  user-select: none;
   z-index: 1000;
 }
 .modal-content {
-  background: white;
-  padding: 20px;
+  background-color: #feffef;
+  border: 2px solid black;
+  padding: 1em 2em 3em 2em;
   border-radius: 8px;
   position: relative;
   width: 90%;
@@ -154,48 +148,11 @@ textarea {
   font-family: verdana, "microsoft yahei";
   letter-spacing: 0.05em;
   line-height: 20px;
-  border: 1px solid #eee;
+  border: 1px solid #c7c7c7;
   border-radius: 4px;
   box-sizing: border-box;
   /* overflow-y: hidden; */
   resize: none;
   user-select: none;
-}
-
-.btn3d {
-  position: relative;
-  top: -6px;
-  border: 0;
-  color: #666666;
-  /* box-shadow: 0 0 0 1px #ebebeb inset, 0 0 0 2px rgba(255, 255, 255, 0.1) inset,
-    0 8px 0 0 #bebebe, 0 8px 8px 1px rgba(0, 0, 0, 0.2); ORIGINAL */
-  box-shadow: 0 0 0 1px #50b280 inset, 0 0 0 2px rgba(200, 255, 204, 0.1) inset,
-    0 8px 0 0 #50b280, 0 8px 8px 1px rgba(0, 0, 0, 0.2);
-  background-color: #f9f9f9;
-  transition: all 40ms linear;
-  margin-top: 10px;
-  color: #50b280;
-  margin-bottom: 10px;
-  margin-left: 2px;
-  margin-right: 2px;
-}
-
-.btn3d:active:focus,
-.btn3d:focus:hover,
-.btn3d:focus {
-  -moz-outline-style: none;
-  outline-style: none;
-  outline: medium none;
-}
-
-.btn3d:active,
-.btn3d.active {
-  top: 2px;
-  color: #50b280;
-  /* box-shadow: 0 0 0 1px #ebebeb inset, 0 0 0 1px rgba(255, 255, 255, 0.15) inset,
-    0 1px 3px 1px rgba(0, 0, 0, 0.1); ORIGINAL */
-  box-shadow: 0 0 0 1px #50b280 inset, 0 0 0 1px rgb(80, 178, 128, 0.15) inset,
-    0 1px 3px 1px rgb(80, 178, 128, 0.1);
-  background-color: #f9f9f9;
 }
 </style>

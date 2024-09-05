@@ -41,7 +41,7 @@ watch(
   padding: 0.5em 0em;
   width: 100%;
   z-index: 999;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: inherit;
 }
 
 .elements {

@@ -1,48 +1,22 @@
 <template>
-  <div class="bubble-container">
-    <span class="info-icon" @mouseover="toggleBubble" @mouseleave="toggleBubble"
-      >ℹ️</span
-    >
-    <!-- <span class="bubble">{{ props.description }}</span> -->
-    <div v-if="showBubble" class="bubble">
-      {{ props.description }}
-    </div>
+  <div class="bubble">
+    {{ props.description }}
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps } from "vue";
+import { defineProps } from "vue";
 
 const props = defineProps<{
   description: string;
 }>();
-
-const showBubble = ref(false);
-
-const toggleBubble = () => {
-  showBubble.value = !showBubble.value;
-};
 </script>
 
 <style scoped>
-.bubble-container {
-  position: relative;
-  display: inline-block;
-}
-
-.info-icon {
-  cursor: pointer;
-  /* font-weight: bold;
-  background-color: #e0e0e0;
-  border-radius: 50%;
-  padding: 0.2rem 0.4rem;
-  font-size: 1rem; */
-  /* user-select: none; */
-}
-
 .bubble {
   position: absolute;
-  bottom: 50px;
+  display: none;
+  bottom: 120px;
   width: 180px;
   text-wrap: balance;
   height: fit-content;

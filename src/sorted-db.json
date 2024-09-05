@@ -15,7 +15,7 @@
     "logo": "https://coteditor.com/img/appicon/256@2x.png",
     "category": "developer",
     "url": "https://coteditor.com/",
-    "star": false
+    "star": true
   },
   {
     "name": "iTerm2",
@@ -24,7 +24,7 @@
     "logo": "https://cdn.icon-icons.com/icons2/2667/PNG/512/iterm_terminal_icon_161274.png",
     "category": "developer",
     "url": "https://iterm2.com/",
-    "star": false
+    "star": true
   },
   {
     "name": "Visual Studio Code",
@@ -42,7 +42,7 @@
     "logo": "https://cdn.prod.website-files.com/64b6f3636f598299028e8577/653024a36ae7b9b3ea53d451_Warp%20-%20Glyph.svg",
     "category": "developer",
     "url": "https://www.warp.dev/",
-    "star": false
+    "star": true
   },
   {
     "name": "Zed",
@@ -60,7 +60,7 @@
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Arc_%28browser%29_logo.svg/1200px-Arc_%28browser%29_logo.svg.png",
     "category": "internet",
     "url": "https://arc.net/",
-    "star": false
+    "star": true
   },
   {
     "name": "Brave Browser",
@@ -141,7 +141,7 @@
     "logo": "https://telegram.org/img/t_logo.png",
     "category": "messaging",
     "url": "https://telegram.org/",
-    "star": false
+    "star": true
   },
   {
     "name": "WhatsApp",
@@ -159,7 +159,7 @@
     "logo": "https://upload.wikimedia.org/wikipedia/commons/1/12/IINA-v1.1-icon.png",
     "category": "multimedia",
     "url": "https://iina.io/",
-    "star": false
+    "star": true
   },
   {
     "name": "Sonos",
@@ -195,7 +195,7 @@
     "logo": "https://upload.wikimedia.org/wikipedia/commons/0/03/Bitwarden_Logo.png",
     "category": "productivity",
     "url": "https://bitwarden.com/",
-    "star": false
+    "star": true
   },
   {
     "name": "Figma",
@@ -222,7 +222,7 @@
     "logo": "https://www.podfeet.com/blog/wp-content/uploads/2020/06/Itsycal-logo.png",
     "category": "productivity",
     "url": "https://www.mowglii.com/itsycal/",
-    "star": false
+    "star": true
   },
   {
     "name": "Notion",
@@ -249,7 +249,7 @@
     "logo": "https://miro.medium.com/v2/resize:fit:1024/1*ThvbH5hKHEM4jpuAqRNfBQ.png",
     "category": "productivity",
     "url": "https://www.raycast.com/",
-    "star": false
+    "star": true
   },
   {
     "name": "Rectangle",
@@ -258,7 +258,7 @@
     "logo": "https://rectangleapp.com/assets/images/mac512pts1x.png",
     "category": "productivity",
     "url": "https://rectangleapp.com/",
-    "star": false
+    "star": true
   },
   {
     "name": "Setapp",
@@ -294,7 +294,7 @@
     "logo": "https://alt-tab-macos.netlify.app/public/android-chrome-256x256.png",
     "category": "tools",
     "url": "https://alt-tab-macos.netlify.app/",
-    "star": false
+    "star": true
   },
   {
     "name": "BalenaEtcher",
@@ -339,7 +339,7 @@
     "logo": "https://github.com/jordanbaird/Ice/raw/main/Ice/Assets.xcassets/AppIcon.appiconset/icon_256x256.png",
     "category": "tools",
     "url": "https://github.com/jordanbaird/Ice",
-    "star": false
+    "star": true
   },
   {
     "name": "Latest",
@@ -366,7 +366,7 @@
     "logo": "https://framalibre.org/images/logo/Maccy.png",
     "category": "tools",
     "url": "https://maccy.app/",
-    "star": false
+    "star": true
   },
   {
     "name": "Scroll Reverser",
@@ -393,7 +393,7 @@
     "logo": "https://github.com/exelban/stats/raw/master/Stats/Supporting%20Files/Assets.xcassets/AppIcon.appiconset/icon_256x256.png",
     "category": "tools",
     "url": "https://github.com/exelban/stats",
-    "star": false
+    "star": true
   },
   {
     "name": "The Unarchiver",
@@ -411,6 +411,6 @@
     "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Transmission_icon.png",
     "category": "tools",
     "url": "https://transmissionbt.com/",
-    "star": false
+    "star": true
   }
 ]
