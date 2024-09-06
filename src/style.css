@@ -97,6 +97,11 @@ button {
   box-shadow: 0 0 0 1px #50b280 inset, 0 0 0 1px rgb(80, 178, 128, 0.15) inset,
     0 1px 3px 1px rgb(80, 178, 128, 0.1);
   background-color: rgba(161, 229, 161, 1);
+  &.btn3d-gold.active {
+    box-shadow: 0 0 0 1px #b28350 inset, 0 0 0 1px rgb(80, 178, 128, 0.15) inset,
+      0 1px 3px 1px rgb(80, 178, 128, 0.1);
+    background-color: rgb(141 105 55 / 80%);
+  }
 }
 
 #app {

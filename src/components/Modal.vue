@@ -8,6 +8,12 @@
         <code>terminal</code> et <kbd>⮐</kbd>
       </p>
       <p>
+        Sur Linux → <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd>
+        ou
+        <kbd>Super</kbd>ou<kbd>⊞ Win</kbd> puis tapez <code>terminal</code> et
+        appuyez sur <kbd>⮐</kbd>
+      </p>
+      <p>
         Copiez puis collez le code suivant dans le terminal et appuyez sur
         <kbd>⮐</kbd> pour que la magie opère
       </p>
@@ -38,7 +44,7 @@ export default defineComponent({
     };
 
     const installBrew =
-      'command -v brew &> /dev/null && brew update || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" ';
+      'command -v brew &> /dev/null && brew update || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && ';
 
     const tapApps = store.tapApps;
     const caskApps = store.apps.filter((app) => app.startsWith("--cask"));
@@ -49,19 +55,21 @@ export default defineComponent({
     const tapCommand =
       tapApps.length > 0 ? `brew tap ${tapApps.join(" && brew tap")}` : "";
     const caskCommand =
-      caskAppsCleaned.length > 0 ? `--cask ${caskAppsCleaned.join(" ")}` : "";
+      caskAppsCleaned.length > 0
+        ? `brew install --cask ${caskAppsCleaned.join(" ")}`
+        : "";
     const nonCaskCommand =
-      nonCaskApps.length > 0 ? `${nonCaskApps.join(" ")}` : "";
+      nonCaskApps.length > 0 ? `brew install ${nonCaskApps.join(" ")}` : "";
 
     const commandWithBrew =
       installBrew +
       [tapCommand, caskCommand, nonCaskCommand]
         .filter((part) => part !== "")
-        .join(" && brew install ");
+        .join(" && ");
 
     const commandWithoutBrew = [tapCommand, caskCommand, nonCaskCommand]
       .filter((part) => part !== "")
-      .join(" && brew install ");
+      .join(" && ");
 
     const copyWithBrew = () => {
       navigator.clipboard.writeText(commandWithBrew.trimEnd());
@@ -123,8 +131,7 @@ p:has(kbd) {
   justify-content: start;
 }
 
-kbd,
-code {
+kbd {
   background-color: #eee;
   border-radius: 3px;
   border: 1px solid #b4b4b4;
@@ -133,7 +140,7 @@ code {
   color: #333;
   display: inline-block;
   font-family: Helvetica, Arial, sans-serif;
-  font-size: 11px;
+  font-size: 14px;
   line-height: 1.4;
   margin: 0 0.5em;
   padding: 0.1em 0.6em;
@@ -142,9 +149,9 @@ code {
 }
 
 code {
-  background-color: #f0f0f0;
-  /* border: 1px solid #eee;
-  border-radius: 4px; */
+  /* background-color: #f0f0f0;
+  border: 1px solid #eee;
+  border-radius: 4px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2),
     0 2px 0 0 rgba(255, 255, 255, 0.7) inset;
   color: #333;
@@ -154,7 +161,13 @@ code {
   line-height: 20px;
   margin: 0 0.5em;
   padding: 0.1em 0.6em;
+  white-space: nowrap; */
+  background-color: #272822;
+  color: #f8f8f2;
+  border-radius: 0.3rem;
+  padding: 4px 5px 5px;
   white-space: nowrap;
+  margin: 0 0.5em;
 }
 
 textarea {
