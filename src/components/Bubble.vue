@@ -17,20 +17,14 @@ const props = defineProps<{
 
 const bubbleLeft = ref(0);
 const bubbleTop = ref(0);
-const isVisible = ref(false); // Contrôle la visibilité de l'infobulle
+const isVisible = ref(false);
 
 const updateBubblePosition = (event: MouseEvent) => {
-  // Afficher l'infobulle avant de calculer sa largeur
   isVisible.value = true;
 
   requestAnimationFrame(() => {
-    // const bubbleWidth = (document.querySelector(".bubble") as HTMLElement)
-    //   .offsetWidth;
     const windowWidth = window.innerWidth;
     const mouseX = event.clientX;
-
-    console.log("windowWidth", windowWidth);
-    console.log("mouseX + 300", mouseX + 200);
 
     if (mouseX + 300 > windowWidth) {
       bubbleLeft.value = mouseX - 230;

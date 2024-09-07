@@ -1,435 +1,483 @@
 [
   {
     "name": "Bruno",
+    "code": "bruno",
     "description": "Bruno est une alternative à Postman.",
     "brew": "--cask bruno",
     "logo": "https://testdev.tools/images/resources/usebruno.png",
     "category": "developer",
     "url": "https://usebruno.com/",
-    "star": false
+    "special": "new"
   },
   {
     "name": "CotEditor",
+    "code": "coteditor",
     "description": "CotEditor est un éditeur de texte léger pour macOS.",
     "brew": "--cask coteditor",
     "logo": "https://coteditor.com/img/appicon/256@2x.png",
     "category": "developer",
     "url": "https://coteditor.com/",
-    "star": true
+    "special": "star"
   },
   {
     "name": "iTerm2",
+    "code": "iterm",
     "description": "iTerm2 est un terminal alternatif.",
     "brew": "--cask iterm2",
     "logo": "https://cdn.icon-icons.com/icons2/2667/PNG/512/iterm_terminal_icon_161274.png",
     "category": "developer",
     "url": "https://iterm2.com/",
-    "star": true
+    "special": "star"
   },
   {
     "name": "Visual Studio Code",
+    "code": "visual",
     "description": "Visual Studio Code est un éditeur de code développé par Microsoft.",
     "brew": "--cask visual-studio-code",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg",
     "category": "developer",
     "url": "https://code.visualstudio.com/",
-    "star": false
+    "special": ""
   },
   {
     "name": "Warp",
+    "code": "warp",
     "description": "Warp est un terminal moderne avec une IA intégré.",
     "brew": "--cask warp",
     "logo": "https://cdn.prod.website-files.com/64b6f3636f598299028e8577/653024a36ae7b9b3ea53d451_Warp%20-%20Glyph.svg",
     "category": "developer",
     "url": "https://www.warp.dev/",
-    "star": true
+    "special": "heart"
   },
   {
     "name": "Zed",
+    "code": "zed",
     "description": "Zed est un éditeur de texte rapide et minimaliste.",
     "brew": "--cask zed",
     "logo": "https://zed.dev/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fstable-app-logo.9b5f959f.png&w=384&q=75",
     "category": "developer",
     "url": "https://zed.dev/",
-    "star": false
+    "special": "new"
   },
   {
     "name": "Arc",
+    "code": "arc",
     "description": "Arc est un navigateur web moderne.",
     "brew": "--cask arc",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Arc_%28browser%29_logo.svg/1200px-Arc_%28browser%29_logo.svg.png",
     "category": "internet",
     "url": "https://arc.net/",
-    "star": true
+    "special": "heart"
   },
   {
     "name": "Brave",
+    "code": "brave",
     "description": "Brave est un navigateur axé sur la confidentialité.",
     "brew": "--cask brave-browser",
     "logo": "https://cdn.icon-icons.com/icons2/2552/PNG/512/brave_browser_logo_icon_153013.png",
     "category": "internet",
     "url": "https://brave.com/",
-    "star": false
+    "special": ""
   },
   {
     "name": "Firefox",
+    "code": "firefox",
     "description": "Firefox est un navigateur web open-source.",
     "brew": "--cask firefox",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Firefox_logo%2C_2019.svg/1971px-Firefox_logo%2C_2019.svg.png",
     "category": "internet",
     "url": "https://www.mozilla.org/firefox/",
-    "star": false
+    "special": ""
   },
   {
     "name": "Google Chrome",
+    "code": "chrome",
     "description": "Google Chrome est le navigateur le plus utilisé",
     "brew": "--cask google-chrome",
     "logo": "https://www.google.com/chrome/static/images/chrome-logo.svg",
     "category": "internet",
     "url": "https://www.google.com/chrome/",
-    "star": false
+    "special": "star"
   },
   {
     "name": "Orion",
+    "code": "orion",
     "description": "Orion est une alternative à Safari, les extensions en plus.",
     "brew": "--cask orion",
     "logo": "https://pic.clubic.com/v1/images/1944009/raw",
     "category": "internet",
     "url": "https://browser.kagi.com/",
-    "star": false
+    "special": ""
   },
   {
     "name": "Zen",
+    "code": "zen",
     "description": "Orion est une alternative à Safari, les extensions en plus.",
     "tap": "zen-browser/browser https://github.com/zen-browser/desktop.git",
     "brew": "--cask zen-browser",
     "logo": "https://github.com/zen-browser/desktop/raw/main/docs/assets/zen-black.svg",
     "category": "internet",
     "url": "https://browser.kagi.com/",
-    "star": false
+    "special": "new"
   },
   {
     "name": "Discord",
+    "code": "discord",
     "description": "Discord est une application de communication pour les communautés.",
     "brew": "--cask discord",
     "logo": "https://upload.wikimedia.org/wikipedia/fr/thumb/4/4f/Discord_Logo_sans_texte.svg/213px-Discord_Logo_sans_texte.svg.png",
     "category": "messaging",
     "url": "https://discord.com/",
-    "star": false
+    "special": ""
   },
   {
     "name": "Beeper",
+    "code": "beeper",
     "description": "Beeper réunie toutes vos apps de messagerie.",
     "brew": "--cask beeper",
     "logo": "https://cdn.mcauto-images-production.sendgrid.net/52f9e94e4cd3e19f/dcdebc87-a332-42f0-b40c-0fc61152eb9a/288x288.png",
     "category": "messaging",
     "url": "https://www.beeper.com/",
-    "star": true
+    "special": "new"
   },
   {
     "name": "Ferdium",
+    "code": "ferdium",
     "description": "Ferdium réunie toutes vos apps de messagerie.",
     "brew": "--cask ferdium",
     "logo": "https://raw.githubusercontent.com/ferdium/ferdium-app/develop/build-helpers/images/icon.png",
     "category": "messaging",
     "url": "https://ferdium.org/",
-    "star": false
+    "special": ""
   },
   {
     "name": "Signal",
+    "code": "signal",
     "description": "Signal est une application de messagerie sécurisée.",
     "brew": "--cask signal",
     "logo": "https://seeklogo.com/images/S/signal-logo-20A1616F60-seeklogo.com.png",
     "category": "messaging",
     "url": "https://signal.org/",
-    "star": false
+    "special": ""
   },
   {
     "name": "Slack",
+    "code": "slack",
     "description": "Slack est une application de messagerie pour les équipes.",
     "brew": "--cask slack",
     "logo": "https://a.slack-edge.com/80588/marketing/img/icons/icon_slack_hash_colored.png",
     "category": "messaging",
     "url": "https://slack.com/",
-    "star": false
+    "special": ""
   },
   {
     "name": "Telegram",
+    "code": "telegram",
     "description": "Telegram est une application de messagerie sécurisée.",
     "brew": "--cask telegram",
     "logo": "https://telegram.org/img/t_logo.png",
     "category": "messaging",
     "url": "https://telegram.org/",
-    "star": true
+    "special": "heart"
   },
   {
     "name": "WhatsApp",
+    "code": "whatsapp",
     "description": "WhatsApp est une application de messagerie.",
     "brew": "--cask whatsapp",
     "logo": "https://logo-marque.com/wp-content/uploads/2020/05/WhatsApp-Logo.png",
     "category": "messaging",
     "url": "https://www.whatsapp.com/",
-    "star": false
+    "special": ""
   },
   {
     "name": "IINA",
+    "code": "iina",
     "description": "IINA est un lecteur multimédia moderne pour macOS.",
     "brew": "--cask iina",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/1/12/IINA-v1.1-icon.png",
     "category": "multimedia",
     "url": "https://iina.io/",
-    "star": true
+    "special": "heart"
   },
   {
     "name": "Sonos",
+    "code": "sonos",
     "description": "Sonos est un gestionnaire pour les enceintes Sonos.",
     "brew": "--cask sonos",
     "logo": "https://assets.sonos.com/care/kb/images/FAQ4786/SonosS2.png",
     "category": "multimedia",
     "url": "https://www.sonos.com/controller-app/",
-    "star": false
+    "special": ""
   },
   {
     "name": "VLC",
+    "code": "vlc",
     "description": "VLC est un lecteur multimédia open-source.",
     "brew": "--cask vlc",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e6/VLC_Icon.svg",
     "category": "multimedia",
     "url": "https://www.videolan.org/vlc/",
-    "star": false
+    "special": "star"
   },
   {
     "name": "Alfred",
+    "code": "alfred",
     "description": "Alfred est un lanceur de commandes pour macOS.",
     "brew": "--cask alfred",
     "logo": "https://www.alfredapp.com/media/logo.png",
     "category": "productivity",
     "url": "https://www.alfredapp.com/",
-    "star": false
+    "special": ""
   },
   {
     "name": "Bitwarden",
+    "code": "bitwarden",
     "description": "Bitwarden est un gestionnaire de mots de passe gratuit et open-source.",
     "brew": "--cask bitwarden",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/0/03/Bitwarden_Logo.png",
     "category": "productivity",
     "url": "https://bitwarden.com/",
-    "star": true
+    "special": "star"
   },
   {
     "name": "Figma",
+    "code": "figma",
     "description": "Figma est un outil de conception d'interface utilisateur.",
     "brew": "--cask figma",
     "logo": "https://cdn.sanity.io/images/599r6htc/regionalized/46a76c802176eb17b04e12108de7e7e0f3736dc6-1024x1024.png?w=804&h=804&q=75&fit=max&auto=format",
     "category": "productivity",
     "url": "https://www.figma.com/",
-    "star": false
+    "special": "star"
   },
   {
     "name": "Google Drive",
+    "code": "drive",
     "description": "Google Drive est un service de stockage en ligne.",
     "brew": "--cask google-drive",
     "logo": "https://ssl.gstatic.com/images/branding/product/2x/hh_drive_96dp.png",
     "category": "productivity",
     "url": "https://www.google.com/drive/",
-    "star": false
+    "special": ""
   },
   {
     "name": "Itsycal",
+    "code": "itsycal",
     "description": "Itsycal est un calendrier pour la barre de menu de macOS.",
     "brew": "--cask itsycal",
     "logo": "https://www.podfeet.com/blog/wp-content/uploads/2020/06/Itsycal-logo.png",
     "category": "productivity",
     "url": "https://www.mowglii.com/itsycal/",
-    "star": true
+    "special": "heart"
   },
   {
     "name": "Notion",
+    "code": "notion",
     "description": "Notion est une application de prise de notes et de gestion de projet.",
     "brew": "--cask notion",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png",
     "category": "productivity",
     "url": "https://www.notion.so/",
-    "star": false
+    "special": "star"
   },
   {
     "name": "Obsidian",
+    "code": "obsidian",
     "description": "Obsidian est une alternative à Notion.",
     "brew": "--cask obsidian",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/2023_Obsidian_logo.svg/1200px-2023_Obsidian_logo.svg.png",
     "category": "productivity",
     "url": "https://obsidian.md/",
-    "star": false
+    "special": ""
   },
   {
     "name": "Raycast",
+    "code": "raycast",
     "description": "Raycast est un lanceur de commandes pour macOS.",
     "brew": "--cask raycast",
     "logo": "https://cdn.prod.website-files.com/5f15081919fdf673994ab5fd/645c5e8934a9295452699391_Raycast-Logo.svg",
     "category": "productivity",
     "url": "https://www.raycast.com/",
-    "star": true
+    "special": "star"
   },
   {
     "name": "Rectangle",
+    "code": "rectangle",
     "description": "Rectangle est une application de gestion des fenêtres pour macOS.",
     "brew": "--cask rectangle",
     "logo": "https://rectangleapp.com/assets/images/mac512pts1x.png",
     "category": "productivity",
     "url": "https://rectangleapp.com/",
-    "star": true
+    "special": "heart"
   },
   {
     "name": "Setapp",
+    "code": "setapp",
     "description": "Setapp est un service payant regroupant plusieurs applications.",
     "brew": "--cask setapp",
     "logo": "https://i0.wp.com/www.appletips.nl/wp-content/uploads/2024/05/setapp-icon.png?h=135&w=135&ssl=1&zoom=2&quality=80",
     "category": "productivity",
     "url": "https://setapp.com/",
-    "star": false
+    "special": ""
   },
   {
     "name": "Ente",
+    "code": "ente",
     "description": "Ente est un gestionnaire de mot de passe à deux facteurs.",
     "brew": "--cask ente-auth",
     "logo": "https://authenticator.2stable.com/assets/img/2fa-services/Icons/ente.io.svg",
     "category": "security",
     "url": "https://ente.io/",
-    "star": false
+    "special": ""
   },
   {
     "name": "AlDente",
+    "code": "aldente",
     "description": "AlDente est une application pour gérer la charge de la batterie du Mac.",
     "brew": "--cask aldente",
     "logo": "https://apphousekitchen.com/wp-content/uploads/2021/03/aldenteproicon.png",
     "category": "tools",
     "url": "https://apphousekitchen.com/aldente/",
-    "star": false
+    "special": ""
   },
   {
     "name": "Alt-Tab",
+    "code": "alttab",
     "description": "Alt-Tab est un switcher d'application pour macOS.",
     "brew": "--cask alt-tab",
     "logo": "https://alt-tab-macos.netlify.app/public/android-chrome-256x256.png",
     "category": "tools",
     "url": "https://alt-tab-macos.netlify.app/",
-    "star": true
+    "special": "heart"
   },
   {
     "name": "BalenaEtcher",
+    "code": "balena",
     "description": "BalenaEtcher est un outil pour flasher des cartes SD et des clés USB.",
     "brew": "--cask balenaetcher",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/2/2d/Etcher-icon.png",
     "category": "tools",
     "url": "https://www.balena.io/etcher/",
-    "star": false
+    "special": ""
   },
   {
     "name": "Battery",
+    "code": "battery",
     "description": "Battery est une application pour surveiller l'état de la batterie.",
     "brew": "--cask battery",
     "logo": "https://github.com/actuallymentor/battery/blob/main/app/build/icon.png?raw=true",
     "category": "tools",
     "url": "https://github.com/actuallymentor/battery",
-    "star": false
+    "special": ""
   },
   {
     "name": "Caffeine",
+    "code": "caffeine",
     "description": "Caffeine est une application pour empêcher le Mac de se mettre en veille.",
     "brew": "--cask caffeine",
     "logo": "https://www.caffeine-app.net/images/sonoma/caffeine-2x.png",
     "category": "tools",
     "url": "https://www.caffeine-app.net/",
-    "star": false
+    "special": ""
   },
   {
     "name": "CoconutBattery",
+    "code": "coconut",
     "description": "CoconutBattery est une application pour surveiller l'état de la batterie.",
     "brew": "--cask coconutbattery",
     "logo": "https://cdn.icon-icons.com/icons2/3053/PNG/512/coconutbattery_macos_bigsur_icon_189515.png",
     "category": "tools",
     "url": "https://www.coconut-flavour.com/coconutbattery/",
-    "star": false
+    "special": ""
   },
   {
     "name": "ICE",
+    "code": "ice",
     "description": "ICE permet de masquer les icônes de la barre de menu.",
     "brew": "--cask jordanbaird-ice",
     "logo": "https://github.com/jordanbaird/Ice/raw/main/Ice/Assets.xcassets/AppIcon.appiconset/icon_256x256.png",
     "category": "tools",
     "url": "https://github.com/jordanbaird/Ice",
-    "star": true
+    "special": "heart"
   },
   {
     "name": "Latest",
+    "code": "latest",
     "description": "Latest permet de visualiser les dernières mises à jour d'une application.",
     "brew": "--cask latest",
     "logo": "https://github.com/mangerlahn/Latest/blob/main/Latest/Resources/Assets.xcassets/AppIcon.appiconset/256.png?raw=true",
     "category": "tools",
     "url": "https://max.codes/latest/",
-    "star": false
+    "special": ""
   },
   {
     "name": "LuLu",
+    "code": "lulu",
     "description": "LuLu est un pare-feu open source pour macOS.",
     "brew": "--cask lulu",
     "logo": "https://objective-see.org/images/LL/icon.png",
     "category": "tools",
     "url": "https://objective-see.org/products/lulu.html",
-    "star": false
+    "special": ""
   },
   {
     "name": "Maccy",
+    "code": "maccy",
     "description": "Maccy est un gestionnaire de presse-papiers pour macOS.",
     "brew": "--cask maccy",
     "logo": "https://framalibre.org/images/logo/Maccy.png",
     "category": "tools",
     "url": "https://maccy.app/",
-    "star": true
+    "special": "star"
   },
   {
     "name": "Scroll Reverser",
+    "code": "scrollreverser",
     "description": "Scroll Reverser est une application pour inverser le sens de défilement d'une souris mais pas du trackpad.",
     "brew": "--cask scroll-reverser",
     "logo": "https://cdn.icon-icons.com/icons2/3053/PNG/512/scroll_reverser_macos_bigsur_icon_189762.png",
     "category": "tools",
     "url": "https://pilotmoon.com/scrollreverser/",
-    "star": false
+    "special": ""
   },
   {
     "name": "Shottr",
+    "code": "shottr",
     "description": "Shottr est une application de capture d'écran rapide.",
     "brew": "--cask shottr",
     "logo": "https://www.25mac.com/wp-content/uploads/2023/07/18/6116b58e5ebb5b6d01d4a796eb3ed9bc-1689702758.png",
     "category": "tools",
     "url": "https://shottr.cc/",
-    "star": false
+    "special": ""
   },
   {
     "name": "Stats",
+    "code": "stats",
     "description": "Stats est une application pour surveiller les performances du système.",
     "brew": "--cask stats",
     "logo": "https://github.com/exelban/stats/raw/master/Stats/Supporting%20Files/Assets.xcassets/AppIcon.appiconset/icon_256x256.png",
     "category": "tools",
     "url": "https://github.com/exelban/stats",
-    "star": true
+    "special": "heart"
   },
   {
     "name": "The Unarchiver",
+    "code": "unarchiver",
     "description": "The Unarchiver est un outil de décompression de fichiers.",
     "brew": "--cask the-unarchiver",
     "logo": "https://cdn.icon-icons.com/icons2/3053/PNG/512/the_unarchiver_macos_bigsur_icon_189648.png",
     "category": "tools",
     "url": "https://theunarchiver.com/",
-    "star": false
+    "special": "star"
   },
   {
     "name": "Transmission",
+    "code": "transmission",
     "description": "Transmission est un client BitTorrent léger.",
     "brew": "--cask transmission",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Transmission_icon.png",
     "category": "tools",
     "url": "https://transmissionbt.com/",
-    "star": true
+    "special": "star"
   }
 ]

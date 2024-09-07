@@ -1,8 +1,24 @@
 <template>
   <div class="content">
-    <h2>Installer toutes ces applications en une fois</h2>
+    <div class="instructions">
+      <h2>{{ t("message.subtitle") }}</h2>
+      <div class="legend">
+        <div class="legend-item">
+          <img src="../assets/icons/star.svg" alt="star" :height="16" />
+          <span>{{ t("message.legend.star") }}</span>
+        </div>
+        <div class="legend-item">
+          <img src="../assets/icons/new.svg" alt="new" :height="16" />
+          <span>{{ t("message.legend.new") }}</span>
+        </div>
+        <div class="legend-item">
+          <img src="../assets/icons/heart.svg" alt="heart" :height="16" />
+          <span>{{ t("message.legend.heart") }}</span>
+        </div>
+      </div>
+    </div>
     <div v-for="category in orderedCategories" :key="category" class="category">
-      <h3>{{ category }}</h3>
+      <h3>{{ $t(`message.categories.${category}`).toLowerCase() }}</h3>
       <div class="cards">
         <label
           v-for="(item, index) in groupedItems[category]"
@@ -11,7 +27,10 @@
           :class="{ checked: item.checked }"
         >
           <input type="checkbox" v-model="item.checked" @change="updateCount" />
-          <Bubble :description="item.description" v-if="showBubble" />
+          <Bubble
+            :description="t(`message.descriptions.${item.code}`)"
+            v-if="showBubble"
+          />
           <img
             :src="item.logo"
             :alt="item.name + ' logo'"
@@ -25,10 +44,10 @@
             >{{ item.name }}</span
           >
           <img
-            v-if="item.star"
-            src="https://www.svgrepo.com/show/13695/star.svg"
-            alt="star"
-            class="star"
+            v-if="item.special !== ''"
+            :src="`src/assets/icons/${item.special}.svg`"
+            :alt="item.special"
+            :class="item.special"
             :height="16"
           />
         </label>
@@ -42,9 +61,11 @@ import { defineComponent, onMounted, ref, watch, computed } from "vue";
 import { store } from "../store";
 import dbData from "../sorted-db.json";
 import Bubble from "./Bubble.vue";
+import { useI18n } from "vue-i18n";
 
 interface Item {
   name: string;
+  code: string;
   brew: string;
   tap?: string;
   logo: string;
@@ -52,7 +73,7 @@ interface Item {
   url: string;
   description: string;
   checked: boolean;
-  star: boolean;
+  special: string;
 }
 
 const orderedCategories = [
@@ -69,6 +90,7 @@ export default defineComponent({
   name: "CheckList",
   components: {
     Bubble,
+    useI18n,
   },
   setup() {
     const items = ref<Item[]>([]);
@@ -103,6 +125,8 @@ export default defineComponent({
 
     watch(items, updateCount, { deep: true });
 
+    const { t } = useI18n();
+
     return {
       items,
       groupedItems,
@@ -110,6 +134,7 @@ export default defineComponent({
       updateCount,
       toggleBubble,
       showBubble,
+      t,
     };
   },
 });
@@ -193,7 +218,9 @@ export default defineComponent({
         0 0 0 1px rgb(80, 178, 128, 0.15) inset,
         0 1px 3px 1px rgb(80, 178, 128, 0.1);
     }
-    .star {
+    .star,
+    .new,
+    .heart {
       position: absolute;
       right: 0;
       top: 0;
@@ -216,6 +243,35 @@ export default defineComponent({
   }
   input {
     display: none;
+  }
+}
+
+.instructions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1em;
+  margin-bottom: 2em;
+  & h2 {
+    margin-right: 4em;
+    margin-bottom: 0.2em;
+  }
+  .legend {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    border: 1px dashed rgb(200, 200, 200);
+    border-radius: 0.5em;
+    padding: 0.5em;
+    & img {
+      margin-right: 0.5em;
+    }
+    & .legend-item {
+      display: flex;
+      align-items: center;
+      color: rgb(101, 101, 101);
+    }
   }
 }
 </style>

@@ -2,28 +2,17 @@
   <div class="modal-overlay" @click="closeModal">
     <div class="modal-content" @click.stop>
       <button class="close-button" @click="closeModal">X</button>
-      <h2>Dernière étape</h2>
-      <p>
-        Sur macOS → <kbd>⌘</kbd> + <kbd>Espace</kbd> puis tapez
-        <code>terminal</code> et <kbd>⮐</kbd>
-      </p>
-      <p>
-        Sur Linux → <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd>
-        ou
-        <kbd>Super</kbd>ou<kbd>⊞ Win</kbd> puis tapez <code>terminal</code> et
-        appuyez sur <kbd>⮐</kbd>
-      </p>
-      <p>
-        Copiez puis collez le code suivant dans le terminal et appuyez sur
-        <kbd>⮐</kbd> pour que la magie opère
-      </p>
+      <h2 v-html="t('message.last_step')"></h2>
+      <p v-html="t('message.install_macos')"></p>
+      <p v-html="t('message.install_linux')"></p>
+      <p v-html="t('message.instructions')"></p>
       <textarea readonly id="install-command">{{ commandWithBrew }}</textarea>
       <div class="buttons">
         <button type="button" class="btn btn-green" @click="copyWithBrew">
-          Copier la commande
+          {{ t("message.copy") }}
         </button>
         <button type="button" class="btn btn-gold" @click="copyWithoutBrew">
-          J'ai déjà brew !
+          {{ t("message.already_brew") }}
         </button>
       </div>
       <slot></slot>
@@ -34,6 +23,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { store } from "../store";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "Modal",
@@ -42,6 +32,8 @@ export default defineComponent({
     const closeModal = () => {
       emit("close");
     };
+
+    const { t } = useI18n();
 
     const installBrew =
       'command -v brew &> /dev/null && brew update || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && ';
@@ -87,6 +79,7 @@ export default defineComponent({
       copyWithoutBrew,
       commandWithBrew,
       commandWithoutBrew,
+      t,
     };
   },
 });
@@ -106,7 +99,7 @@ export default defineComponent({
   z-index: 1000;
 }
 .modal-content {
-  background-color: #feffef;
+  background-color: var(--background-color);
   border: 2px solid black;
   padding: 1em 2em 3em 2em;
   border-radius: 8px;
@@ -125,7 +118,7 @@ export default defineComponent({
   cursor: pointer;
 }
 
-p:has(kbd) {
+/* p:has(kbd) {
   display: flex;
   align-items: center;
   justify-content: start;
@@ -149,26 +142,13 @@ kbd {
 }
 
 code {
-  /* background-color: #f0f0f0;
-  border: 1px solid #eee;
-  border-radius: 4px;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2),
-    0 2px 0 0 rgba(255, 255, 255, 0.7) inset;
-  color: #333;
-  display: inline-block;
-  font-family: Courier, monospace;
-  font-size: 13px;
-  line-height: 20px;
-  margin: 0 0.5em;
-  padding: 0.1em 0.6em;
-  white-space: nowrap; */
   background-color: #272822;
   color: #f8f8f2;
   border-radius: 0.3rem;
   padding: 4px 5px 5px;
   white-space: nowrap;
   margin: 0 0.5em;
-}
+} */
 
 textarea {
   width: 100%;
@@ -176,7 +156,6 @@ textarea {
   margin-bottom: 1em;
   padding: 12px 21px;
   font-size: 14px;
-  /* color: #666; */
   background-color: #f0f0f0;
   font-family: verdana, "microsoft yahei";
   letter-spacing: 0.05em;
@@ -184,7 +163,6 @@ textarea {
   border: 1px solid #c7c7c7;
   border-radius: 4px;
   box-sizing: border-box;
-  /* overflow-y: hidden; */
   resize: none;
   user-select: none;
 }
