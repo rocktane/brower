@@ -7,7 +7,8 @@
         <label
           v-for="(item, index) in groupedItems[category]"
           :key="index"
-          :class="{ btn3d: true, checked: item.checked }"
+          class="btn btn-green"
+          :class="{ checked: item.checked }"
         >
           <input type="checkbox" v-model="item.checked" @change="updateCount" />
           <Bubble :description="item.description" v-if="showBubble" />
@@ -140,7 +141,7 @@ export default defineComponent({
   display: flex;
   box-sizing: border-box;
   flex-flow: row wrap;
-  gap: 1.354492rem;
+  gap: 1.07421rem;
   width: 100%;
   margin-top: 6px;
   .card {
@@ -185,6 +186,12 @@ export default defineComponent({
     }
     &.checked:hover {
       background-color: rgba(161, 229, 161, 0.8);
+    }
+    &.checked:active {
+      background-color: rgba(161, 229, 161, 1);
+      box-shadow: 0 0 0 1px #50b280 inset,
+        0 0 0 1px rgb(80, 178, 128, 0.15) inset,
+        0 1px 3px 1px rgb(80, 178, 128, 0.1);
     }
     .star {
       position: absolute;

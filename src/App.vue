@@ -5,6 +5,7 @@ import List from "./components/List.vue";
 import Modal from "./components/Modal.vue";
 
 const showModal = ref(false);
+
 const singularPlural = ref("application");
 
 watch(
@@ -18,9 +19,13 @@ watch(
 <template>
   <div class="navbar">
     <div class="elements">
-      <a href="/"><h1>yTools</h1></a>
+      <a href="/" class="title">
+        <div id="logo" class="btn btn-green">:~</div>
+        <h1>yTools</h1>
+      </a>
       <button
-        class="btn3d"
+        class="btn btn-green"
+        id="install-button"
         :disabled="store.checkedCount === 0"
         @click="showModal = true"
       >
@@ -41,7 +46,8 @@ watch(
   padding: 0.5em 0em;
   width: 100%;
   z-index: 999;
-  background-color: inherit;
+  backdrop-filter: blur(10px);
+  background-color: rgba(254, 255, 245, 0.1);
 }
 
 .elements {
@@ -50,6 +56,33 @@ watch(
   align-items: center;
   width: 90%;
   margin: 0 auto;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+#logo {
+  font-size: x-large;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-family: serif;
+  box-sizing: content-box;
+  margin-top: 9px;
+  color: black;
+  box-shadow: 0 0 0 1px #000000 inset, 0 0 0 2px rgba(200, 255, 204, 0.1) inset,
+    0 8px 0 0 #000000, 0 8px 8px 1px rgba(0, 0, 0, 0.2);
+  background-color: rgba(63, 63, 63, 0.1);
+}
+
+#install-button {
+  background-color: #eaf3e6;
 }
 
 h1 {
@@ -63,5 +96,6 @@ h1 {
 button:disabled {
   opacity: 0.7;
   pointer-events: none;
+  cursor: not-allowed;
 }
 </style>

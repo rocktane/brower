@@ -1,34 +1,70 @@
 <template>
-  <div class="bubble">
+  <div
+    class="bubble"
+    v-show="isVisible"
+    :style="{ left: bubbleLeft + 'px', top: bubbleTop + 'px' }"
+  >
     {{ props.description }}
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 
 const props = defineProps<{
   description: string;
 }>();
+
+const bubbleLeft = ref(0);
+const bubbleTop = ref(0);
+const isVisible = ref(false); // Contrôle la visibilité de l'infobulle
+
+const updateBubblePosition = (event: MouseEvent) => {
+  // Afficher l'infobulle avant de calculer sa largeur
+  isVisible.value = true;
+
+  requestAnimationFrame(() => {
+    // const bubbleWidth = (document.querySelector(".bubble") as HTMLElement)
+    //   .offsetWidth;
+    const windowWidth = window.innerWidth;
+    const mouseX = event.clientX;
+
+    console.log("windowWidth", windowWidth);
+    console.log("mouseX + 300", mouseX + 200);
+
+    if (mouseX + 300 > windowWidth) {
+      bubbleLeft.value = mouseX - 230;
+    } else {
+      bubbleLeft.value = mouseX;
+    }
+
+    bubbleTop.value = event.clientY + 20;
+  });
+};
+
+onMounted(() => {
+  window.addEventListener("mousemove", updateBubblePosition);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("mousemove", updateBubblePosition);
+});
 </script>
 
 <style scoped>
 .bubble {
-  position: absolute;
+  position: fixed;
   display: none;
-  bottom: 120px;
   width: 180px;
   text-wrap: balance;
   height: fit-content;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #e3e3e3;
-  border: #cccccc solid 1px;
-  color: #5a5a5a;
+  background-color: #266946;
+  border: #266946 solid 1px;
+  color: white;
   padding: 1rem;
   border-radius: 0.25rem;
   z-index: 1000;
-  margin-top: 0.5rem;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  pointer-events: none;
 }
 </style>

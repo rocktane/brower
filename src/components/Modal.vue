@@ -19,10 +19,10 @@
       </p>
       <textarea readonly id="install-command">{{ commandWithBrew }}</textarea>
       <div class="buttons">
-        <button type="button" class="btn3d" @click="copyWithBrew">
+        <button type="button" class="btn btn-green" @click="copyWithBrew">
           Copier la commande
         </button>
-        <button type="button" class="btn3d btn3d-gold" @click="copyWithoutBrew">
+        <button type="button" class="btn btn-gold" @click="copyWithoutBrew">
           J'ai déjà brew !
         </button>
       </div>

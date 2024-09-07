@@ -3,6 +3,8 @@
   line-height: 1.5;
   font-weight: 400;
   --background-color: #fefff5;
+  width: 100dvw;
+  background-color: var(--background-color);
 }
 
 a {
@@ -45,27 +47,19 @@ button {
   /* transition: border-color 0.25s; */
 }
 
-.btn3d {
+.btn {
   position: relative;
   top: -6px;
   border: 0;
   border-radius: 8px;
-  /* box-shadow: 0 0 0 1px #ebebeb inset, 0 0 0 2px rgba(255, 255, 255, 0.1) inset,
-    0 8px 0 0 #bebebe, 0 8px 8px 1px rgba(0, 0, 0, 0.2); ORIGINAL */
+  cursor: pointer;
+}
+
+.btn-green {
+  color: #266946;
   box-shadow: 0 0 0 1px #50b280 inset, 0 0 0 2px rgba(200, 255, 204, 0.1) inset,
     0 8px 0 0 #50b280, 0 8px 8px 1px rgba(0, 0, 0, 0.2);
   background-color: rgba(55, 141, 97, 0.1);
-  transition: all 40ms linear;
-  /* margin-top: 10px; */
-  color: #266946;
-  cursor: pointer;
-  &.btn3d-gold {
-    color: darkgoldenrod;
-    box-shadow: 0 0 0 1px #b28350 inset,
-      0 0 0 2px rgba(200, 255, 204, 0.1) inset, 0 8px 0 0 #b28350,
-      0 8px 8px 1px rgba(0, 0, 0, 0.2);
-    background-color: rgb(141 105 55 / 10%);
-  }
   &:hover {
     top: -4px;
     box-shadow: 0 0 0 1px #50b280 inset,
@@ -73,38 +67,38 @@ button {
       0 6px 6px 1px rgba(0, 0, 0, 0.2);
     background-color: rgba(161, 229, 161, 0.8);
   }
-  &.bt3d:hover {
+  &:active {
+    top: 2px;
+    transform: translateY(2px);
+    box-shadow: 0 0 0 1px #50b280 inset, 0 0 0 1px rgb(80, 178, 128, 0.15) inset,
+      0 1px 3px 1px rgb(80, 178, 128, 0.1);
+    background-color: rgba(161, 229, 161, 1);
+  }
+}
+
+.btn-gold {
+  color: darkgoldenrod;
+  box-shadow: 0 0 0 1px #b28350 inset, 0 0 0 2px rgba(200, 255, 204, 0.1) inset,
+    0 8px 0 0 #b28350, 0 8px 8px 1px rgba(0, 0, 0, 0.2);
+  background-color: rgb(141 105 55 / 10%);
+  &:hover {
     top: -4px;
     box-shadow: 0 0 0 1px #b28350 inset,
       0 0 0 2px rgba(200, 255, 204, 0.1) inset, 0 6px 0 0 #b28350,
       0 6px 6px 1px rgba(0, 0, 0, 0.2);
-    background-color: rgb(141 105 55 / 80%);
+    background-color: rgba(229, 200, 160, 0.6);
+  }
+  &:active {
+    box-shadow: 0 0 0 1px #b28350 inset, 0 0 0 1px rgb(80, 178, 128, 0.15) inset,
+      0 1px 3px 1px rgb(80, 178, 128, 0.1);
+    background-color: rgb(229, 200, 160, 1);
   }
 }
 
-.btn3d:active:focus,
-.btn3d:focus:hover,
-.btn3d:focus {
+.btn .btn:active:focus,
+.btn:focus:hover,
+.btn:focus {
   -moz-outline-style: none;
   outline-style: none;
   outline: medium none;
-}
-
-.btn3d:active,
-.btn3d.active {
-  top: 2px;
-  transform: translateY(2px);
-  box-shadow: 0 0 0 1px #50b280 inset, 0 0 0 1px rgb(80, 178, 128, 0.15) inset,
-    0 1px 3px 1px rgb(80, 178, 128, 0.1);
-  background-color: rgba(161, 229, 161, 1);
-  &.btn3d-gold.active {
-    box-shadow: 0 0 0 1px #b28350 inset, 0 0 0 1px rgb(80, 178, 128, 0.15) inset,
-      0 1px 3px 1px rgb(80, 178, 128, 0.1);
-    background-color: rgb(141 105 55 / 80%);
-  }
-}
-
-#app {
-  width: 100dvw;
-  background-color: var(--background-color);
 }
