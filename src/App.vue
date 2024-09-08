@@ -123,18 +123,22 @@ const handleMouseLeave = () => {
   margin-top: 9px;
   color: black;
   box-shadow: 0 0 0 1px #000000 inset, 0 0 0 2px rgba(200, 255, 204, 0.1) inset,
-    0 8px 0 0 #000000, 0 8px 8px 1px rgba(0, 0, 0, 0.2);
+    -8px 8px 0 0 #000000, -1px 1px 0 0px #000000, -2px 2px 0 0px #000000,
+    -3px 3px 0 0px #000000, -4px 4px 0 0px #000000, -5px 5px 0 0px #000000,
+    -6px 6px 0 0px #000000, -7px 7px 0 0px #000000;
   background-color: rgba(63, 63, 63, 0.1);
   &:hover {
     top: -4px;
+    transform: translateX(-2px);
     box-shadow: 0 0 0 1px #000000 inset,
-      0 0 0 2px rgba(200, 255, 204, 0.1) inset, 0 6px 0 0 #000000,
-      0 6px 6px 1px rgba(0, 0, 0, 0.2);
+      0 0 0 2px rgba(200, 255, 204, 0.1) inset, -1px 1px 0 0px #000000,
+      -2px 2px 0 0px #000000, -3px 3px 0 0px #000000, -4px 4px 0 0px #000000,
+      -5px 5px 0 0px #000000, -6px 6px 0 0px #000000;
     background-color: rgba(0, 0, 0, 0.2);
   }
   &:active {
     top: 0px;
-    transform: translateY(2px);
+    transform: translate(-8px, 2px);
     box-shadow: 0 0 0 1px #000000 inset, 0 0 0 1px rgb(80, 178, 128, 0.15) inset,
       0 1px 3px 1px rgb(80, 178, 128, 0.1);
     background-color: rgba(0, 0, 0, 0.4);
@@ -171,11 +175,17 @@ button:disabled {
 .buttons {
   display: flex;
   gap: 1em;
-  & #en.active {
-    background-color: rgb(229 200 160 / 50%);
+  & #en {
+    background-color: #f2f0e2;
+    &.active {
+      background-color: rgb(229 200 160 / 50%);
+    }
   }
-  & #fr.active {
-    background-color: rgb(161 229 161 / 60%);
+  & #fr {
+    background-color: #eaf3e6;
+    &.active {
+      background-color: rgb(161 229 161 / 60%);
+    }
   }
 }
 </style>

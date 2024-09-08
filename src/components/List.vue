@@ -251,10 +251,11 @@ export default defineComponent({
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  margin-top: 1em;
-  margin-bottom: 2em;
+  margin-top: 2em;
+  margin-bottom: 3em;
   & h2 {
     margin-right: 4em;
+    margin-top: 0.2em;
     margin-bottom: 0.2em;
   }
   .legend {
