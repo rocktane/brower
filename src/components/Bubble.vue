@@ -27,9 +27,9 @@ const updateBubblePosition = (event: MouseEvent) => {
     const mouseX = event.clientX;
 
     if (mouseX + 300 > windowWidth) {
-      bubbleLeft.value = mouseX - 230;
+      bubbleLeft.value = mouseX - 240;
     } else {
-      bubbleLeft.value = mouseX;
+      bubbleLeft.value = mouseX + 10;
     }
 
     bubbleTop.value = event.clientY + 20;
@@ -49,7 +49,7 @@ onUnmounted(() => {
 .bubble {
   position: fixed;
   display: none;
-  width: 180px;
+  width: 200px;
   text-wrap: balance;
   height: fit-content;
   background-color: #266946;

@@ -118,38 +118,6 @@ export default defineComponent({
   cursor: pointer;
 }
 
-/* p:has(kbd) {
-  display: flex;
-  align-items: center;
-  justify-content: start;
-}
-
-kbd {
-  background-color: #eee;
-  border-radius: 3px;
-  border: 1px solid #b4b4b4;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2),
-    0 2px 0 0 rgba(255, 255, 255, 0.7) inset;
-  color: #333;
-  display: inline-block;
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.4;
-  margin: 0 0.5em;
-  padding: 0.1em 0.6em;
-  text-shadow: 0 1px 0 #fff;
-  white-space: nowrap;
-}
-
-code {
-  background-color: #272822;
-  color: #f8f8f2;
-  border-radius: 0.3rem;
-  padding: 4px 5px 5px;
-  white-space: nowrap;
-  margin: 0 0.5em;
-} */
-
 textarea {
   width: 100%;
   height: auto;

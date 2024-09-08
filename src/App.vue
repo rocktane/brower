@@ -99,6 +99,9 @@ const handleMouseLeave = () => {
   align-items: center;
   width: 90%;
   margin: 0 auto;
+  & .bubble {
+    display: block;
+  }
 }
 
 .title {
@@ -143,9 +146,6 @@ const handleMouseLeave = () => {
   &:hover {
     background-color: #b3eab1;
   }
-  & + .bubble {
-    display: block;
-  }
 }
 
 h1 {
@@ -171,5 +171,11 @@ button:disabled {
 .buttons {
   display: flex;
   gap: 1em;
+  & #en.active {
+    background-color: rgb(229 200 160 / 50%);
+  }
+  & #fr.active {
+    background-color: rgb(161 229 161 / 60%);
+  }
 }
 </style>
