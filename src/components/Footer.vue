@@ -1,11 +1,13 @@
 <template>
   <footer>
-    <p>
-      Made with ❤️ by
-      <a id="github" href="https://github.com/rocktane">rocktane</a> mais aussi
-      <a id="linkedin" href="https://www.linkedin.com/in/yohan-g/">là</a> et
-      <a id="perso" href="https://www.yohangouiran.com/">ici</a>
-    </p>
+  <p>This website is using the great 🍺 <a id="homebrew" href="https://github.com/Homebrew/brew">homebrew</a> package manager.</p>
+  <p>A suggestion or a bug report? Contact me on twitter <a id="twitter" href="https://twitter.com/rcktne">@rcktne</a></p>
+  <p>
+    Made with ❤️ by
+    <a id="github" href="https://github.com/rocktane">rocktane</a> mais aussi
+    <a id="linkedin" href="https://www.linkedin.com/in/yohan-g/">là</a> et
+    <a id="perso" href="https://www.yohangouiran.com/">ici</a>
+  </p>
   </footer>
 </template>
 
@@ -13,11 +15,12 @@
 footer {
   width: 100%;
   height: 200px;
-  background-color: #266946;
+  background-color: #50b280;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-family: "anybody", serif;
+  font-family: "system-ui", serif;
   font-size: 1em;
   color: white;
   margin-top: 150px;

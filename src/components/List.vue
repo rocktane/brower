@@ -59,7 +59,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch, computed } from "vue";
 import { store } from "../store";
-import dbData from "../sorted-db.json";
+import dbData from "../db.json";
 import Bubble from "./Bubble.vue";
 import { useI18n } from "vue-i18n";
 

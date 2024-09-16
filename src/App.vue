@@ -51,16 +51,18 @@ const handleMouseLeave = () => {
         <h1>yTools</h1>
       </a>
       <div class="buttons">
-        <button id="fr" class="btn btn-green" @click="changeLanguage('fr')">
-          🇫🇷 FR
-        </button>
-        <button
-          id="en"
-          class="btn btn-gold active"
-          @click="changeLanguage('en')"
-        >
-          🇺🇸 EN
-        </button>
+        <div class="languages">
+          <button id="fr" class="btn btn-green" @click="changeLanguage('fr')">
+            🇫🇷 FR
+          </button>
+          <button
+            id="en"
+            class="btn btn-gold active"
+            @click="changeLanguage('en')"
+          >
+            🇺🇸 EN
+          </button>
+        </div>
         <button
           class="btn btn-green"
           id="install-button"
@@ -77,6 +79,7 @@ const handleMouseLeave = () => {
   </div>
   <Modal v-if="showModal" @close="showModal = false" />
   <List />
+  <p class="post">A curated selection of apps by <a href="https://twitter.com/rcktne">@rcktne</a></p>
   <Footer />
 </template>
 
@@ -172,20 +175,42 @@ button:disabled {
   }
 }
 
-.buttons {
+.buttons,
+.languages {
   display: flex;
   gap: 1em;
+}
+
+.languages {
+  margin-right: 2em;
+}
+
+.buttons {
   & #en {
     background-color: #f2f0e2;
     &.active {
       background-color: rgb(229 200 160 / 50%);
+      box-shadow: 0 0 0 1px #b28350 inset,
+        0 0 0 2px rgba(200, 255, 204, 0.1) inset, 0 1px 0 0 #b28350,
+        0 1px 1px 1px rgba(0, 0, 0, 0.2);
     }
   }
   & #fr {
     background-color: #eaf3e6;
     &.active {
       background-color: rgb(161 229 161 / 60%);
+      box-shadow: 0 0 0 1px #50b280 inset,
+        0 0 0 2px rgba(200, 255, 204, 0.1) inset, 0 1px 0 0 #50b280,
+        0 1px 1px 1px rgba(0, 0, 0, 0.2);
     }
+  }
+}
+
+.post {
+  font-family: "anybody", display;
+  text-align: center;
+  & a {
+    color: #b28350;
   }
 }
 </style>
