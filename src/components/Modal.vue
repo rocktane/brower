@@ -6,7 +6,9 @@
       <p v-html="t('message.install_macos')"></p>
       <p v-html="t('message.install_linux')"></p>
       <p v-html="t('message.instructions')"></p>
-      <textarea readonly id="install-command">{{ commandWithBrew }}</textarea>
+      <textarea readonly id="install-command" v-auto-size>{{
+        commandWithBrew
+      }}</textarea>
       <div class="buttons">
         <button type="button" class="btn btn-green" @click="copyWithBrew">
           {{ t("message.copy") }}
@@ -24,10 +26,14 @@
 import { defineComponent } from "vue";
 import { store } from "../store";
 import { useI18n } from "vue-i18n";
+import autoSize from "../directives/autoSize";
 
 export default defineComponent({
   name: "Modal",
   emits: ["close"],
+  directives: {
+    autoSize,
+  },
   setup(_, { emit }) {
     const closeModal = () => {
       emit("close");
@@ -104,7 +110,7 @@ export default defineComponent({
   padding: 1em 2em 3em 2em;
   border-radius: 8px;
   position: relative;
-  width: 90%;
+  width: 50%;
   height: fit-content;
   margin-top: 9rem;
 }
@@ -120,7 +126,7 @@ export default defineComponent({
 
 textarea {
   width: 100%;
-  height: auto;
+  /* height: auto; */
   margin-bottom: 1em;
   padding: 12px 21px;
   font-size: 14px;

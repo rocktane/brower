@@ -1,13 +1,24 @@
 <template>
   <footer>
-  <p>This website is using the great 🍺 <a id="homebrew" href="https://github.com/Homebrew/brew">homebrew</a> package manager.</p>
-  <p>A suggestion or a bug report? Contact me on twitter <a id="twitter" href="https://twitter.com/rcktne">@rcktne</a></p>
-  <p>
-    Made with ❤️ by
-    <a id="github" href="https://github.com/rocktane">rocktane</a> mais aussi
-    <a id="linkedin" href="https://www.linkedin.com/in/yohan-g/">là</a> et
-    <a id="perso" href="https://www.yohangouiran.com/">ici</a>
-  </p>
+    <p>
+      This website is using the great 🍺
+      <a id="homebrew" href="https://github.com/Homebrew/brew">homebrew</a>
+      package manager. The idea came after using
+      <a href="https://macapps.link">macapp.link</a> which has not been updated
+      since 2019.
+    </p>
+    <p>
+      A suggestion or a bug report? Contact me on twitter
+      <a id="twitter" href="https://twitter.com/rcktne">@rcktne</a>
+    </p>
+    <p>
+      Made with ♥ by
+      <a id="portfolio" href="https://www.yohangouiran.com/">Yohan</a>.
+      Retrouvez-moi
+      <a id="linkedin" href="https://www.linkedin.com/in/yohan-g/">ici</a>
+      mais aussi
+      <a id="github" href="https://github.com/rocktane">là</a>.
+    </p>
   </footer>
 </template>
 

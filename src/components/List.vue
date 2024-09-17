@@ -53,6 +53,49 @@
         </label>
       </div>
     </div>
+
+    --------------------------------------------------
+    <br />
+    <br />
+    <br />
+
+    <div v-for="category in orderedCategories" :key="category" class="category">
+      <h3>{{ category }}</h3>
+      <div class="cards">
+        <label
+          v-for="(record, index) in getRecordsByCategory(category)"
+          :key="index"
+          class="btn btn-green"
+          :class="{ checked: record.checked }"
+        >
+          <input
+            type="checkbox"
+            v-model="record.checked"
+            @change="updateCount"
+          />
+          <Bubble :description="record.description_fr" v-if="showBubble" />
+          <img
+            :src="record.logo"
+            :alt="record.name + ' logo'"
+            :height="48"
+            :ratio="1 / 1"
+          />
+          <span
+            class="name"
+            @mouseover="toggleBubble"
+            @mouseleave="toggleBubble"
+            >{{ record.name }}</span
+          >
+          <img
+            v-if="record.special !== ''"
+            :src="`src/assets/icons/${record.special}.svg`"
+            :alt="record.special"
+            :class="record.special"
+            :height="16"
+          />
+        </label>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -62,6 +105,7 @@ import { store } from "../store";
 import dbData from "../db.json";
 import Bubble from "./Bubble.vue";
 import { useI18n } from "vue-i18n";
+import PocketBase from "pocketbase";
 
 interface Item {
   name: string;
@@ -71,7 +115,8 @@ interface Item {
   logo: string;
   category: string;
   url: string;
-  description: string;
+  description_fr: string;
+  description_en: string;
   checked: boolean;
   special: string;
 }
@@ -94,20 +139,41 @@ export default defineComponent({
   },
   setup() {
     const items = ref<Item[]>([]);
+    const records = ref<Item[]>([]);
+    const showBubble = ref(false);
+    const pb = new PocketBase("http://localhost:8090");
 
-    onMounted(() => {
+    onMounted(async () => {
       items.value = dbData.map((item) => ({ ...item, checked: false }));
+
+      try {
+        const response = await pb.collection("apps").getFullList();
+        records.value = response.map((record: any) => ({
+          name: record.name,
+          code: record.code,
+          brew: record.brew,
+          tap: record.tap,
+          logo: record.logo,
+          category: record.category,
+          url: record.url,
+          description_fr: record.description_fr,
+          description_en: record.description_en,
+          checked: false,
+          special: record.special,
+        }));
+      } catch (error) {
+        console.error("Failed to fetch records:", error);
+      }
+
       updateCount();
     });
-
-    const showBubble = ref(false);
 
     const toggleBubble = () => {
       showBubble.value = !showBubble.value;
     };
 
     const updateCount = () => {
-      const checked = items.value.filter((item) => item.checked);
+      const checked = records.value.filter((record) => record.checked);
       store.checkedCount = checked.length;
       store.tapApps = checked.filter((app) => app.tap).map((app) => app.tap);
       store.apps = checked.map((app) => app.brew);
@@ -123,6 +189,10 @@ export default defineComponent({
       }, {} as Record<string, Item[]>);
     });
 
+    const getRecordsByCategory = (category: string) => {
+      return records.value.filter((record) => record.category === category);
+    };
+
     watch(items, updateCount, { deep: true });
 
     const { t } = useI18n();
@@ -135,6 +205,8 @@ export default defineComponent({
       toggleBubble,
       showBubble,
       t,
+      records,
+      getRecordsByCategory,
     };
   },
 });
