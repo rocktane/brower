@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 src/assets/backup/
 src/assets/backup/*.json
-pocketbase/pb_data/
+pocketbase/pb_data/*
