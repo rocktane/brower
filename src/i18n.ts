@@ -11,8 +11,6 @@ const messages = {
       last_step: "Last step",
       install_macos:
         "On macOS → <kbd>⌘</kbd> + <kbd>Space</kbd> then type <code>terminal</code> and <kbd>⮐</kbd>",
-      install_linux:
-        "On Linux → <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd> or <kbd>Super</kbd>ou<kbd>⊞ Win</kbd> then type <code>terminal</code> and <kbd>⮐</kbd>",
       instructions:
         "Copy then paste the following command in the terminal and press <kbd>⮐</kbd> to make magic happen",
       copy: "Copy the command",
@@ -102,8 +100,6 @@ const messages = {
       at_least_one_app: "Il faut au moins sélectionner une application",
       install_macos:
         "Sur macOS → <kbd>⌘</kbd> + <kbd>Espace</kbd> puis tapez <code>terminal</code> et <kbd>⮐</kbd>",
-      install_linux:
-        "Sur Linux → <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd> ou <kbd>Super</kbd>ou<kbd>⊞ Win</kbd> puis tapez <code>terminal</code> et <kbd>⮐</kbd>",
       instructions:
         "Copiez puis collez le code suivant dans le terminal et appuyez sur <kbd>⮐</kbd> pour que la magie opère",
       copy: "Copier la commande",

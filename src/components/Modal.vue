@@ -4,7 +4,6 @@
       <button class="close-button" @click="closeModal">X</button>
       <h2 v-html="t('message.last_step')"></h2>
       <p v-html="t('message.install_macos')"></p>
-      <p v-html="t('message.install_linux')"></p>
       <p v-html="t('message.instructions')"></p>
       <textarea readonly id="install-command" v-auto-size>{{
         commandWithBrew

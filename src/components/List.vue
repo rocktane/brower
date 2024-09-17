@@ -21,48 +21,6 @@
       <h3>{{ $t(`message.categories.${category}`).toLowerCase() }}</h3>
       <div class="cards">
         <label
-          v-for="(item, index) in groupedItems[category]"
-          :key="index"
-          class="btn btn-green"
-          :class="{ checked: item.checked }"
-        >
-          <input type="checkbox" v-model="item.checked" @change="updateCount" />
-          <Bubble
-            :description="t(`message.descriptions.${item.code}`)"
-            v-if="showBubble"
-          />
-          <img
-            :src="item.logo"
-            :alt="item.name + ' logo'"
-            :height="48"
-            :ratio="1 / 1"
-          />
-          <span
-            class="name"
-            @mouseover="toggleBubble"
-            @mouseleave="toggleBubble"
-            >{{ item.name }}</span
-          >
-          <img
-            v-if="item.special !== ''"
-            :src="`src/assets/icons/${item.special}.svg`"
-            :alt="item.special"
-            :class="item.special"
-            :height="16"
-          />
-        </label>
-      </div>
-    </div>
-
-    --------------------------------------------------
-    <br />
-    <br />
-    <br />
-
-    <div v-for="category in orderedCategories" :key="category" class="category">
-      <h3>{{ category }}</h3>
-      <div class="cards">
-        <label
           v-for="(record, index) in getRecordsByCategory(category)"
           :key="index"
           class="btn btn-green"
@@ -73,7 +31,7 @@
             v-model="record.checked"
             @change="updateCount"
           />
-          <Bubble :description="record.description_fr" v-if="showBubble" />
+          <Bubble :description="getDescription(record)" v-if="showBubble" />
           <img
             :src="record.logo"
             :alt="record.name + ' logo'"
@@ -102,7 +60,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch, computed } from "vue";
 import { store } from "../store";
-import dbData from "../db.json";
+// import dbData from "../db.json";
 import Bubble from "./Bubble.vue";
 import { useI18n } from "vue-i18n";
 import PocketBase from "pocketbase";
@@ -137,6 +95,20 @@ export default defineComponent({
     Bubble,
     useI18n,
   },
+
+  methods: {
+    getDescription(record: Item): string {
+      const locale = this.$i18n.locale as string;
+      const key = `description_${locale}` as keyof Item;
+
+      const description = record[key];
+      if (typeof description === "string") {
+        return description;
+      }
+      return "";
+    },
+  },
+
   setup() {
     const items = ref<Item[]>([]);
     const records = ref<Item[]>([]);
@@ -144,7 +116,8 @@ export default defineComponent({
     const pb = new PocketBase("http://localhost:8090");
 
     onMounted(async () => {
-      items.value = dbData.map((item) => ({ ...item, checked: false }));
+      // TO DELETE
+      // items.value = dbData.map((item) => ({ ...item, checked: false }));
 
       try {
         const response = await pb.collection("apps").getFullList();
@@ -179,6 +152,7 @@ export default defineComponent({
       store.apps = checked.map((app) => app.brew);
     };
 
+    // TO DELETE
     const groupedItems = computed(() => {
       return items.value.reduce((acc, item) => {
         if (!acc[item.category]) {
@@ -193,6 +167,7 @@ export default defineComponent({
       return records.value.filter((record) => record.category === category);
     };
 
+    // TO DELETE ??
     watch(items, updateCount, { deep: true });
 
     const { t } = useI18n();

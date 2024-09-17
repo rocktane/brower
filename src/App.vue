@@ -71,7 +71,8 @@ const handleMouseLeave = () => {
           @mouseover="handleMouseOver"
           @mouseleave="handleMouseLeave"
         >
-          Installer {{ store.checkedCount }} {{ singularPlural }}
+          {{ t("message.install") }} {{ store.checkedCount }}
+          {{ singularPlural }}
         </button>
       </div>
       <Bubble :description="message" v-if="showBubble" />
@@ -79,7 +80,10 @@ const handleMouseLeave = () => {
   </div>
   <Modal v-if="showModal" @close="showModal = false" />
   <List />
-  <p class="post">A curated selection of apps by <a href="https://twitter.com/rcktne">@rcktne</a></p>
+  <p class="post">
+    A curated selection of apps by
+    <a href="https://twitter.com/rcktne">@rcktne</a>
+  </p>
   <Footer />
 </template>
 

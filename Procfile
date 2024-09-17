@@ -1,1 +1,1 @@
-web: npm start & ./pocketbase/pocketbase serve --http 0.0.0.0:8090
+web: ./pocketbase/pocketbase serve --http 0.0.0.0:8090 & npm start

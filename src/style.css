@@ -3,6 +3,9 @@
   line-height: 1.5;
   font-weight: 400;
   --background-color: #fefff5;
+}
+
+#app {
   width: 100dvw;
   background-color: var(--background-color);
 }
