@@ -1,6 +1,7 @@
 <template>
   <div
     class="bubble"
+    :class="$i18n.locale === 'fr' ? 'bubble-gold' : 'bubble-green'"
     v-show="isVisible"
     :style="{ left: bubbleLeft + 'px', top: bubbleTop + 'px' }"
   >
@@ -52,13 +53,17 @@ onUnmounted(() => {
   width: 200px;
   text-wrap: balance;
   height: fit-content;
-  background-color: #266946;
-  border: #266946 solid 1px;
   color: white;
   padding: 1rem;
   border-radius: 0.25rem;
   z-index: 1000;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
   pointer-events: none;
+  &.bubble-green {
+    background-color: #266946;
+  }
+  &.bubble-gold {
+    background-color: #6f5a28;
+  }
 }
 </style>

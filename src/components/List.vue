@@ -21,24 +21,23 @@
       <h3>{{ $t(`message.categories.${category}`).toLowerCase() }}</h3>
       <div class="cards">
         <label
-          v-for="(record, index) in getRecordsByCategory(category)"
+          v-for="(item, index) in groupedItems[category]"
           :key="index"
           class="btn"
           :class="[
             'btn',
             $i18n.locale === 'fr' ? 'btn-gold' : 'btn-green',
-            { checked: record.checked },
+            { checked: item.checked },
           ]"
         >
-          <input
-            type="checkbox"
-            v-model="record.checked"
-            @change="updateCount"
+          <input type="checkbox" v-model="item.checked" @change="updateCount" />
+          <Bubble
+            :description="t(`message.descriptions.${item.code}`)"
+            v-if="showBubble"
           />
-          <Bubble :description="getDescription(record)" v-if="showBubble" />
           <img
-            :src="record.logo"
-            :alt="record.name + ' logo'"
+            :src="item.logo"
+            :alt="item.name + ' logo'"
             :height="48"
             :ratio="1 / 1"
           />
@@ -46,13 +45,13 @@
             class="name"
             @mouseover="toggleBubble"
             @mouseleave="toggleBubble"
-            >{{ record.name }}</span
+            >{{ item.name }}</span
           >
           <img
-            v-if="record.special !== ''"
-            :src="`src/assets/icons/${record.special}.svg`"
-            :alt="record.special"
-            :class="record.special"
+            v-if="item.special !== ''"
+            :src="`src/assets/icons/${item.special}.svg`"
+            :alt="item.special"
+            :class="item.special"
             :height="16"
           />
         </label>
@@ -62,11 +61,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, onMounted, ref, watch, computed } from "vue";
 import { store } from "../store";
 import Bubble from "./Bubble.vue";
 import { useI18n } from "vue-i18n";
-import PocketBase from "pocketbase";
+import dbData from "../db.json";
 
 interface Item {
   name: string;
@@ -76,8 +75,7 @@ interface Item {
   logo: string;
   category: string;
   url: string;
-  description_fr: string;
-  description_en: string;
+  description: string;
   checked: boolean;
   special: string;
 }
@@ -99,45 +97,12 @@ export default defineComponent({
     useI18n,
   },
 
-  methods: {
-    getDescription(record: Item): string {
-      const locale = this.$i18n.locale as string;
-      const key = `description_${locale}` as keyof Item;
-
-      const description = record[key];
-      if (typeof description === "string") {
-        return description;
-      }
-      return "";
-    },
-  },
-
   setup() {
     const items = ref<Item[]>([]);
-    const records = ref<Item[]>([]);
     const showBubble = ref(false);
-    const pb = new PocketBase("http://localhost:8090");
 
-    onMounted(async () => {
-      try {
-        const response = await pb.collection("apps").getFullList();
-        records.value = response.map((record: any) => ({
-          name: record.name,
-          code: record.code,
-          brew: record.brew,
-          tap: record.tap,
-          logo: record.logo,
-          category: record.category,
-          url: record.url,
-          description_fr: record.description_fr,
-          description_en: record.description_en,
-          checked: false,
-          special: record.special,
-        }));
-      } catch (error) {
-        console.error("Failed to fetch records:", error);
-      }
-
+    onMounted(() => {
+      items.value = dbData.map((item) => ({ ...item, checked: false }));
       updateCount();
     });
 
@@ -146,15 +111,23 @@ export default defineComponent({
     };
 
     const updateCount = () => {
-      const checked = records.value.filter((record) => record.checked);
+      const checked = items.value.filter((item) => item.checked);
       store.checkedCount = checked.length;
       store.tapApps = checked.filter((app) => app.tap).map((app) => app.tap);
       store.apps = checked.map((app) => app.brew);
     };
 
-    const getRecordsByCategory = (category: string) => {
-      return records.value.filter((record) => record.category === category);
-    };
+    const groupedItems = computed(() => {
+      return items.value.reduce((acc, item) => {
+        if (!acc[item.category]) {
+          acc[item.category] = [];
+        }
+        acc[item.category].push(item);
+        return acc;
+      }, {} as Record<string, Item[]>);
+    });
+
+    watch(items, updateCount, { deep: true });
 
     const { t } = useI18n();
 
@@ -165,8 +138,7 @@ export default defineComponent({
       toggleBubble,
       showBubble,
       t,
-      records,
-      getRecordsByCategory,
+      groupedItems,
     };
   },
 });

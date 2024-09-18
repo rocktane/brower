@@ -147,7 +147,6 @@ export default defineComponent({
   position: absolute;
   top: 10px;
   right: 10px;
-  background: none;
   border: none;
   font-size: 16px;
   cursor: pointer;
