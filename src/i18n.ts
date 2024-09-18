@@ -59,8 +59,7 @@ const messages = {
         arc: "Arc is an alternative web browser.",
         brave: "Brave is a privacy-focused web browser.",
         firefox: "Firefox is a free and open-source web browser.",
-        googlechrome:
-          "Google Chrome is a free web browser developed by Google.",
+        chrome: "Google Chrome is a free web browser developed by Google.",
         orion: "Orion is an alternative web browser, extensions included.",
         zen: "Zen is a web browser aimed at privacy.",
         discord:

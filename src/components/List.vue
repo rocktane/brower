@@ -49,7 +49,7 @@
           >
           <img
             v-if="item.special !== ''"
-            :src="`src/assets/icons/${item.special}.svg`"
+            :src="getIconUrl(item.special)"
             :alt="item.special"
             :class="item.special"
             :height="16"
@@ -131,6 +131,10 @@ export default defineComponent({
 
     const { t } = useI18n();
 
+    const getIconUrl = (name) => {
+      return new URL(`../assets/icons/${name}.svg`, import.meta.url).href;
+    };
+
     return {
       items,
       orderedCategories,
@@ -139,6 +143,7 @@ export default defineComponent({
       showBubble,
       t,
       groupedItems,
+      getIconUrl,
     };
   },
 });
