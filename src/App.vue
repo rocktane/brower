@@ -47,24 +47,25 @@ const handleMouseLeave = () => {
   <div class="navbar">
     <div class="elements">
       <a href="/" class="title">
-        <div id="logo" class="btn btn-green">:~</div>
-        <h1>yTools</h1>
+        <div id="logo" class="btn">:~</div>
+        <h1>brower</h1>
       </a>
       <div class="buttons">
         <div class="languages">
-          <button id="fr" class="btn btn-green" @click="changeLanguage('fr')">
-            🇫🇷 FR
-          </button>
           <button
             id="en"
-            class="btn btn-gold active"
+            class="btn btn-green active"
             @click="changeLanguage('en')"
           >
             🇺🇸 EN
           </button>
+          <button id="fr" class="btn btn-gold" @click="changeLanguage('fr')">
+            🇫🇷 FR
+          </button>
         </div>
         <button
-          class="btn btn-green"
+          class="btn"
+          :class="[$i18n.locale === 'fr' ? 'btn-gold' : 'btn-green']"
           id="install-button"
           :disabled="store.checkedCount === 0"
           @click="showModal = true"
@@ -80,8 +81,8 @@ const handleMouseLeave = () => {
   </div>
   <Modal v-if="showModal" @close="showModal = false" />
   <List />
-  <p class="post">
-    A curated selection of apps by
+  <p class="post" :class="[$i18n.locale === 'fr' ? 'post-gold' : 'post-green']">
+    {{ t("message.last_word") }}
     <a href="https://twitter.com/rcktne">@rcktne</a>
   </p>
   <Footer />
@@ -153,9 +154,17 @@ const handleMouseLeave = () => {
 }
 
 #install-button {
-  background-color: #eaf3e6;
-  &:hover {
-    background-color: #b3eab1;
+  &.btn-green {
+    background-color: #eaf3e6;
+    &:hover {
+      background-color: #b3eab1;
+    }
+  }
+  &.btn-gold {
+    background-color: #f2f0e2;
+    &:hover {
+      background-color: #efdec2;
+    }
   }
 }
 
@@ -165,6 +174,10 @@ h1 {
   color: black;
   text-align: center;
   display: inline-block;
+  transition: translate 0.1s ease;
+  &:hover {
+    translate: -2px 2px;
+  }
 }
 
 button:disabled {
@@ -189,32 +202,51 @@ button:disabled {
   margin-right: 2em;
 }
 
+.post {
+  font-family: "anybody", display;
+  text-align: center;
+  &.post-gold a {
+    color: #b28350;
+  }
+  &.post-green a {
+    color: #50b280;
+  }
+}
+
+/* color convertion to manage the blur background effect */
 .buttons {
-  & #en {
+  min-width: 430px;
+  width: fit-content;
+  justify-content: space-between;
+  & #fr {
     background-color: #f2f0e2;
+    &:hover {
+      background-color: #efdec2;
+    }
     &.active {
       background-color: rgb(229 200 160 / 50%);
       box-shadow: 0 0 0 1px #b28350 inset,
         0 0 0 2px rgba(200, 255, 204, 0.1) inset, 0 1px 0 0 #b28350,
         0 1px 1px 1px rgba(0, 0, 0, 0.2);
+      &:hover {
+        background-color: #efdec2;
+      }
     }
   }
-  & #fr {
+  & #en {
     background-color: #eaf3e6;
+    &:hover {
+      background-color: #b3eab1;
+    }
     &.active {
       background-color: rgb(161 229 161 / 60%);
       box-shadow: 0 0 0 1px #50b280 inset,
         0 0 0 2px rgba(200, 255, 204, 0.1) inset, 0 1px 0 0 #50b280,
         0 1px 1px 1px rgba(0, 0, 0, 0.2);
+      &:hover {
+        background-color: #b3eab1;
+      }
     }
-  }
-}
-
-.post {
-  font-family: "anybody", display;
-  text-align: center;
-  & a {
-    color: #b28350;
   }
 }
 </style>

@@ -6,6 +6,26 @@ const messages = {
     message: {
       hello: "hello world",
       subtitle: "Install all these apps in one go",
+      last_word: "A curated selection of apps by",
+      footer: {
+        homebrew: {
+          before: "So I decided to make my own version using the great",
+          after: "package manager.",
+        },
+        idea: {
+          before: "I have been using",
+          after: "for years, but it hasn't been updated in quite some time.",
+        },
+        suggestion: "A suggestion or a bug report? Contact me on twitter",
+        made: "Made with ♥ by",
+        also_check: "Found me",
+        thanks: {
+          before: "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+          here: "here",
+          and: "but also",
+          there: "there",
+        },
+      },
       at_least_one_app: "At least one app must be selected",
       install: "Install",
       last_step: "Last step",
@@ -95,9 +115,30 @@ const messages = {
   fr: {
     message: {
       subtitle: "Installer toutes ces apps en une fois",
+      last_word: "Une sélection d'applications par",
+      footer: {
+        homebrew: {
+          before: "J'ai donc décidé de faire ma propre version en utilisant",
+          after: "le fameux gestionnaire de paquets.",
+        },
+        idea: {
+          before: "J'ai longtemps utilisé",
+          after: ", mais il n'a pas été mis à jour depuis quelques temps.",
+        },
+        suggestion:
+          "Une suggestion ou un bug à rapporter ? Contactez-moi sur twitter",
+        made: "Fait avec ♥ par",
+        also_check: "Trouvez-moi aussi",
+        thanks: {
+          before: "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+          here: "ici",
+          and: "et",
+          there: "là",
+        },
+      },
+      at_least_one_app: "Il faut au moins sélectionner une application",
       install: "Installer",
       last_step: "Dernière étape",
-      at_least_one_app: "Il faut au moins sélectionner une application",
       install_macos:
         "Sur macOS → <kbd>⌘</kbd> + <kbd>Espace</kbd> puis tapez <code>terminal</code> et <kbd>⮐</kbd>",
       instructions:

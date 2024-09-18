@@ -1,7 +1,20 @@
 <template>
   <div class="modal-overlay" @click="closeModal">
-    <div class="modal-content" @click.stop>
-      <button class="close-button" @click="closeModal">X</button>
+    <div
+      class="modal-content"
+      :class="{
+        'mdl-gold': $i18n.locale === 'fr',
+        'mdl-green': $i18n.locale !== 'fr',
+      }"
+      @click.stop
+    >
+      <button
+        class="close-button btn"
+        :class="[$i18n.locale === 'fr' ? 'btn-gold' : 'btn-green']"
+        @click="closeModal"
+      >
+        𝗫
+      </button>
       <h2 v-html="t('message.last_step')"></h2>
       <p v-html="t('message.install_macos')"></p>
       <p v-html="t('message.instructions')"></p>
@@ -9,10 +22,20 @@
         commandWithBrew
       }}</textarea>
       <div class="buttons">
-        <button type="button" class="btn btn-green" @click="copyWithBrew">
+        <button
+          type="button"
+          class="btn"
+          :class="[$i18n.locale === 'fr' ? 'btn-gold' : 'btn-green']"
+          @click="copyWithBrew"
+        >
           {{ t("message.copy") }}
         </button>
-        <button type="button" class="btn btn-gold" @click="copyWithoutBrew">
+        <button
+          type="button"
+          class="btn"
+          :class="[$i18n.locale === 'fr' ? 'btn-green' : 'btn-gold']"
+          @click="copyWithoutBrew"
+        >
           {{ t("message.already_brew") }}
         </button>
       </div>
@@ -105,13 +128,20 @@ export default defineComponent({
 }
 .modal-content {
   background-color: var(--background-color);
-  border: 2px solid black;
+  border: 2px solid #50b280;
   padding: 1em 2em 3em 2em;
   border-radius: 8px;
   position: relative;
   width: 50%;
   height: fit-content;
   margin-top: 9rem;
+  box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.5);
+  &.mdl-gold {
+    border: 2px solid #b28350;
+  }
+  &.mdl-green {
+    border: 2px solid #50b280;
+  }
 }
 .close-button {
   position: absolute;
@@ -121,6 +151,14 @@ export default defineComponent({
   border: none;
   font-size: 16px;
   cursor: pointer;
+  &.btn-green:hover {
+    top: 12px;
+    background-color: rgba(161, 229, 161, 0.8);
+  }
+  &.btn-gold:hover {
+    top: 12px;
+    background-color: rgba(229, 200, 160, 0.6);
+  }
 }
 
 textarea {

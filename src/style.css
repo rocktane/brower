@@ -83,7 +83,7 @@ button {
 }
 
 .btn-gold {
-  color: darkgoldenrod;
+  color: #6f5a28;
   box-shadow: 0 0 0 1px #b28350 inset, 0 0 0 2px rgba(200, 255, 204, 0.1) inset,
     0 8px 0 0 #b28350, 0 8px 8px 1px rgba(0, 0, 0, 0.2);
   background-color: rgb(141 105 55 / 10%);
@@ -114,11 +114,11 @@ button {
   outline: medium none;
 }
 
-p:has(kbd) {
+/* p:has(kbd) {
   display: flex;
   align-items: center;
   justify-content: start;
-}
+} */
 
 kbd {
   background-color: #eee;

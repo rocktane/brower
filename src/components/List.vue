@@ -23,8 +23,12 @@
         <label
           v-for="(record, index) in getRecordsByCategory(category)"
           :key="index"
-          class="btn btn-green"
-          :class="{ checked: record.checked }"
+          class="btn"
+          :class="[
+            'btn',
+            $i18n.locale === 'fr' ? 'btn-gold' : 'btn-green',
+            { checked: record.checked },
+          ]"
         >
           <input
             type="checkbox"
@@ -58,9 +62,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch, computed } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 import { store } from "../store";
-// import dbData from "../db.json";
 import Bubble from "./Bubble.vue";
 import { useI18n } from "vue-i18n";
 import PocketBase from "pocketbase";
@@ -116,9 +119,6 @@ export default defineComponent({
     const pb = new PocketBase("http://localhost:8090");
 
     onMounted(async () => {
-      // TO DELETE
-      // items.value = dbData.map((item) => ({ ...item, checked: false }));
-
       try {
         const response = await pb.collection("apps").getFullList();
         records.value = response.map((record: any) => ({
@@ -152,29 +152,14 @@ export default defineComponent({
       store.apps = checked.map((app) => app.brew);
     };
 
-    // TO DELETE
-    const groupedItems = computed(() => {
-      return items.value.reduce((acc, item) => {
-        if (!acc[item.category]) {
-          acc[item.category] = [];
-        }
-        acc[item.category].push(item);
-        return acc;
-      }, {} as Record<string, Item[]>);
-    });
-
     const getRecordsByCategory = (category: string) => {
       return records.value.filter((record) => record.category === category);
     };
-
-    // TO DELETE ??
-    watch(items, updateCount, { deep: true });
 
     const { t } = useI18n();
 
     return {
       items,
-      groupedItems,
       orderedCategories,
       updateCount,
       toggleBubble,
@@ -213,7 +198,7 @@ export default defineComponent({
   display: flex;
   box-sizing: border-box;
   flex-flow: row wrap;
-  gap: 1.07421rem;
+  gap: 1.04521rem;
   width: 100%;
   margin-top: 6px;
   .card {
@@ -231,6 +216,7 @@ export default defineComponent({
     gap: 0.5rem;
     width: 170px;
     padding: 1em;
+    user-select: none;
     & img {
       justify-self: center;
       max-height: inherit;
@@ -249,21 +235,37 @@ export default defineComponent({
     &:hover .name:after {
       opacity: 1;
     }
-    &.checked {
+    &.btn-green.checked {
       background-color: rgba(161, 229, 161, 0.5);
       top: 2px;
       box-shadow: 0 0 0 1px #50b280 inset,
         0 0 0 2px rgba(200, 255, 204, 0.1) inset, 0 1px 0 0 #50b280,
         0 1px 1px 1px rgba(0, 0, 0, 0.2);
     }
-    &.checked:hover {
+    &.btn-green.checked:hover {
       background-color: rgba(161, 229, 161, 0.8);
     }
-    &.checked:active {
+    &.btn-green.checked:active {
       background-color: rgba(161, 229, 161, 1);
       box-shadow: 0 0 0 1px #50b280 inset,
         0 0 0 1px rgb(80, 178, 128, 0.15) inset,
         0 1px 3px 1px rgb(80, 178, 128, 0.1);
+    }
+    &.btn-gold.checked {
+      top: 2px;
+      box-shadow: 0 0 0 1px #b28350 inset,
+        0 0 0 1px rgb(80, 178, 128, 0.15) inset,
+        0 1px 3px 1px rgb(80, 178, 128, 0.1);
+      background-color: rgb(229, 200, 160, 1);
+    }
+    &.btn-gold.checked:hover {
+      background-color: rgba(229, 200, 160, 0.8);
+    }
+    &.btn-gold.checked:active {
+      background-color: rgba(229, 200, 160, 1);
+      box-shadow: 0 0 0 1px #b28350 inset,
+        0 0 0 1px rgba(200, 255, 204, 0.1) inset,
+        0 1px 3px 1px rgba(0, 0, 0, 0.2);
     }
     .star,
     .new,
@@ -272,7 +274,7 @@ export default defineComponent({
       right: 0;
       top: 0;
       padding: 8px;
-      opacity: 0.6;
+      /* opacity: 0.6; */
     }
   }
   .name {
@@ -311,7 +313,7 @@ export default defineComponent({
     gap: 1em;
     border: 1px dashed rgb(200, 200, 200);
     border-radius: 0.5em;
-    padding: 0.5em;
+    padding: 0.5em 1em;
     & img {
       margin-right: 0.5em;
     }
