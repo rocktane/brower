@@ -3,6 +3,14 @@ import { createI18n } from "vue-i18n";
 // Messages de traduction
 const messages = {
   en: {
+    og: {
+      title: "brower ~ Get Mac apps automatically (like Ninite for Mac)",
+      url: "https://brower.yohan.one/",
+      type: "website",
+      description: "One command to get all your apps.",
+      image: "https://brower.yohan.one/src/assets/icons/share.png",
+      logo: "https://brower.yohan.one/src/assets/icons/logo.png",
+    },
     message: {
       hello: "hello world",
       subtitle: "Install all these apps in one go",
