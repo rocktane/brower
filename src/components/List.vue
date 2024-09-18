@@ -131,7 +131,7 @@ export default defineComponent({
 
     const { t } = useI18n();
 
-    const getIconUrl = (name) => {
+    const getIconUrl = (name: String) => {
       return new URL(`../assets/icons/${name}.svg`, import.meta.url).href;
     };
 
