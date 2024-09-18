@@ -7,7 +7,7 @@
     "dev": "concurrently \"vite\" \"./pocketbase/pocketbase serve --http localhost:8090\"",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
-    "start": "concurrently \"./pocketbase/bin/pocketbase serve --http 0.0.0.0:8090\" \"node server.cjs\"",
+    "start": "pm2-runtime start ecosystem.config.js",
     "postinstall": "npm run build"
   },
   "dependencies": {
@@ -15,10 +15,11 @@
     "pocketbase": "^0.21.5",
     "vue": "^3.4.37",
     "vue-i18n": "^9.14.0",
-    "concurrently": "^7.4.0"
+    "pm2": "^5.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.2",
+    "concurrently": "^7.4.0",
     "typescript": "^5.5.3",
     "vite": "^5.4.1",
     "vue-tsc": "^2.0.29"
