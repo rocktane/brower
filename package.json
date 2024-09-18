@@ -14,11 +14,11 @@
     "express": "^4.19.2",
     "pocketbase": "^0.21.5",
     "vue": "^3.4.37",
-    "vue-i18n": "^9.14.0"
+    "vue-i18n": "^9.14.0",
+    "concurrently": "^7.4.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.2",
-    "concurrently": "^7.4.0",
     "typescript": "^5.5.3",
     "vite": "^5.4.1",
     "vue-tsc": "^2.0.29"
