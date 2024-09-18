@@ -1,7 +1,7 @@
 {
-  "name": "ytools",
+  "name": "brower",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "scripts": {
     "dev": "concurrently \"vite\" \"./pocketbase/pocketbase serve --http localhost:8090\"",
