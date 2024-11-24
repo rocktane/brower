@@ -106,7 +106,7 @@ export default defineComponent({
       updateCount();
     });
 
-    const toggleBubble = (event?: MouseEvent): void => {
+    const toggleBubble = (): void => {
       showBubble.value = !showBubble.value;
     };
 
