@@ -106,11 +106,11 @@ export default defineComponent({
       updateCount();
     });
 
-    const toggleBubble = () => {
+    const toggleBubble = (event?: MouseEvent): void => {
       showBubble.value = !showBubble.value;
     };
 
-    const updateCount = () => {
+    const updateCount = (): void => {
       const checked = items.value.filter((item) => item.checked);
       store.checkedCount = checked.length;
       store.tapApps = checked.filter((app) => app.tap).map((app) => app.tap);
@@ -131,7 +131,7 @@ export default defineComponent({
 
     const { t } = useI18n();
 
-    const getIconUrl = (name: String) => {
+    const getIconUrl = (name: string): string => {
       return new URL(`../assets/icons/${name}.svg`, import.meta.url).href;
     };
 
