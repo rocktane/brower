@@ -115,7 +115,7 @@
     "description": "Orion est une alternative à Safari, les extensions en plus.",
     "tap": "zen-browser/browser https://github.com/zen-browser/desktop.git",
     "brew": "--cask zen-browser",
-    "logo": "https://github.com/zen-browser/desktop/raw/main/docs/assets/zen-black.svg",
+    "logo": "https://zen-browser.app/_astro/app-icon.B4cquOFH_TcmbB.webp",
     "category": "internet",
     "url": "https://browser.kagi.com/",
     "special": "new"
