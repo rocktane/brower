@@ -243,9 +243,6 @@ export async function initializeDataService(): Promise<Item[]> {
           if (needsUpdate) {
             console.log('Background refresh started');
             fetchDataFromGoogleSheet().then(freshData => {
-              // Store a backup of current data
-              const currentData = loadDataFromLocalStorage();
-
               // Only save new data if it looks valid
               if (freshData.items && freshData.items.length > 0) {
                 saveDataToLocalStorage(freshData);
