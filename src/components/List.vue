@@ -152,7 +152,7 @@ export default defineComponent({
       if (locale === 'fr' && item.descriptionFR) {
         return item.descriptionFR;
       }
-      return item.descriptionEN || item.description || '';
+      return item.descriptionEN || '';
     };
 
     return {

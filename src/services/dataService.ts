@@ -167,8 +167,8 @@ export async function importFromDBJson(): Promise<CachedData> {
     // Ensure all items have the required fields
     const updatedItems = items.map((item: any) => ({
       ...item,
-      descriptionEN: item.descriptionEN || item.description || '',
-      descriptionFR: item.descriptionFR || item.description || '',
+      descriptionEN: item.descriptionEN || '',
+      descriptionFR: item.descriptionFR || '',
     }));
 
     return {
@@ -180,8 +180,8 @@ export async function importFromDBJson(): Promise<CachedData> {
     // Fall back to bundled data if any other error occurs
     const fallbackItems = defaultData.map((item: any) => ({
       ...item,
-      descriptionEN: item.descriptionEN || item.description || '',
-      descriptionFR: item.descriptionFR || item.description || '',
+      descriptionEN: item.descriptionEN || '',
+      descriptionFR: item.descriptionFR || '',
     }));
 
     return {
