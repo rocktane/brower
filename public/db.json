@@ -543,7 +543,7 @@
     "name": "Zed",
     "code": "zed",
     "brew": "--cask zed",
-    "logo": "https://zed.dev/*next/image?url=%2F_next%2Fstatic%2Fmedia%2Fstable-app-logo.9b5f959f.png&w=384&q=75,*",
+    "logo": "https://zed.dev/_next/image?url=/_next/static/media/stable-app-logo.9b5f959f.png&w=384&q=75",
     "category": "developer",
     "url": "https://zed.dev/",
     "description": "Zed est un éditeur de texte rapide et minimaliste.",

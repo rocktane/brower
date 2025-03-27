@@ -16,9 +16,8 @@ export interface Item {
   logo: string;
   category: string;
   url: string;
-  description: string;     // Keep for backward compatibility
-  descriptionEN: string;   // New field for English description
-  descriptionFR: string;   // New field for French description
+  descriptionEN: string;
+  descriptionFR: string;
   special: string;
   checked?: boolean;
 }
@@ -62,9 +61,8 @@ function parseCSVtoItems(csvData: string): Item[] {
     logo: row.logo || '',
     category: row.category || '',
     url: row.url || '',
-    description: row.description || '', // Keep for backward compatibility
-    descriptionEN: row.descriptionEN || row.description || '', // Use description as fallback
-    descriptionFR: row.descriptionFR || row.description || '', // Use description as fallback
+    descriptionEN: row.descriptionEN || '',
+    descriptionFR: row.descriptionFR || '',
     special: row.special || 'none',
   }));
 }
