@@ -102,15 +102,35 @@ export async function fetchDataFromGoogleSheet(): Promise<CachedData> {
  * Save data to local storage
  */
 export function saveDataToLocalStorage(data: CachedData): void {
-  localStorage.setItem('brower_data_cache', JSON.stringify(data));
+  try {
+    localStorage.setItem('brower_data_cache', JSON.stringify(data));
+    console.log('Data successfully saved to local storage');
+  } catch (err) {
+    console.error('Failed to save data to local storage:', err);
+    // Don't throw - just log the error as we can still function without storage
+  }
 }
 
 /**
  * Load data from local storage
  */
 export function loadDataFromLocalStorage(): CachedData | null {
-  const cachedData = localStorage.getItem('brower_data_cache');
-  return cachedData ? JSON.parse(cachedData) : null;
+  try {
+    const cachedData = localStorage.getItem('brower_data_cache');
+    if (!cachedData) return null;
+
+    const parsedData = JSON.parse(cachedData);
+    // Validate the data structure to ensure it's valid
+    if (!parsedData.items || !Array.isArray(parsedData.items)) {
+      console.warn('Invalid data structure in local storage');
+      return null;
+    }
+
+    return parsedData;
+  } catch (err) {
+    console.error('Error loading data from local storage:', err);
+    return null;
+  }
 }
 
 /**
@@ -202,6 +222,10 @@ export async function getData(): Promise<Item[]> {
  * It will check if we need to refresh data and return the initial data
  */
 export async function initializeDataService(): Promise<Item[]> {
+  // Track our initial data source for analytics and debugging
+  let initialDataSource = 'unknown';
+  let initialData: Item[] = [];
+
   try {
     // Try to load from localStorage first
     const cachedData = loadDataFromLocalStorage();
@@ -209,18 +233,29 @@ export async function initializeDataService(): Promise<Item[]> {
     // If we have cached data, use it immediately
     if (cachedData && cachedData.items && cachedData.items.length > 0) {
       console.log('Using cached data from local storage');
+      initialDataSource = 'localStorage';
+      initialData = cachedData.items;
 
-      // Start a background check for updates
+      // Start a background check for updates, but with a longer delay
       setTimeout(async () => {
         try {
           const needsUpdate = await checkForUpdates();
           if (needsUpdate) {
             console.log('Background refresh started');
             fetchDataFromGoogleSheet().then(freshData => {
-              saveDataToLocalStorage(freshData);
-              console.log('Background data refresh complete');
+              // Store a backup of current data
+              const currentData = loadDataFromLocalStorage();
+
+              // Only save new data if it looks valid
+              if (freshData.items && freshData.items.length > 0) {
+                saveDataToLocalStorage(freshData);
+                console.log('Background data refresh complete with', freshData.items.length, 'items');
+              } else {
+                console.warn('Received empty data from Google Sheet, keeping existing data');
+              }
             }).catch(err => {
               console.error('Background refresh failed:', err);
+              // No need to do anything - we already have data
             });
           } else {
             console.log('Cached data is up to date');
@@ -228,35 +263,55 @@ export async function initializeDataService(): Promise<Item[]> {
         } catch (err) {
           console.error('Failed to check for updates:', err);
         }
-      }, 100); // Start background check very shortly after initial render
+      }, 2000); // Increased from 100ms to 2000ms to give app more time to stabilize
 
-      return cachedData.items;
+      return initialData;
     }
 
     // If no cache or empty cache, try to load from db.json first for speed
     try {
       console.log('No valid cache, loading from db.json');
       const dbData = await importFromDBJson();
+      initialDataSource = 'db.json';
+      initialData = dbData.items;
+
+      // Save immediately to localStorage to prevent future issues
+      if (dbData.items && dbData.items.length > 0) {
+        saveDataToLocalStorage(dbData);
+      }
 
       // Start a background update from the Google Sheet
       setTimeout(async () => {
         try {
           console.log('Fetching latest data in background');
           const freshData = await fetchDataFromGoogleSheet();
-          saveDataToLocalStorage(freshData);
-          console.log('Updated with latest data from Google Sheet');
+
+          // Only save if we got valid data
+          if (freshData.items && freshData.items.length > 0) {
+            saveDataToLocalStorage(freshData);
+            console.log('Updated with latest data from Google Sheet - received', freshData.items.length, 'items');
+          } else {
+            console.warn('Received invalid or empty data from Google Sheet, keeping existing data');
+          }
         } catch (err) {
           console.error('Background fetch failed:', err);
+          // We already have db.json data, so no further action needed
         }
-      }, 100);
+      }, 3000); // Increased from 100ms to 3000ms
 
-      return dbData.items;
+      return initialData;
     } catch (err) {
       // If db.json fails, fetch from Google Sheet directly
       console.error('Failed to load from db.json, fetching from Google Sheet:', err);
       const freshData = await fetchDataFromGoogleSheet();
-      saveDataToLocalStorage(freshData);
-      return freshData.items;
+      initialDataSource = 'googleSheet';
+      initialData = freshData.items;
+
+      if (freshData.items && freshData.items.length > 0) {
+        saveDataToLocalStorage(freshData);
+      }
+
+      return initialData;
     }
   } catch (err) {
     console.error('Failed to initialize data service:', err);
@@ -265,10 +320,15 @@ export async function initializeDataService(): Promise<Item[]> {
     // Try one last time with db.json as absolute fallback
     try {
       const dbData = await importFromDBJson();
-      return dbData.items;
+      initialDataSource = 'fallback-db.json';
+      initialData = dbData.items;
+      return initialData;
     } catch (fallbackErr) {
       console.error('All data sources failed:', fallbackErr);
       return []; // Return empty array as last resort
     }
+  } finally {
+    // Log our final data status
+    console.log(`Data initialization complete. Source: ${initialDataSource}, Items: ${initialData.length}`);
   }
 }
