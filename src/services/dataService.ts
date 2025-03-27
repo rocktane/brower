@@ -4,6 +4,9 @@ import Papa from 'papaparse';
 // Google Sheet URL in CSV format
 const GOOGLE_SHEET_URL = import.meta.env.VITE_GOOGLE_SHEET_URL;
 
+// Direct import of db.json data for bundling at build time
+import defaultData from '../db.json';
+
 // Interface for item data
 export interface Item {
   name: string;
@@ -138,9 +141,30 @@ export function loadDataFromLocalStorage(): CachedData | null {
  */
 export async function importFromDBJson(): Promise<CachedData> {
   try {
-    const module = await import('../db.json');
-    // Add missing fields for backward compatibility
-    const items = Array.isArray(module.default) ? module.default : [];
+    let items: any[];
+
+    // In production, use the directly imported data
+    if (import.meta.env.PROD) {
+      console.log('Using pre-bundled db.json data in production');
+      items = defaultData;
+    } else {
+      // In development, try to dynamically import for fresher data
+      try {
+        console.log('Attempting to dynamically load db.json in development');
+        const response = await fetch('/src/db.json');
+        items = await response.json();
+      } catch (srcFetchErr) {
+        // Try fallback to public folder
+        try {
+          console.log('Trying fallback to public/db.json');
+          const publicResponse = await fetch('/db.json');
+          items = await publicResponse.json();
+        } catch (publicFetchErr) {
+          console.warn('Failed to fetch db.json from both locations, using bundled data instead');
+          items = defaultData;
+        }
+      }
+    }
 
     // Ensure all items have the required fields
     const updatedItems = items.map((item: any) => ({
@@ -155,7 +179,17 @@ export async function importFromDBJson(): Promise<CachedData> {
     };
   } catch (err) {
     console.error('Error importing from db.json:', err);
-    throw err;
+    // Fall back to bundled data if any other error occurs
+    const fallbackItems = defaultData.map((item: any) => ({
+      ...item,
+      descriptionEN: item.descriptionEN || item.description || '',
+      descriptionFR: item.descriptionFR || item.description || '',
+    }));
+
+    return {
+      lastModified: new Date().toISOString(),
+      items: fallbackItems
+    };
   }
 }
 
@@ -236,32 +270,6 @@ export async function initializeDataService(): Promise<Item[]> {
       initialDataSource = 'localStorage';
       initialData = cachedData.items;
 
-      // Start a background check for updates, but with a longer delay
-      setTimeout(async () => {
-        try {
-          const needsUpdate = await checkForUpdates();
-          if (needsUpdate) {
-            console.log('Background refresh started');
-            fetchDataFromGoogleSheet().then(freshData => {
-              // Only save new data if it looks valid
-              if (freshData.items && freshData.items.length > 0) {
-                saveDataToLocalStorage(freshData);
-                console.log('Background data refresh complete with', freshData.items.length, 'items');
-              } else {
-                console.warn('Received empty data from Google Sheet, keeping existing data');
-              }
-            }).catch(err => {
-              console.error('Background refresh failed:', err);
-              // No need to do anything - we already have data
-            });
-          } else {
-            console.log('Cached data is up to date');
-          }
-        } catch (err) {
-          console.error('Failed to check for updates:', err);
-        }
-      }, 2000); // Increased from 100ms to 2000ms to give app more time to stabilize
-
       return initialData;
     }
 
@@ -277,7 +285,13 @@ export async function initializeDataService(): Promise<Item[]> {
         saveDataToLocalStorage(dbData);
       }
 
-      // Start a background update from the Google Sheet
+      // Skip background update if in production to avoid refresh issues
+      if (import.meta.env.PROD) {
+        console.log('Skipping background refresh in production - using db.json data');
+        return initialData;
+      }
+
+      // Start a background update from the Google Sheet (development only)
       setTimeout(async () => {
         try {
           console.log('Fetching latest data in background');
@@ -327,11 +341,5 @@ export async function initializeDataService(): Promise<Item[]> {
   } finally {
     // Log our final data status
     console.log(`Data initialization complete. Source: ${initialDataSource}, Items: ${initialData.length}`);
-
-    // For a quick test, add this condition to disable background refreshes in production
-    if (process.env.NODE_ENV === 'production') {
-      console.log('Background refreshes disabled in production');
-      return initialData; // Return without setting the timeout
-    }
   }
 }
