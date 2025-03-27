@@ -17,7 +17,13 @@
         </div>
       </div>
     </div>
-    <div v-for="category in orderedCategories" :key="category" class="category">
+    <div v-if="loading" class="loading-state">
+      <p>{{ t("message.loading") || "Loading..." }}</p>
+    </div>
+    <div v-else-if="fetchError" class="error-state">
+      <p>{{ t("message.error") || "Error loading data" }}: {{ fetchError }}</p>
+    </div>
+    <div v-else v-for="category in orderedCategories" :key="category" class="category">
       <h3>{{ $t(`message.categories.${category}`).toLowerCase() }}</h3>
       <div class="cards">
         <label
@@ -32,7 +38,7 @@
         >
           <input type="checkbox" v-model="item.checked" @change="updateCount" />
           <Bubble
-            :description="t(`message.descriptions.${item.code}`)"
+            :description="getLocalizedDescription(item)"
             v-if="showBubble"
           />
           <img
@@ -48,7 +54,7 @@
             >{{ item.name }}</span
           >
           <img
-            v-if="item.special !== ''"
+            v-if="item.special !== 'none'"
             :src="getIconUrl(item.special)"
             :alt="item.special"
             :class="item.special"
@@ -65,20 +71,10 @@ import { defineComponent, onMounted, ref, watch, computed } from "vue";
 import { store } from "../store";
 import Bubble from "./Bubble.vue";
 import { useI18n } from "vue-i18n";
-import dbData from "../db.json";
-
-interface Item {
-  name: string;
-  code: string;
-  brew: string;
-  tap?: string;
-  logo: string;
-  category: string;
-  url: string;
-  description: string;
-  checked: boolean;
-  special: string;
-}
+import {
+  Item,
+  initializeDataService,
+} from "../services/dataService";
 
 const orderedCategories = [
   "internet",
@@ -100,10 +96,21 @@ export default defineComponent({
   setup() {
     const items = ref<Item[]>([]);
     const showBubble = ref(false);
+    const loading = ref(false);
+    const fetchError = ref<string | null>(null);
 
-    onMounted(() => {
-      items.value = dbData.map((item) => ({ ...item, checked: false }));
-      updateCount();
+    onMounted(async () => {
+      try {
+        loading.value = true;
+        items.value = await initializeDataService();
+        items.value = items.value.map(item => ({ ...item, checked: false }));
+        updateCount();
+      } catch (err) {
+        console.error("Failed to load data:", err);
+        fetchError.value = err instanceof Error ? err.message : "Unknown error";
+      } finally {
+        loading.value = false;
+      }
     });
 
     const toggleBubble = (): void => {
@@ -135,6 +142,19 @@ export default defineComponent({
       return new URL(`../assets/icons/${name}.svg`, import.meta.url).href;
     };
 
+    const hasTranslation = (code: string): boolean => {
+      const key = `message.descriptions.${code}`;
+      return t(key) !== key;
+    };
+
+    const getLocalizedDescription = (item: Item): string => {
+      const locale = useI18n().locale.value;
+      if (locale === 'fr' && item.descriptionFR) {
+        return item.descriptionFR;
+      }
+      return item.descriptionEN || item.description || '';
+    };
+
     return {
       items,
       orderedCategories,
@@ -144,6 +164,10 @@ export default defineComponent({
       t,
       groupedItems,
       getIconUrl,
+      loading,
+      fetchError,
+      hasTranslation,
+      getLocalizedDescription,
     };
   },
 });
@@ -153,6 +177,22 @@ export default defineComponent({
 .content {
   width: 90%;
   margin: 0 auto;
+}
+
+.loading-state,
+.error-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2em;
+  margin: 1em 0;
+  border: 1px solid rgb(200, 200, 200);
+  border-radius: 15px;
+}
+
+.error-state {
+  color: #d83b01;
+  background-color: rgba(216, 59, 1, 0.05);
 }
 
 .category {

@@ -40,14 +40,12 @@ h3 {
 }
 
 button {
-  /* border: 1px solid transparent; */
   padding: 0.6em 1.2em;
   border-radius: 8px;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
   cursor: pointer;
-  /* transition: border-color 0.25s; */
 }
 
 .btn {
@@ -113,12 +111,6 @@ button {
   outline-style: none;
   outline: medium none;
 }
-
-/* p:has(kbd) {
-  display: flex;
-  align-items: center;
-  justify-content: start;
-} */
 
 kbd {
   background-color: #eee;
