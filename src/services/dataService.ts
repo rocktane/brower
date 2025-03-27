@@ -327,5 +327,11 @@ export async function initializeDataService(): Promise<Item[]> {
   } finally {
     // Log our final data status
     console.log(`Data initialization complete. Source: ${initialDataSource}, Items: ${initialData.length}`);
+
+    // For a quick test, add this condition to disable background refreshes in production
+    if (process.env.NODE_ENV === 'production') {
+      console.log('Background refreshes disabled in production');
+      return initialData; // Return without setting the timeout
+    }
   }
 }
