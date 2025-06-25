@@ -64,7 +64,20 @@ export default defineComponent({
     const { t } = useI18n();
 
     const installBrew =
-      'command -v brew &> /dev/null && brew update || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && ';
+      'command -v brew &> /dev/null && brew update || ( /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && ' +
+      'HOMEBREW_PREFIX="$(/opt/homebrew/bin/brew --prefix 2>/dev/null || /usr/local/bin/brew --prefix 2>/dev/null || echo /opt/homebrew)" && ' +
+      'SHELL_RCFILE="$([ -n "$ZSH_VERSION" ] && echo ~/.zshrc || ([ -n "$BASH_VERSION" ] && echo ~/.bashrc || echo ~/.profile))" && ' +
+      'if grep -qs "eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)""; then ' +
+      '  if ! command -v brew >/dev/null; then ' +
+      '    echo "- Run this command in your terminal to add Homebrew to your PATH:"; ' +
+      '    echo "    eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)""; ' +
+      '  fi; ' +
+      'else ' +
+      '  echo "- Run these commands in your terminal to add Homebrew to your PATH:"; ' +
+      '  echo "    echo >> $SHELL_RCFILE"; ' +
+      '  echo "    echo 'eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"' >> $SHELL_RCFILE"; ' +
+      '  echo "    eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)""; ' +
+      'fi ) && ';
 
     const tapApps = store.tapApps;
     const caskApps = store.apps.filter((app) => app.startsWith("--cask"));
