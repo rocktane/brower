@@ -4,6 +4,9 @@ import Papa from 'papaparse';
 // Google Sheet URL in CSV format
 const GOOGLE_SHEET_URL = import.meta.env.VITE_GOOGLE_SHEET_URL;
 
+// Direct import of db.json data for bundling at build time
+import defaultData from '../db.json';
+
 // Interface for item data
 export interface Item {
   name: string;
@@ -13,9 +16,8 @@ export interface Item {
   logo: string;
   category: string;
   url: string;
-  description: string;     // Keep for backward compatibility
-  descriptionEN: string;   // New field for English description
-  descriptionFR: string;   // New field for French description
+  descriptionEN: string;
+  descriptionFR: string;
   special: string;
   checked?: boolean;
 }
@@ -28,6 +30,8 @@ export interface CachedData {
 
 export const isLoading = ref(false);
 export const error = ref<string | null>(null);
+export const dataSource = ref<string>('unknown');
+export const lastUpdated = ref<string | null>(null);
 
 /**
  * Fetch the Last-Modified header from the Google Sheet
@@ -43,46 +47,167 @@ export async function fetchLastModifiedDate(): Promise<string> {
 }
 
 /**
- * Parse CSV data into an array of items
+ * Validate a single item to ensure it has required fields
+ */
+function validateItem(item: any): boolean {
+  // Required fields that must have non-empty values
+  const requiredFields = ['name', 'code', 'brew', 'category'];
+  
+  for (const field of requiredFields) {
+    if (!item[field] || typeof item[field] !== 'string' || item[field].trim() === '') {
+      console.warn(`Invalid item: missing or empty ${field}`, item);
+      return false;
+    }
+  }
+  
+  return true;
+}
+
+/**
+ * Parse CSV data into an array of items with validation
  */
 function parseCSVtoItems(csvData: string): Item[] {
-  const { data } = Papa.parse(csvData, {
+  const { data, errors } = Papa.parse(csvData, {
     header: true,
     skipEmptyLines: true
   });
 
-  return data.map((row: any) => ({
-    name: row.name || '',
-    code: row.code || '',
-    brew: row.brew || '',
-    tap: row.tap || undefined,
-    logo: row.logo || '',
-    category: row.category || '',
-    url: row.url || '',
-    description: row.description || '', // Keep for backward compatibility
-    descriptionEN: row.descriptionEN || row.description || '', // Use description as fallback
-    descriptionFR: row.descriptionFR || row.description || '', // Use description as fallback
-    special: row.special || 'none',
-  }));
+  if (errors && errors.length > 0) {
+    console.error('CSV parsing errors:', errors);
+  }
+
+  const validItems: Item[] = [];
+  let invalidCount = 0;
+
+  for (const row of data as any[]) {
+    if (validateItem(row)) {
+      validItems.push({
+        name: row.name.trim(),
+        code: row.code.trim(),
+        brew: row.brew.trim(),
+        tap: row.tap?.trim() || undefined,
+        logo: row.logo?.trim() || '',
+        category: row.category.trim(),
+        url: row.url?.trim() || '',
+        descriptionEN: row.descriptionEN?.trim() || '',
+        descriptionFR: row.descriptionFR?.trim() || '',
+        special: row.special?.trim() || 'none',
+      });
+    } else {
+      invalidCount++;
+    }
+  }
+
+  if (invalidCount > 0) {
+    console.warn(`Filtered out ${invalidCount} invalid items from CSV data`);
+  }
+
+  console.log(`Successfully parsed ${validItems.length} valid items from CSV`);
+  return validItems;
 }
 
 /**
- * Fetch data from Google Sheet and parse it
+ * Try multiple URL formats to fetch Google Sheet data
+ */
+async function tryFetchGoogleSheet(url: string): Promise<string> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+  
+  try {
+    const response = await fetch(url, {
+      signal: controller.signal,
+      mode: 'cors',
+      credentials: 'omit',
+      headers: {
+        'Accept': 'text/csv, text/plain, */*'
+      }
+    });
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
+    }
+
+    return await response.text();
+  } catch (err) {
+    clearTimeout(timeoutId);
+    throw err;
+  }
+}
+
+/**
+ * Fetch data from Google Sheet and parse it with validation
  */
 export async function fetchDataFromGoogleSheet(): Promise<CachedData> {
   isLoading.value = true;
   error.value = null;
 
   try {
+    if (!GOOGLE_SHEET_URL) {
+      throw new Error('Google Sheet URL not configured. Please set VITE_GOOGLE_SHEET_URL environment variable.');
+    }
+
+    console.log('Fetching data from Google Sheet...');
+    
     // Get the last modified date
     const lastModified = await fetchLastModifiedDate();
 
-    // Fetch the CSV data
-    const response = await fetch(GOOGLE_SHEET_URL);
-    const csvData = await response.text();
+    // Try to fetch CSV data
+    let csvData = '';
+    let fetchError = null;
+    
+    try {
+      csvData = await tryFetchGoogleSheet(GOOGLE_SHEET_URL);
+    } catch (err) {
+      fetchError = err;
+      console.warn('Primary URL failed, trying alternative format...');
+      
+      // Try alternative URL format if the primary fails
+      const sheetId = GOOGLE_SHEET_URL.match(/\/d\/([a-zA-Z0-9-_]+)/)?.[1];
+      if (sheetId) {
+        const altUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;
+        try {
+          csvData = await tryFetchGoogleSheet(altUrl);
+          console.log('Alternative URL format worked!');
+        } catch (altErr) {
+          // If both fail, throw the original error
+          throw fetchError;
+        }
+      } else {
+        throw fetchError;
+      }
+    }
+    
+    // Check if we got valid CSV data
+    if (!csvData || csvData.trim().length === 0) {
+      throw new Error('Received empty data from Google Sheet');
+    }
 
-    // Parse the CSV data
+    // Check if we accidentally got HTML instead of CSV
+    if (csvData.trim().startsWith('<!DOCTYPE') || csvData.trim().startsWith('<html')) {
+      console.error('Received HTML instead of CSV. This is likely a CORS/redirect issue.');
+      console.error('Current URL:', GOOGLE_SHEET_URL);
+      console.error('Try one of these solutions:');
+      console.error('1. Clear your browser cache and cookies for docs.google.com');
+      console.error('2. Open the URL directly in a new tab to accept any redirects:', GOOGLE_SHEET_URL);
+      console.error('3. Use a proxy service or backend server to fetch the data');
+      throw new Error('Google Sheet returned HTML (likely due to CORS/redirect). See console for solutions.');
+    }
+
+    // Check if the response looks like CSV (has comma-separated values)
+    if (!csvData.includes(',') || !csvData.includes('\n')) {
+      console.warn('Response may not be valid CSV format');
+    }
+
+    // Parse the CSV data with validation
     const items = parseCSVtoItems(csvData);
+
+    // Validate we got at least some items
+    if (items.length === 0) {
+      throw new Error('No valid items found in Google Sheet data');
+    }
+
+    console.log(`Successfully fetched ${items.length} items from Google Sheet`);
 
     return {
       lastModified,
@@ -90,8 +215,21 @@ export async function fetchDataFromGoogleSheet(): Promise<CachedData> {
     };
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-    console.error('Error fetching data:', errorMessage);
-    error.value = errorMessage;
+    
+    // Log specific error types
+    if (err instanceof Error) {
+      if (err.name === 'AbortError') {
+        console.error('Google Sheet fetch timeout after 10 seconds');
+        error.value = 'Request timeout - Google Sheet took too long to respond';
+      } else if (err.message.includes('fetch')) {
+        console.error('Network error fetching Google Sheet:', errorMessage);
+        error.value = 'Network error - Could not reach Google Sheet';
+      } else {
+        console.error('Error fetching data from Google Sheet:', errorMessage);
+        error.value = errorMessage;
+      }
+    }
+    
     throw err;
   } finally {
     isLoading.value = false;
@@ -112,59 +250,185 @@ export function saveDataToLocalStorage(data: CachedData): void {
 }
 
 /**
- * Load data from local storage
+ * Load data from local storage with validation
  */
 export function loadDataFromLocalStorage(): CachedData | null {
   try {
     const cachedData = localStorage.getItem('brower_data_cache');
-    if (!cachedData) return null;
-
-    const parsedData = JSON.parse(cachedData);
-    // Validate the data structure to ensure it's valid
-    if (!parsedData.items || !Array.isArray(parsedData.items)) {
-      console.warn('Invalid data structure in local storage');
+    if (!cachedData) {
+      console.log('No cached data found in localStorage');
       return null;
     }
 
+    const parsedData = JSON.parse(cachedData);
+    
+    // Validate the data structure
+    if (!parsedData.items || !Array.isArray(parsedData.items)) {
+      console.warn('Invalid data structure in local storage - missing or invalid items array');
+      localStorage.removeItem('brower_data_cache'); // Clear invalid cache
+      return null;
+    }
+
+    // Validate that items have required fields
+    const validItems = parsedData.items.filter((item: any) => validateItem(item));
+    
+    if (validItems.length === 0) {
+      console.warn('No valid items in cached data');
+      localStorage.removeItem('brower_data_cache'); // Clear invalid cache
+      return null;
+    }
+
+    if (validItems.length < parsedData.items.length) {
+      console.warn(`Filtered out ${parsedData.items.length - validItems.length} invalid items from cache`);
+      parsedData.items = validItems;
+    }
+
+    console.log(`Loaded ${validItems.length} valid items from localStorage cache`);
     return parsedData;
   } catch (err) {
     console.error('Error loading data from local storage:', err);
+    // Clear corrupted cache
+    try {
+      localStorage.removeItem('brower_data_cache');
+      console.log('Cleared corrupted cache from localStorage');
+    } catch (clearErr) {
+      console.error('Failed to clear corrupted cache:', clearErr);
+    }
     return null;
   }
 }
 
 /**
- * Import data from db.json
+ * Import data from db.json with validation
  */
 export async function importFromDBJson(): Promise<CachedData> {
   try {
-    const module = await import('../db.json');
-    // Add missing fields for backward compatibility
-    const items = Array.isArray(module.default) ? module.default : [];
+    let items: any[];
 
-    // Ensure all items have the required fields
-    const updatedItems = items.map((item: any) => ({
-      ...item,
-      descriptionEN: item.descriptionEN || item.description || '',
-      descriptionFR: item.descriptionFR || item.description || '',
-    }));
+    // In production, use the directly imported data
+    if (import.meta.env.PROD) {
+      items = defaultData;
+    } else {
+      // In development, try to dynamically import for fresher data
+      try {
+        const response = await fetch('/src/db.json');
+        if (!response.ok) {
+          throw new Error(`Failed to fetch: ${response.status}`);
+        }
+        items = await response.json();
+      } catch (srcFetchErr) {
+        // Try fallback to public folder
+        try {
+          const publicResponse = await fetch('/db.json');
+          if (!publicResponse.ok) {
+            throw new Error(`Failed to fetch: ${publicResponse.status}`);
+          }
+          items = await publicResponse.json();
+        } catch (publicFetchErr) {
+          items = defaultData;
+        }
+      }
+    }
+
+    // Validate that we have an array
+    if (!Array.isArray(items)) {
+      console.error('db.json does not contain an array of items');
+      throw new Error('Invalid db.json format - expected array');
+    }
+
+    // Filter and validate items
+    const validItems: Item[] = [];
+    let invalidCount = 0;
+
+    for (const item of items) {
+      if (validateItem(item)) {
+        validItems.push({
+          name: item.name.trim(),
+          code: item.code.trim(),
+          brew: item.brew.trim(),
+          tap: item.tap?.trim() || undefined,
+          logo: item.logo?.trim() || '',
+          category: item.category.trim(),
+          url: item.url?.trim() || '',
+          descriptionEN: item.descriptionEN?.trim() || '',
+          descriptionFR: item.descriptionFR?.trim() || '',
+          special: item.special?.trim() || 'none',
+        });
+      } else {
+        invalidCount++;
+      }
+    }
+
+    if (invalidCount > 0) {
+      console.warn(`Filtered out ${invalidCount} invalid items from db.json`);
+    }
+
+    if (validItems.length === 0) {
+      throw new Error('No valid items found in db.json');
+    }
 
     return {
       lastModified: new Date().toISOString(),
-      items: updatedItems
+      items: validItems
     };
   } catch (err) {
     console.error('Error importing from db.json:', err);
-    throw err;
+    
+    // Last resort: try to use bundled data with validation
+    try {
+      const fallbackItems: Item[] = [];
+      
+      if (Array.isArray(defaultData)) {
+        for (const item of defaultData) {
+          if (validateItem(item)) {
+            fallbackItems.push({
+              name: item.name.trim(),
+              code: item.code.trim(),
+              brew: item.brew.trim(),
+              tap: item.tap?.trim() || undefined,
+              logo: item.logo?.trim() || '',
+              category: item.category.trim(),
+              url: item.url?.trim() || '',
+              descriptionEN: item.descriptionEN?.trim() || '',
+              descriptionFR: item.descriptionFR?.trim() || '',
+              special: item.special?.trim() || 'none',
+            });
+          }
+        }
+      }
+
+      if (fallbackItems.length > 0) {
+        console.log(`Using ${fallbackItems.length} valid items from bundled fallback data`);
+        return {
+          lastModified: new Date().toISOString(),
+          items: fallbackItems
+        };
+      }
+    } catch (fallbackErr) {
+      console.error('Failed to process bundled fallback data:', fallbackErr);
+    }
+
+    // If all else fails, return empty array
+    console.error('All data sources failed - returning empty dataset');
+    return {
+      lastModified: new Date().toISOString(),
+      items: []
+    };
   }
 }
 
 /**
  * Check if data needs to be refreshed
  */
-export async function checkForUpdates(): Promise<boolean> {
+export async function checkForUpdates(forceCheck: boolean = false): Promise<boolean> {
   const cachedData = loadDataFromLocalStorage();
   if (!cachedData) return true;
+
+  // Force refresh if explicitly requested
+  if (forceCheck) {
+    console.log('Force refresh requested');
+    return true;
+  }
 
   try {
     const remoteLastModified = await fetchLastModifiedDate();
@@ -173,14 +437,26 @@ export async function checkForUpdates(): Promise<boolean> {
     const remoteDate = new Date(remoteLastModified).getTime();
     const cachedDate = new Date(cachedData.lastModified).getTime();
 
-    // Add a 5-minute threshold to avoid frequent updates
-    const fiveMinutesInMs = 5 * 60 * 1000;
+    // Check cache age - if older than 1 hour, refresh
+    const oneHourInMs = 60 * 60 * 1000;
+    const cacheAge = Date.now() - cachedDate;
+    
+    if (cacheAge > oneHourInMs) {
+      console.log('Cache is older than 1 hour, refreshing...');
+      return true;
+    }
 
-    // Only update if the remote date is at least 5 minutes newer
-    return remoteDate > (cachedDate + fiveMinutesInMs);
+    // Check if remote has newer data
+    const hasUpdate = remoteDate > cachedDate;
+    if (hasUpdate) {
+      console.log('Google Sheet has newer data, refreshing...');
+    }
+    
+    return hasUpdate;
   } catch (err) {
     console.error('Error checking for updates:', err);
-    return false;
+    // On error, try to refresh to get latest data
+    return true;
   }
 }
 
@@ -217,6 +493,38 @@ export async function getData(): Promise<Item[]> {
 }
 
 /**
+ * Clear local storage cache
+ */
+export function clearCache(): void {
+  try {
+    localStorage.removeItem('brower_data_cache');
+    console.log('Cache cleared successfully');
+  } catch (err) {
+    console.error('Failed to clear cache:', err);
+  }
+}
+
+
+/**
+ * Force refresh data from Google Sheet
+ */
+export async function forceRefreshData(): Promise<Item[]> {
+  try {
+    const freshData = await fetchDataFromGoogleSheet();
+    saveDataToLocalStorage(freshData);
+    dataSource.value = 'Google Sheet (forced refresh)';
+    lastUpdated.value = new Date().toISOString();
+    return freshData.items;
+  } catch (err) {
+    const dbData = await importFromDBJson();
+    saveDataToLocalStorage(dbData);
+    dataSource.value = 'db.json (fallback)';
+    lastUpdated.value = new Date().toISOString();
+    return dbData.items;
+  }
+}
+
+/**
  * Initialize data service
  * This function should be called when the app starts
  * It will check if we need to refresh data and return the initial data
@@ -230,44 +538,36 @@ export async function initializeDataService(): Promise<Item[]> {
     // Try to load from localStorage first
     const cachedData = loadDataFromLocalStorage();
 
-    // If we have cached data, use it immediately
+    // If we have cached data, use it for immediate display
     if (cachedData && cachedData.items && cachedData.items.length > 0) {
-      console.log('Using cached data from local storage');
-      initialDataSource = 'localStorage';
+      initialDataSource = 'localStorage (cached)';
       initialData = cachedData.items;
+      dataSource.value = initialDataSource;
+      lastUpdated.value = cachedData.lastModified;
 
-      // Start a background check for updates, but with a longer delay
+      // Always check for updates in the background
       setTimeout(async () => {
         try {
           const needsUpdate = await checkForUpdates();
           if (needsUpdate) {
-            console.log('Background refresh started');
-            fetchDataFromGoogleSheet().then(freshData => {
-              // Only save new data if it looks valid
-              if (freshData.items && freshData.items.length > 0) {
-                saveDataToLocalStorage(freshData);
-                console.log('Background data refresh complete with', freshData.items.length, 'items');
-              } else {
-                console.warn('Received empty data from Google Sheet, keeping existing data');
-              }
-            }).catch(err => {
-              console.error('Background refresh failed:', err);
-              // No need to do anything - we already have data
-            });
+            const freshData = await fetchDataFromGoogleSheet();
+            if (freshData.items && freshData.items.length > 0) {
+              saveDataToLocalStorage(freshData);
+              dataSource.value = 'Google Sheet (updated)';
+              lastUpdated.value = freshData.lastModified;
+              // Don't trigger reload - just log the update
+            }
           } else {
-            console.log('Cached data is up to date');
           }
         } catch (err) {
-          console.error('Failed to check for updates:', err);
         }
-      }, 2000); // Increased from 100ms to 2000ms to give app more time to stabilize
+      }, 1000); // Check after 1 second
 
       return initialData;
     }
 
     // If no cache or empty cache, try to load from db.json first for speed
     try {
-      console.log('No valid cache, loading from db.json');
       const dbData = await importFromDBJson();
       initialDataSource = 'db.json';
       initialData = dbData.items;
@@ -277,29 +577,28 @@ export async function initializeDataService(): Promise<Item[]> {
         saveDataToLocalStorage(dbData);
       }
 
-      // Start a background update from the Google Sheet
+      // Always try to get fresh data from Google Sheet in background
       setTimeout(async () => {
         try {
-          console.log('Fetching latest data in background');
           const freshData = await fetchDataFromGoogleSheet();
 
           // Only save if we got valid data
           if (freshData.items && freshData.items.length > 0) {
             saveDataToLocalStorage(freshData);
-            console.log('Updated with latest data from Google Sheet - received', freshData.items.length, 'items');
+            dataSource.value = 'Google Sheet (background update)';
+            lastUpdated.value = freshData.lastModified;
+            // Don't trigger reload - just log the update
           } else {
-            console.warn('Received invalid or empty data from Google Sheet, keeping existing data');
           }
         } catch (err) {
-          console.error('Background fetch failed:', err);
-          // We already have db.json data, so no further action needed
+          // Keep using db.json data
+          dataSource.value = 'db.json (Google Sheet unavailable)';
         }
-      }, 3000); // Increased from 100ms to 3000ms
+      }, 2000); // Try after 2 seconds
 
       return initialData;
     } catch (err) {
       // If db.json fails, fetch from Google Sheet directly
-      console.error('Failed to load from db.json, fetching from Google Sheet:', err);
       const freshData = await fetchDataFromGoogleSheet();
       initialDataSource = 'googleSheet';
       initialData = freshData.items;
@@ -311,7 +610,6 @@ export async function initializeDataService(): Promise<Item[]> {
       return initialData;
     }
   } catch (err) {
-    console.error('Failed to initialize data service:', err);
     error.value = err instanceof Error ? err.message : 'Unknown error';
 
     // Try one last time with db.json as absolute fallback
@@ -321,17 +619,15 @@ export async function initializeDataService(): Promise<Item[]> {
       initialData = dbData.items;
       return initialData;
     } catch (fallbackErr) {
-      console.error('All data sources failed:', fallbackErr);
       return []; // Return empty array as last resort
     }
   } finally {
-    // Log our final data status
-    console.log(`Data initialization complete. Source: ${initialDataSource}, Items: ${initialData.length}`);
-
-    // For a quick test, add this condition to disable background refreshes in production
-    if (process.env.NODE_ENV === 'production') {
-      console.log('Background refreshes disabled in production');
-      return initialData; // Return without setting the timeout
+    // Update reactive refs
+    if (!dataSource.value || dataSource.value === 'unknown') {
+      dataSource.value = initialDataSource;
+    }
+    if (!lastUpdated.value) {
+      lastUpdated.value = new Date().toISOString();
     }
   }
 }

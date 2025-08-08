@@ -5,13 +5,17 @@ import path from 'path';
 import https from 'https';
 import Papa from 'papaparse';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
 
 // Get the directory name
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Google Sheet URL in CSV format
-const GOOGLE_SHEET_URL = import.meta.env.VITE_GOOGLE_SHEET_URL;
+const GOOGLE_SHEET_URL = process.env.VITE_GOOGLE_SHEET_URL || process.env.GOOGLE_SHEET_URL || 'https://docs.google.com/spreadsheets/d/167dm2dr--BkdSp5ANj54Hc6LZY15MHWbIzCb4nN0JTg/gviz/tq?tqx=out:csv';
 const DB_PATH = path.resolve(__dirname, '../src/db.json');
 const CACHED_DB_PATH = path.resolve(__dirname, '../src/db.cache.json');
 
@@ -26,7 +30,6 @@ function fetchLastModifiedDate() {
     });
 
     req.on('error', (error) => {
-      console.error('Error fetching last modified date:', error);
       reject(error);
     });
 
@@ -52,7 +55,6 @@ function fetchDataFromGoogleSheet() {
     });
 
     req.on('error', (error) => {
-      console.error('Error fetching data:', error);
       reject(error);
     });
 
@@ -94,7 +96,6 @@ function saveCachedData(items, lastModified) {
   };
 
   fs.writeFileSync(CACHED_DB_PATH, JSON.stringify(cachedData, null, 2));
-  console.log(`Cache file updated with last modified date: ${lastModified}`);
 }
 
 /**
@@ -110,26 +111,22 @@ async function updateDb() {
     if (fs.existsSync(CACHED_DB_PATH)) {
       const cachedData = JSON.parse(fs.readFileSync(CACHED_DB_PATH, 'utf8'));
       if (cachedData.lastModified === lastModified) {
-        console.log('Data is up-to-date, no update needed.');
         shouldUpdate = false;
       }
     }
 
     if (shouldUpdate) {
-      console.log('Fetching data from Google Sheet...');
       const csvData = await fetchDataFromGoogleSheet();
       const items = parseCSVtoItems(csvData);
 
       // Save items to db.json
       fs.writeFileSync(DB_PATH, JSON.stringify(items, null, 2));
-      console.log(`db.json updated with ${items.length} items`);
 
       // Save to cache with last modified date
       saveCachedData(items, lastModified);
     }
 
   } catch (error) {
-    console.error('Error updating db.json:', error);
     process.exit(1);
   }
 }

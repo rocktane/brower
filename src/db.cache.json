@@ -1,14 +1,16 @@
 {
-  "lastModified": "2025-03-27T00:11:56.617Z",
+  "lastModified": "2025-08-08T17:39:17.384Z",
   "items": [
     {
       "name": "AlDente",
       "code": "aldente",
       "brew": "--cask aldente",
-      "logo": "https://apphousekitchen.com/wp-content/uploads/2021/03/aldenteproicon.png",
+      "logo": "https://i0.wp.com/www.appletips.nl/wp-content/uploads/2021/07/aldentepro-icon.png",
       "category": "tools",
       "url": "https://apphousekitchen.com/aldente/",
-      "description": "AlDente est une application pour gérer la charge de la batterie du Mac.",
+      "description": "",
+      "descriptionEN": "AlDente is a battery manager for macOS.",
+      "descriptionFR": "AlDente est une application pour gérer la charge de la batterie du Mac.",
       "special": "none"
     },
     {
@@ -18,7 +20,9 @@
       "logo": "https://www.alfredapp.com/media/logo.png",
       "category": "productivity",
       "url": "https://www.alfredapp.com/",
-      "description": "Alfred est un lanceur de commandes pour macOS.",
+      "description": "",
+      "descriptionEN": "Alfred is a productivity app for macOS.",
+      "descriptionFR": "Alfred est un lanceur de commandes pour macOS.",
       "special": "none"
     },
     {
@@ -28,7 +32,9 @@
       "logo": "https://alt-tab-macos.netlify.app/public/android-chrome-256x256.png",
       "category": "tools",
       "url": "https://alt-tab-macos.netlify.app/",
-      "description": "Alt-Tab est un switcher d'application pour macOS.",
+      "description": "",
+      "descriptionEN": "Alt-Tab is a macOS application switcher.",
+      "descriptionFR": "Alt-Tab est un switcher d'application pour macOS.",
       "special": "heart"
     },
     {
@@ -38,7 +44,9 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/3/37/Arc_%28browser%29_logo.svg",
       "category": "internet",
       "url": "https://arc.net/",
-      "description": "Arc est un navigateur web moderne.",
+      "description": "",
+      "descriptionEN": "Arc is an alternative web browser.",
+      "descriptionFR": "Arc est un navigateur web moderne.",
       "special": "heart"
     },
     {
@@ -48,7 +56,9 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/2/2d/Etcher-icon.png",
       "category": "tools",
       "url": "https://www.balena.io/etcher/",
-      "description": "BalenaEtcher est un outil pour flasher des cartes SD et des clés USB.",
+      "description": "",
+      "descriptionEN": "BalenaEtcher is a tool for flashing SD cards and USB keys.",
+      "descriptionFR": "BalenaEtcher est un outil pour flasher des cartes SD et des clés USB.",
       "special": "none"
     },
     {
@@ -58,7 +68,9 @@
       "logo": "https://github.com/actuallymentor/battery/blob/main/app/build/icon.png?raw=true",
       "category": "tools",
       "url": "https://github.com/actuallymentor/battery",
-      "description": "Battery est une application pour surveiller l'état de la batterie.",
+      "description": "",
+      "descriptionEN": "Battery is an application to monitor the battery status.",
+      "descriptionFR": "Battery est une application pour surveiller l'état de la batterie.",
       "special": "none"
     },
     {
@@ -68,7 +80,9 @@
       "logo": "https://cdn.mcauto-images-production.sendgrid.net/52f9e94e4cd3e19f/dcdebc87-a332-42f0-b40c-0fc61152eb9a/288x288.png",
       "category": "messaging",
       "url": "https://www.beeper.com/",
-      "description": "Beeper réunie toutes vos apps de messagerie.",
+      "description": "",
+      "descriptionEN": "Beeper is a free and open-source messaging app for macOS.",
+      "descriptionFR": "Beeper réunie toutes vos apps de messagerie.",
       "special": "new"
     },
     {
@@ -78,7 +92,9 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/0/03/Bitwarden_Logo.png",
       "category": "security",
       "url": "https://bitwarden.com/",
-      "description": "Bitwarden est un gestionnaire de mots de passe gratuit et open-source.",
+      "description": "",
+      "descriptionEN": "Bitwarden is a free and open-source password manager.",
+      "descriptionFR": "Bitwarden est un gestionnaire de mots de passe gratuit et open-source.",
       "special": "star"
     },
     {
@@ -88,7 +104,9 @@
       "logo": "https://cdn.icon-icons.com/icons2/2552/PNG/512/brave_browser_logo_icon_153013.png",
       "category": "internet",
       "url": "https://brave.com/",
-      "description": "Brave est un navigateur axé sur la confidentialité.",
+      "description": "",
+      "descriptionEN": "Brave is a privacy-focused web browser.",
+      "descriptionFR": "Brave est un navigateur axé sur la confidentialité.",
       "special": "none"
     },
     {
@@ -98,7 +116,9 @@
       "logo": "https://github.com/usebruno/bruno/blob/main/assets/images/logo-transparent.png?raw=true",
       "category": "developer",
       "url": "https://usebruno.com/",
-      "description": "Bruno est une alternative à Postman.",
+      "description": "",
+      "descriptionEN": "Bruno is an alternative to Postman.",
+      "descriptionFR": "Bruno est une alternative à Postman.",
       "special": "new"
     },
     {
@@ -108,7 +128,9 @@
       "logo": "https://cdn.icon-icons.com/icons2/3053/PNG/512/coconutbattery_macos_bigsur_icon_189515.png",
       "category": "tools",
       "url": "https://www.coconut-flavour.com/coconutbattery/",
-      "description": "CoconutBattery est une application pour surveiller l'état de la batterie.",
+      "description": "",
+      "descriptionEN": "CoconutBattery is an application to monitor the battery status.",
+      "descriptionFR": "CoconutBattery est une application pour surveiller l'état de la batterie.",
       "special": "none"
     },
     {
@@ -118,8 +140,22 @@
       "logo": "https://coteditor.com/img/appicon/256@2x.png",
       "category": "developer",
       "url": "https://coteditor.com/",
-      "description": "CotEditor est un éditeur de texte léger pour macOS.",
+      "description": "",
+      "descriptionEN": "CotEditor is a lightweight text editor for macOS.",
+      "descriptionFR": "CotEditor est un éditeur de texte léger pour macOS.",
       "special": "star"
+    },
+    {
+      "name": "Cursor",
+      "code": "cursor",
+      "brew": "--cask cursor",
+      "logo": "https://safee-ullah1.gallerycdn.vsassets.io/extensions/safee-ullah1/cursorcord/5.2.14/1725208655753/Microsoft.VisualStudio.Services.Icons.Default",
+      "category": "developer",
+      "url": "https://www.cursor.com",
+      "description": "",
+      "descriptionEN": "Cursor is a code editor based on VSCode but boosted by AI.",
+      "descriptionFR": "Cursor est un éditeur de code basé sur VSCode mais boosté à l'IA",
+      "special": "heart"
     },
     {
       "name": "Discord",
@@ -128,7 +164,9 @@
       "logo": "https://upload.wikimedia.org/wikipedia/fr/thumb/4/4f/Discord_Logo_sans_texte.svg/213px-Discord_Logo_sans_texte.svg.png",
       "category": "messaging",
       "url": "https://discord.com/",
-      "description": "Discord est une application de communication pour les communautés.",
+      "description": "",
+      "descriptionEN": "Discord is a free voice and text chat app for gamers and communities.",
+      "descriptionFR": "Discord est une application de communication pour les communautés.",
       "special": "none"
     },
     {
@@ -138,7 +176,9 @@
       "logo": "https://authenticator.2stable.com/assets/img/2fa-services/Icons/ente.io.svg",
       "category": "security",
       "url": "https://ente.io/",
-      "description": "Ente est un gestionnaire de mot de passe à deux facteurs.",
+      "description": "",
+      "descriptionEN": "Ente is a two-factor authentication app.",
+      "descriptionFR": "Ente est un gestionnaire de mot de passe à deux facteurs.",
       "special": "none"
     },
     {
@@ -148,7 +188,9 @@
       "logo": "https://raw.githubusercontent.com/ferdium/ferdium-app/develop/build-helpers/images/icon.png",
       "category": "messaging",
       "url": "https://ferdium.org/",
-      "description": "Ferdium réunie toutes vos apps de messagerie.",
+      "description": "",
+      "descriptionEN": "Ferdium is a free and open-source messaging app for macOS.",
+      "descriptionFR": "Ferdium réunie toutes vos apps de messagerie.",
       "special": "none"
     },
     {
@@ -158,7 +200,9 @@
       "logo": "https://cdn.sanity.io/images/599r6htc/regionalized/46a76c802176eb17b04e12108de7e7e0f3736dc6-1024x1024.png?w=804&h=804&q=75&fit=max&auto=format",
       "category": "productivity",
       "url": "https://www.figma.com/",
-      "description": "Figma est un outil de conception d'interface utilisateur.",
+      "description": "",
+      "descriptionEN": "Figma is a vector graphics editor for macOS.",
+      "descriptionFR": "Figma est un outil de conception d'interface utilisateur.",
       "special": "star"
     },
     {
@@ -168,7 +212,9 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Firefox_logo%2C_2019.svg/1971px-Firefox_logo%2C_2019.svg.png",
       "category": "internet",
       "url": "https://www.mozilla.org/firefox/",
-      "description": "Firefox est un navigateur web open-source.",
+      "description": "",
+      "descriptionEN": "Firefox is an open-source web browser",
+      "descriptionFR": "Firefox est un navigateur web open-source.",
       "special": "none"
     },
     {
@@ -178,7 +224,9 @@
       "logo": "https://www.google.com/chrome/static/images/chrome-logo.svg",
       "category": "internet",
       "url": "https://www.google.com/chrome/",
-      "description": "Google Chrome est le navigateur le plus utilisé",
+      "description": "",
+      "descriptionEN": "Google Chrome is the most used browser.",
+      "descriptionFR": "Google Chrome est le navigateur le plus utilisé",
       "special": "star"
     },
     {
@@ -188,7 +236,9 @@
       "logo": "https://ssl.gstatic.com/images/branding/product/2x/hh_drive_96dp.png",
       "category": "productivity",
       "url": "https://www.google.com/drive/",
-      "description": "Google Drive est un service de stockage en ligne.",
+      "description": "",
+      "descriptionEN": "Google Drive is a free and open-source cloud storage service.",
+      "descriptionFR": "Google Drive est un service de stockage en ligne.",
       "special": "none"
     },
     {
@@ -198,7 +248,9 @@
       "logo": "https://github.com/jordanbaird/Ice/raw/main/Ice/Assets.xcassets/AppIcon.appiconset/icon_256x256.png",
       "category": "tools",
       "url": "https://github.com/jordanbaird/Ice",
-      "description": "ICE permet de masquer les icônes de la barre de menu.",
+      "description": "",
+      "descriptionEN": "ICE allows you to hide icons in the menu bar.",
+      "descriptionFR": "ICE permet de masquer les icônes de la barre de menu.",
       "special": "heart"
     },
     {
@@ -208,7 +260,9 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/1/12/IINA-v1.1-icon.png",
       "category": "multimedia",
       "url": "https://iina.io/",
-      "description": "IINA est un lecteur multimédia moderne pour macOS.",
+      "description": "",
+      "descriptionEN": "IINA is a modern video player for macOS.",
+      "descriptionFR": "IINA est un lecteur multimédia moderne pour macOS.",
       "special": "heart"
     },
     {
@@ -218,7 +272,9 @@
       "logo": "https://cdn.icon-icons.com/icons2/2667/PNG/512/iterm_terminal_icon_161274.png",
       "category": "developer",
       "url": "https://iterm2.com/",
-      "description": "iTerm2 est un terminal alternatif.",
+      "description": "",
+      "descriptionEN": "iTerm2 is an alternative the macOS terminal",
+      "descriptionFR": "iTerm2 est un terminal alternatif.",
       "special": "star"
     },
     {
@@ -228,7 +284,9 @@
       "logo": "https://www.podfeet.com/blog/wp-content/uploads/2020/06/Itsycal-logo.png",
       "category": "productivity",
       "url": "https://www.mowglii.com/itsycal/",
-      "description": "Itsycal est un calendrier pour la barre de menu de macOS.",
+      "description": "",
+      "descriptionEN": "Itsycal is a calendar app for macOS.",
+      "descriptionFR": "Itsycal est un calendrier pour la barre de menu de macOS.",
       "special": "heart"
     },
     {
@@ -238,7 +296,9 @@
       "logo": "https://github.com/mangerlahn/Latest/blob/main/Latest/Resources/Assets.xcassets/AppIcon.appiconset/256.png?raw=true",
       "category": "tools",
       "url": "https://max.codes/latest/",
-      "description": "Latest permet de visualiser les dernières mises à jour d'une application.",
+      "description": "",
+      "descriptionEN": "Latest allows you to view the latest updates of an application.",
+      "descriptionFR": "Latest permet de visualiser les dernières mises à jour d'une application.",
       "special": "none"
     },
     {
@@ -248,7 +308,9 @@
       "logo": "https://objective-see.org/images/LL/icon.png",
       "category": "tools",
       "url": "https://objective-see.org/products/lulu.html",
-      "description": "LuLu est un pare-feu open source pour macOS.",
+      "description": "",
+      "descriptionEN": "LuLu is an open-source firewall for macOS.",
+      "descriptionFR": "LuLu est un pare-feu open source pour macOS.",
       "special": "none"
     },
     {
@@ -258,7 +320,9 @@
       "logo": "https://framalibre.org/images/logo/Maccy.png",
       "category": "tools",
       "url": "https://maccy.app/",
-      "description": "Maccy est un gestionnaire de presse-papiers pour macOS.",
+      "description": "",
+      "descriptionEN": "Maccy is a clipboard manager for macOS.",
+      "descriptionFR": "Maccy est un gestionnaire de presse-papiers pour macOS.",
       "special": "star"
     },
     {
@@ -268,7 +332,9 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png",
       "category": "productivity",
       "url": "https://www.notion.so/",
-      "description": "Notion est une application de prise de notes et de gestion de projet.",
+      "description": "",
+      "descriptionEN": "Notion is a free and open-source productivity app.",
+      "descriptionFR": "Notion est une application de prise de notes et de gestion de projet.",
       "special": "star"
     },
     {
@@ -278,7 +344,9 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/2023_Obsidian_logo.svg/1200px-2023_Obsidian_logo.svg.png",
       "category": "productivity",
       "url": "https://obsidian.md/",
-      "description": "Obsidian est une alternative à Notion.",
+      "description": "",
+      "descriptionEN": "Obsidian is a free and open-source note-taking app.",
+      "descriptionFR": "Obsidian est une alternative à Notion.",
       "special": "none"
     },
     {
@@ -288,7 +356,9 @@
       "logo": "https://pic.clubic.com/v1/images/1944009/raw",
       "category": "internet",
       "url": "https://browser.kagi.com/",
-      "description": "Orion est une alternative à Safari, les extensions en plus.",
+      "description": "",
+      "descriptionEN": "Orion est une alternative à Safari, les extensions en plus.",
+      "descriptionFR": "Orion est une alternative à Safari, les extensions en plus.",
       "special": "none"
     },
     {
@@ -298,7 +368,9 @@
       "logo": "https://cdn.prod.website-files.com/5f15081919fdf673994ab5fd/645c5e8934a9295452699391_Raycast-Logo.svg",
       "category": "productivity",
       "url": "https://www.raycast.com/",
-      "description": "Raycast est un lanceur de commandes pour macOS.",
+      "description": "",
+      "descriptionEN": "Raycast is a free and open-source app that makes it easy to control your tools.",
+      "descriptionFR": "Raycast est un lanceur de commandes pour macOS.",
       "special": "star"
     },
     {
@@ -308,7 +380,9 @@
       "logo": "https://rectangleapp.com/assets/images/mac512pts1x.png",
       "category": "productivity",
       "url": "https://rectangleapp.com/",
-      "description": "Rectangle est une application de gestion des fenêtres pour macOS.",
+      "description": "",
+      "descriptionEN": "Rectangle is a free and open-source app for managing your windows.",
+      "descriptionFR": "Rectangle est une application de gestion des fenêtres pour macOS.",
       "special": "heart"
     },
     {
@@ -318,7 +392,9 @@
       "logo": "https://cdn.icon-icons.com/icons2/3053/PNG/512/scroll_reverser_macos_bigsur_icon_189762.png",
       "category": "tools",
       "url": "https://pilotmoon.com/scrollreverser/",
-      "description": "Scroll Reverser est une application pour inverser le sens de défilement d'une souris mais pas du trackpad.",
+      "description": "",
+      "descriptionEN": "Scroll Reverser is an application to reverse the scrolling direction but not the trackpad.",
+      "descriptionFR": "Scroll Reverser est une application pour inverser le sens de défilement d'une souris mais pas du trackpad.",
       "special": "none"
     },
     {
@@ -328,7 +404,9 @@
       "logo": "https://i0.wp.com/www.appletips.nl/wp-content/uploads/2024/05/setapp-icon.png?h=135&w=135&ssl=1&zoom=2&quality=80",
       "category": "productivity",
       "url": "https://setapp.com/",
-      "description": "Setapp est un service payant regroupant plusieurs applications.",
+      "description": "",
+      "descriptionEN": "Setapp is the Spotify of apps, one subscription for hundreds of apps",
+      "descriptionFR": "Setapp est un service payant regroupant plusieurs applications.",
       "special": "none"
     },
     {
@@ -338,7 +416,9 @@
       "logo": "https://www.25mac.com/wp-content/uploads/2023/07/18/6116b58e5ebb5b6d01d4a796eb3ed9bc-1689702758.png",
       "category": "tools",
       "url": "https://shottr.cc/",
-      "description": "Shottr est une application de capture d'écran rapide.",
+      "description": "",
+      "descriptionEN": "Shottr is a fast screenshot application.",
+      "descriptionFR": "Shottr est une application de capture d'écran rapide.",
       "special": "none"
     },
     {
@@ -348,7 +428,9 @@
       "logo": "https://seeklogo.com/images/S/signal-logo-20A1616F60-seeklogo.com.png",
       "category": "messaging",
       "url": "https://signal.org/",
-      "description": "Signal est une application de messagerie sécurisée.",
+      "description": "",
+      "descriptionEN": "Signal is a free and open-source secure messaging app.",
+      "descriptionFR": "Signal est une application de messagerie sécurisée.",
       "special": "none"
     },
     {
@@ -358,7 +440,9 @@
       "logo": "https://a.slack-edge.com/80588/marketing/img/icons/icon_slack_hash_colored.png",
       "category": "messaging",
       "url": "https://slack.com/",
-      "description": "Slack est une application de messagerie pour les équipes.",
+      "description": "",
+      "descriptionEN": "Slack is a free and open-source messaging app for teams.",
+      "descriptionFR": "Slack est une application de messagerie pour les équipes.",
       "special": "none"
     },
     {
@@ -368,7 +452,9 @@
       "logo": "https://assets.sonos.com/care/kb/images/FAQ4786/SonosS2.png",
       "category": "multimedia",
       "url": "https://www.sonos.com/controller-app/",
-      "description": "Sonos est un gestionnaire pour les enceintes Sonos.",
+      "description": "",
+      "descriptionEN": "Sonos is a smart home multimedia system.",
+      "descriptionFR": "Sonos est un gestionnaire pour les enceintes Sonos.",
       "special": "none"
     },
     {
@@ -378,7 +464,9 @@
       "logo": "https://github.com/exelban/stats/raw/master/Stats/Supporting%20Files/Assets.xcassets/AppIcon.appiconset/icon_256x256.png",
       "category": "tools",
       "url": "https://github.com/exelban/stats",
-      "description": "Stats est une application pour surveiller les performances du système.",
+      "description": "",
+      "descriptionEN": "Stats is an application to monitor system performance.",
+      "descriptionFR": "Stats est une application pour surveiller les performances du système.",
       "special": "heart"
     },
     {
@@ -388,7 +476,9 @@
       "logo": "https://telegram.org/img/t_logo.png",
       "category": "messaging",
       "url": "https://telegram.org/",
-      "description": "Telegram est une application de messagerie sécurisée.",
+      "description": "",
+      "descriptionEN": "Telegram is a free and open-source messaging app focused on speed and security.",
+      "descriptionFR": "Telegram est une application de messagerie sécurisée.",
       "special": "heart"
     },
     {
@@ -398,7 +488,9 @@
       "logo": "https://cdn.icon-icons.com/icons2/3053/PNG/512/the_unarchiver_macos_bigsur_icon_189648.png",
       "category": "tools",
       "url": "https://theunarchiver.com/",
-      "description": "The Unarchiver est un outil de décompression de fichiers.",
+      "description": "",
+      "descriptionEN": "The Unarchiver is a file decompression tool.",
+      "descriptionFR": "The Unarchiver est un outil de décompression de fichiers.",
       "special": "star"
     },
     {
@@ -408,7 +500,9 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Transmission_icon.png",
       "category": "tools",
       "url": "https://transmissionbt.com/",
-      "description": "Transmission est un client BitTorrent léger.",
+      "description": "",
+      "descriptionEN": "Transmission is a lightweight BitTorrent client.",
+      "descriptionFR": "Transmission est un client BitTorrent léger.",
       "special": "star"
     },
     {
@@ -418,7 +512,9 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg",
       "category": "developer",
       "url": "https://code.visualstudio.com/",
-      "description": "Visual Studio Code est un éditeur de code développé par Microsoft.",
+      "description": "",
+      "descriptionEN": "Visual Studio Code is a free and open-source code editor developed by Microsoft.",
+      "descriptionFR": "Visual Studio Code est un éditeur de code développé par Microsoft.",
       "special": "none"
     },
     {
@@ -428,7 +524,9 @@
       "logo": "https://upload.wikimedia.org/wikipedia/commons/e/e6/VLC_Icon.svg",
       "category": "multimedia",
       "url": "https://www.videolan.org/vlc/",
-      "description": "VLC est un lecteur multimédia open-source.",
+      "description": "",
+      "descriptionEN": "VLC is a free and open-source media player and streamer.",
+      "descriptionFR": "VLC est un lecteur multimédia open-source.",
       "special": "star"
     },
     {
@@ -438,7 +536,9 @@
       "logo": "https://cdn.prod.website-files.com/64b6f3636f598299028e8577/653024a36ae7b9b3ea53d451_Warp%20-%20Glyph.svg",
       "category": "developer",
       "url": "https://www.warp.dev/",
-      "description": "Warp est un terminal moderne avec une IA intégré.",
+      "description": "",
+      "descriptionEN": "Warp is a modern terminal emulator with an integrated AI.",
+      "descriptionFR": "Warp est un terminal moderne avec une IA intégré.",
       "special": "heart"
     },
     {
@@ -448,17 +548,21 @@
       "logo": "https://logo-marque.com/wp-content/uploads/2020/05/WhatsApp-Logo.png",
       "category": "messaging",
       "url": "https://www.whatsapp.com/",
-      "description": "WhatsApp est une application de messagerie.",
+      "description": "",
+      "descriptionEN": "WhatsApp is a free and open-source messaging app.",
+      "descriptionFR": "WhatsApp est une application de messagerie.",
       "special": "none"
     },
     {
       "name": "Zed",
       "code": "zed",
       "brew": "--cask zed",
-      "logo": "https://zed.dev/*next/image?url=%2F_next%2Fstatic%2Fmedia%2Fstable-app-logo.9b5f959f.png&w=384&q=75,*",
+      "logo": "https://zed.dev/_next/image?url=/_next/static/media/stable-app-logo.9b5f959f.png&w=384&q=75",
       "category": "developer",
       "url": "https://zed.dev/",
-      "description": "Zed est un éditeur de texte rapide et minimaliste.",
+      "description": "",
+      "descriptionEN": "Zed is a lightweight text editor for macOS.",
+      "descriptionFR": "Zed est un éditeur de texte rapide et minimaliste.",
       "special": "new"
     },
     {
@@ -469,7 +573,9 @@
       "logo": "https://zen-browser.app/\\_astro/app-icon.B4cquOFH_TcmbB.webp",
       "category": "internet",
       "url": "https://browser.kagi.com/",
-      "description": "Orion est une alternative à Safari, les extensions en plus.",
+      "description": "",
+      "descriptionEN": "Zen is a Firefox-based web browser close to Arc",
+      "descriptionFR": "Zen est un navigateur basé sur Firefox et proche de Arc",
       "special": "new"
     }
   ]

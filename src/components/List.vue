@@ -2,18 +2,26 @@
   <div class="content">
     <div class="instructions">
       <h2>{{ t("message.subtitle") }}</h2>
-      <div class="legend">
-        <div class="legend-item">
-          <img src="../assets/icons/star.svg" alt="star" :height="16" />
-          <span>{{ t("message.legend.star") }}</span>
-        </div>
-        <div class="legend-item">
-          <img src="../assets/icons/new.svg" alt="new" :height="16" />
-          <span>{{ t("message.legend.new") }}</span>
-        </div>
-        <div class="legend-item">
-          <img src="../assets/icons/heart.svg" alt="heart" :height="16" />
-          <span>{{ t("message.legend.heart") }}</span>
+      <div class="legend-wrapper">
+        <div class="legend">
+          <div class="legend-item search-hint">
+            <span>{{ $i18n.locale === 'fr' ? 'Rechercher avec' : 'Search with' }}</span>
+            <kbd>⌘</kbd> + <kbd>K</kbd>
+          </div>
+         </div>
+         <div class="legend">
+          <div class="legend-item">
+            <img src="../assets/icons/star.svg" alt="star" :height="16" />
+            <span>{{ t("message.legend.star") }}</span>
+          </div>
+          <div class="legend-item">
+            <img src="../assets/icons/new.svg" alt="new" :height="16" />
+            <span>{{ t("message.legend.new") }}</span>
+          </div>
+          <div class="legend-item">
+            <img src="../assets/icons/heart.svg" alt="heart" :height="16" />
+            <span>{{ t("message.legend.heart") }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -33,10 +41,10 @@
           :class="[
             'btn',
             $i18n.locale === 'fr' ? 'btn-gold' : 'btn-green',
-            { checked: item.checked },
+            { checked: isItemChecked(item) },
           ]"
         >
-          <input type="checkbox" v-model="item.checked" @change="updateCount" />
+          <input type="checkbox" :checked="isItemChecked(item)" @change="toggleItem(item)" />
           <Bubble
             :description="getLocalizedDescription(item)"
             v-if="showBubble"
@@ -67,7 +75,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch, computed } from "vue";
+import { defineComponent, onMounted, ref, computed } from "vue";
 import { store } from "../store";
 import Bubble from "./Bubble.vue";
 import { useI18n } from "vue-i18n";
@@ -103,10 +111,7 @@ export default defineComponent({
       try {
         loading.value = true;
         items.value = await initializeDataService();
-        items.value = items.value.map(item => ({ ...item, checked: false }));
-        updateCount();
       } catch (err) {
-        console.error("Failed to load data:", err);
         fetchError.value = err instanceof Error ? err.message : "Unknown error";
       } finally {
         loading.value = false;
@@ -117,11 +122,27 @@ export default defineComponent({
       showBubble.value = !showBubble.value;
     };
 
-    const updateCount = (): void => {
-      const checked = items.value.filter((item) => item.checked);
-      store.checkedCount = checked.length;
-      store.tapApps = checked.filter((app) => app.tap).map((app) => app.tap);
-      store.apps = checked.map((app) => app.brew);
+    const isItemChecked = (item: Item): boolean => {
+      return store.apps.includes(item.brew);
+    };
+
+    const toggleItem = (item: Item): void => {
+      const index = store.apps.indexOf(item.brew);
+      const tapIndex = store.tapApps.indexOf(item.tap);
+
+      if (index > -1) {
+        store.apps.splice(index, 1);
+        if (item.tap && tapIndex > -1) {
+          store.tapApps.splice(tapIndex, 1);
+        }
+        store.checkedCount--;
+      } else {
+        store.apps.push(item.brew);
+        if (item.tap) {
+          store.tapApps.push(item.tap);
+        }
+        store.checkedCount++;
+      }
     };
 
     const groupedItems = computed(() => {
@@ -133,8 +154,6 @@ export default defineComponent({
         return acc;
       }, {} as Record<string, Item[]>);
     });
-
-    watch(items, updateCount, { deep: true });
 
     const { t } = useI18n();
 
@@ -152,13 +171,14 @@ export default defineComponent({
       if (locale === 'fr' && item.descriptionFR) {
         return item.descriptionFR;
       }
-      return item.descriptionEN || item.description || '';
+      return item.descriptionEN || '';
     };
 
     return {
       items,
       orderedCategories,
-      updateCount,
+      toggleItem,
+      isItemChecked,
       toggleBubble,
       showBubble,
       t,
@@ -324,6 +344,10 @@ export default defineComponent({
     margin-top: 0.2em;
     margin-bottom: 0.2em;
   }
+  .legend-wrapper {
+    display: flex;
+    gap: 0.5em;
+  }
   .legend {
     display: flex;
     align-items: center;
@@ -338,6 +362,24 @@ export default defineComponent({
       display: flex;
       align-items: center;
       color: rgb(101, 101, 101);
+      &.search-hint {
+        font-weight: 500;
+        kbd {
+          padding: 0.2rem 0.4rem;
+          background: white;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          font-size: 0.8rem;
+          font-weight: 500;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+          margin: 0 0.2rem;
+        }
+      }
+    }
+    & .legend-separator {
+      color: rgb(200, 200, 200);
+      font-size: 1.2em;
+      margin: 0 0.2em;
     }
   }
 }
