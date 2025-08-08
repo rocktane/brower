@@ -2,9 +2,21 @@
   "permissions": {
     "allow": [
       "Bash(find:*)",
+      "Bash(chmod:*)",
+      "Bash(npm install:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm run:*)",
+      "Bash(mv:*)",
+      "Bash(brew install:*)",
+      "Bash(tart stop:*)",
+      "Bash(tart delete:*)",
+      "Bash(tart clone:*)",
+      "Bash(tart set:*)",
+      "Bash(tart start:*)",
+      "Bash(tart ip:*)",
+      "Bash(rm:*)",
       "Bash(npm install)",
       "Bash(node:*)",
-      "Bash(npm install:*)",
       "Bash(grep:*)",
       "Bash(npm run build:*)",
       "Bash(npm ls:*)"

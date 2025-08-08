@@ -26,3 +26,35 @@ src/assets/backup/
 src/assets/backup/*.json
 
 */bun.*
+
+# Tart VM files and directories
+*.tart
+*.ipsw
+*.dmg
+*.iso
+.tart/
+tart-vms/
+vm-snapshots/
+
+# VM test outputs and logs
+brower-test-*.log
+brower-test-*.txt
+vm-test-*.log
+vm-test-*.txt
+
+# SSH known hosts from VM testing
+.ssh/known_hosts.vm*
+
+# Temporary VM files
+*.vm.tmp
+*.snapshot.tmp
+.vm-cache/
+
+# VM configuration backups
+vm-configs/
+vm-backups/
+
+# Test results from VM runs
+test-results/
+vm-test-results/
+*.test-output
