@@ -2,18 +2,26 @@
   <div class="content">
     <div class="instructions">
       <h2>{{ t("message.subtitle") }}</h2>
-      <div class="legend">
-        <div class="legend-item">
-          <img src="../assets/icons/star.svg" alt="star" :height="16" />
-          <span>{{ t("message.legend.star") }}</span>
-        </div>
-        <div class="legend-item">
-          <img src="../assets/icons/new.svg" alt="new" :height="16" />
-          <span>{{ t("message.legend.new") }}</span>
-        </div>
-        <div class="legend-item">
-          <img src="../assets/icons/heart.svg" alt="heart" :height="16" />
-          <span>{{ t("message.legend.heart") }}</span>
+      <div class="legend-wrapper">
+        <div class="legend">
+          <div class="legend-item search-hint">
+            <span>{{ $i18n.locale === 'fr' ? 'Rechercher avec' : 'Search with' }}</span>
+            <kbd>⌘</kbd> + <kbd>K</kbd>
+          </div>
+         </div>
+         <div class="legend">
+          <div class="legend-item">
+            <img src="../assets/icons/star.svg" alt="star" :height="16" />
+            <span>{{ t("message.legend.star") }}</span>
+          </div>
+          <div class="legend-item">
+            <img src="../assets/icons/new.svg" alt="new" :height="16" />
+            <span>{{ t("message.legend.new") }}</span>
+          </div>
+          <div class="legend-item">
+            <img src="../assets/icons/heart.svg" alt="heart" :height="16" />
+            <span>{{ t("message.legend.heart") }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -33,24 +41,36 @@
           :class="[
             'btn',
             $i18n.locale === 'fr' ? 'btn-gold' : 'btn-green',
-            { checked: item.checked },
+            { checked: isItemChecked(item) },
           ]"
+          tabindex="0"
+          @keydown.space.prevent="toggleItem(item)"
+          @keydown.enter.prevent="toggleItem(item)"
+          role="checkbox"
+          :aria-checked="isItemChecked(item)"
         >
-          <input type="checkbox" v-model="item.checked" @change="updateCount" />
+          <input 
+            type="checkbox" 
+            :checked="isItemChecked(item)" 
+            @change="toggleItem(item)"
+            :aria-label="`Select ${item.name} for installation`"
+          />
           <Bubble
             :description="getLocalizedDescription(item)"
-            v-if="showBubble"
+            v-if="hoveredItem === item.code"
           />
           <img
             :src="item.logo"
             :alt="item.name + ' logo'"
             :height="48"
             :ratio="1 / 1"
+            loading="lazy"
+            decoding="async"
           />
           <span
             class="name"
-            @mouseover="toggleBubble"
-            @mouseleave="toggleBubble"
+            @mouseover="showBubble(item.code)"
+            @mouseleave="hideBubble"
             >{{ item.name }}</span
           >
           <img
@@ -67,14 +87,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch, computed } from "vue";
+import { defineComponent, ref, computed } from "vue";
 import { store } from "../store";
 import Bubble from "./Bubble.vue";
 import { useI18n } from "vue-i18n";
-import {
-  Item,
-  initializeDataService,
-} from "../services/dataService";
+import { Item } from "../services/dataService";
 
 const orderedCategories = [
   "internet",
@@ -92,40 +109,42 @@ export default defineComponent({
     Bubble,
     useI18n,
   },
+  props: {
+    items: {
+      type: Array as () => Item[],
+      default: () => []
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    fetchError: {
+      type: String,
+      default: null
+    }
+  },
 
-  setup() {
-    const items = ref<Item[]>([]);
-    const showBubble = ref(false);
-    const loading = ref(false);
-    const fetchError = ref<string | null>(null);
+  setup(props) {
+    const hoveredItem = ref<string | null>(null);
 
-    onMounted(async () => {
-      try {
-        loading.value = true;
-        items.value = await initializeDataService();
-        items.value = items.value.map(item => ({ ...item, checked: false }));
-        updateCount();
-      } catch (err) {
-        console.error("Failed to load data:", err);
-        fetchError.value = err instanceof Error ? err.message : "Unknown error";
-      } finally {
-        loading.value = false;
-      }
-    });
-
-    const toggleBubble = (): void => {
-      showBubble.value = !showBubble.value;
+    const showBubble = (itemCode: string) => {
+      hoveredItem.value = itemCode;
     };
 
-    const updateCount = (): void => {
-      const checked = items.value.filter((item) => item.checked);
-      store.checkedCount = checked.length;
-      store.tapApps = checked.filter((app) => app.tap).map((app) => app.tap);
-      store.apps = checked.map((app) => app.brew);
+    const hideBubble = () => {
+      hoveredItem.value = null;
+    };
+
+    const isItemChecked = (item: Item): boolean => {
+      return store.isItemChecked(item.brew);
+    };
+
+    const toggleItem = (item: Item): void => {
+      store.toggleItem(item.brew, item.tap);
     };
 
     const groupedItems = computed(() => {
-      return items.value.reduce((acc, item) => {
+      return props.items.reduce((acc, item) => {
         if (!acc[item.category]) {
           acc[item.category] = [];
         }
@@ -133,8 +152,6 @@ export default defineComponent({
         return acc;
       }, {} as Record<string, Item[]>);
     });
-
-    watch(items, updateCount, { deep: true });
 
     const { t } = useI18n();
 
@@ -156,16 +173,17 @@ export default defineComponent({
     };
 
     return {
-      items,
       orderedCategories,
-      updateCount,
-      toggleBubble,
+      toggleItem,
+      isItemChecked,
       showBubble,
+      hideBubble,
+      hoveredItem,
       t,
       groupedItems,
       getIconUrl,
-      loading,
-      fetchError,
+      loading: computed(() => props.loading),
+      fetchError: computed(() => props.fetchError),
       hasTranslation,
       getLocalizedDescription,
     };
@@ -324,6 +342,10 @@ export default defineComponent({
     margin-top: 0.2em;
     margin-bottom: 0.2em;
   }
+  .legend-wrapper {
+    display: flex;
+    gap: 0.5em;
+  }
   .legend {
     display: flex;
     align-items: center;
@@ -338,6 +360,24 @@ export default defineComponent({
       display: flex;
       align-items: center;
       color: rgb(101, 101, 101);
+      &.search-hint {
+        font-weight: 500;
+        kbd {
+          padding: 0.2rem 0.4rem;
+          background: white;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          font-size: 0.8rem;
+          font-weight: 500;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+          margin: 0 0.2rem;
+        }
+      }
+    }
+    & .legend-separator {
+      color: rgb(200, 200, 200);
+      font-size: 1.2em;
+      margin: 0 0.2em;
     }
   }
 }

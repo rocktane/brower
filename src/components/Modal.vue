@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted, onUnmounted } from "vue";
 import { store } from "../store";
 import { useI18n } from "vue-i18n";
 import autoSize from "../directives/autoSize";
@@ -61,6 +61,20 @@ export default defineComponent({
       emit("close");
     };
 
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeModal();
+      }
+    };
+
+    onMounted(() => {
+      document.addEventListener('keydown', handleEscape);
+    });
+
+    onUnmounted(() => {
+      document.removeEventListener('keydown', handleEscape);
+    });
+
     const { t } = useI18n();
 
     const installBrew =
@@ -75,7 +89,7 @@ export default defineComponent({
       'else ' +
       '  echo "- Run these commands in your terminal to add Homebrew to your PATH:"; ' +
       '  echo "    echo >> $SHELL_RCFILE"; ' +
-      '  echo "    echo \\"eval \\\\\\"\\\$(${HOMEBREW_PREFIX}/bin/brew shellenv)\\\\\\"\\\" >> $SHELL_RCFILE"; ' +
+      '  echo "    echo \\"eval \\\\\\"\\\$(${HOMEBREW_PREFIX}/bin/brew shellenv)\\\\\\"\\"\\" >> $SHELL_RCFILE"; ' +
       '  echo "    eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)""; ' +
       'fi ) && ';
 
