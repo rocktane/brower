@@ -1,13 +1,20 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, watch, onMounted, onUnmounted } from "vue";
 import { store } from "./store";
 import List from "./components/List.vue";
 import Modal from "./components/Modal.vue";
+import SearchModal from "./components/SearchModal.vue";
 import Bubble from "./components/Bubble.vue";
 import Footer from "./components/Footer.vue";
 import { useI18n } from "vue-i18n";
+import { initializeDataService, type Item } from "./services/dataService";
 
 const showModal = ref(false);
+const showSearchModal = ref(false);
+const items = ref<Item[]>([]);
+const loading = ref(false);
+const fetchError = ref<string | null>(null);
+const isScrolled = ref(false);
 
 const { t, locale } = useI18n();
 const changeLanguage = (lang: string) => {
@@ -41,10 +48,41 @@ const handleMouseOver = () => {
 const handleMouseLeave = () => {
   showBubble.value = false;
 };
+
+const handleCmdK = (event: KeyboardEvent) => {
+  if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
+    event.preventDefault();
+    showSearchModal.value = true;
+  }
+};
+
+const handleScroll = () => {
+  isScrolled.value = window.scrollY > 0;
+};
+
+onMounted(async () => {
+  document.addEventListener('keydown', handleCmdK);
+  window.addEventListener('scroll', handleScroll);
+  handleScroll(); // Check initial scroll position
+  
+  try {
+    loading.value = true;
+    items.value = await initializeDataService();
+  } catch (err) {
+    fetchError.value = err instanceof Error ? err.message : "Unknown error";
+  } finally {
+    loading.value = false;
+  }
+});
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleCmdK);
+  window.removeEventListener('scroll', handleScroll);
+});
 </script>
 
 <template>
-  <div class="navbar">
+  <div class="navbar" :class="{ 'scrolled': isScrolled }">
     <div class="elements">
       <a href="/" class="title">
         <div id="logo" class="btn">:~</div>
@@ -80,6 +118,7 @@ const handleMouseLeave = () => {
     </div>
   </div>
   <Modal v-if="showModal" @close="showModal = false" />
+  <SearchModal v-if="showSearchModal" :items="items" @close="showSearchModal = false" />
   <List />
   <p class="post" :class="[$i18n.locale === 'fr' ? 'post-gold' : 'post-green']">
     {{ t("message.last_word") }}
@@ -91,7 +130,7 @@ const handleMouseLeave = () => {
 <style scoped>
 .navbar {
   position: sticky;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid transparent;
   top: 0;
   left: 0;
   padding: 0.5em 0em;
@@ -99,6 +138,11 @@ const handleMouseLeave = () => {
   z-index: 999;
   backdrop-filter: blur(10px);
   background-color: rgba(254, 255, 245, 0.1);
+  transition: border-color 0.2s ease;
+}
+
+.navbar.scrolled {
+  border-bottom-color: black;
 }
 
 .elements {

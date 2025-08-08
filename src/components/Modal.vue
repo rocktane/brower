@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onMounted, onUnmounted } from "vue";
 import { store } from "../store";
 import { useI18n } from "vue-i18n";
 import autoSize from "../directives/autoSize";
@@ -60,6 +60,20 @@ export default defineComponent({
     const closeModal = () => {
       emit("close");
     };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeModal();
+      }
+    };
+
+    onMounted(() => {
+      document.addEventListener('keydown', handleEscape);
+    });
+
+    onUnmounted(() => {
+      document.removeEventListener('keydown', handleEscape);
+    });
 
     const { t } = useI18n();
 
