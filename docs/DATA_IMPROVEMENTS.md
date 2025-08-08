@@ -62,7 +62,7 @@ await forceRefreshData();
 
 // Check data source
 import { dataSource, lastUpdated } from './services/dataService';
-console.log(`Data from: ${dataSource.value}, Updated: ${lastUpdated.value}`);
+// Data source: dataSource.value, Last updated: lastUpdated.value
 ```
 
 ## Data Flow Summary

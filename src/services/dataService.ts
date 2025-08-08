@@ -304,37 +304,28 @@ export function loadDataFromLocalStorage(): CachedData | null {
 export async function importFromDBJson(): Promise<CachedData> {
   try {
     let items: any[];
-    let dataSource = 'unknown';
 
     // In production, use the directly imported data
     if (import.meta.env.PROD) {
-      console.log('Using pre-bundled db.json data in production');
       items = defaultData;
-      dataSource = 'bundled';
     } else {
       // In development, try to dynamically import for fresher data
       try {
-        console.log('Attempting to dynamically load db.json in development');
         const response = await fetch('/src/db.json');
         if (!response.ok) {
           throw new Error(`Failed to fetch: ${response.status}`);
         }
         items = await response.json();
-        dataSource = 'src/db.json';
       } catch (srcFetchErr) {
         // Try fallback to public folder
         try {
-          console.log('Trying fallback to public/db.json');
           const publicResponse = await fetch('/db.json');
           if (!publicResponse.ok) {
             throw new Error(`Failed to fetch: ${publicResponse.status}`);
           }
           items = await publicResponse.json();
-          dataSource = 'public/db.json';
         } catch (publicFetchErr) {
-          console.warn('Failed to fetch db.json from both locations, using bundled data instead');
           items = defaultData;
-          dataSource = 'bundled-fallback';
         }
       }
     }
@@ -375,8 +366,6 @@ export async function importFromDBJson(): Promise<CachedData> {
     if (validItems.length === 0) {
       throw new Error('No valid items found in db.json');
     }
-
-    console.log(`Successfully loaded ${validItems.length} valid items from db.json (source: ${dataSource})`);
 
     return {
       lastModified: new Date().toISOString(),
@@ -515,62 +504,11 @@ export function clearCache(): void {
   }
 }
 
-/**
- * Debug Google Sheet URL - helps identify configuration issues
- */
-export async function debugGoogleSheetUrl(): Promise<void> {
-  console.log('=== Google Sheet Debug Info ===');
-  console.log('Configured URL:', GOOGLE_SHEET_URL);
-  
-  if (!GOOGLE_SHEET_URL) {
-    console.error('❌ No Google Sheet URL configured!');
-    console.log('Please set VITE_GOOGLE_SHEET_URL in your .env file');
-    return;
-  }
-  
-  // Check URL format
-  if (GOOGLE_SHEET_URL.includes('/export?format=csv')) {
-    console.log('✅ URL uses correct CSV export format');
-  } else if (GOOGLE_SHEET_URL.includes('/gviz/')) {
-    console.error('❌ URL uses incorrect gviz format - this will return HTML!');
-    console.log('Fix: Replace /gviz/tq?tqx=out:csv with /export?format=csv');
-  } else {
-    console.warn('⚠️ URL format may be incorrect');
-    console.log('Expected format: https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv');
-  }
-  
-  // Try to fetch
-  try {
-    console.log('Attempting to fetch...');
-    const response = await fetch(GOOGLE_SHEET_URL);
-    const text = await response.text();
-    const preview = text.substring(0, 200);
-    
-    if (text.trim().startsWith('<!DOCTYPE') || text.trim().startsWith('<html')) {
-      console.error('❌ Response is HTML, not CSV!');
-      console.log('This usually means:');
-      console.log('1. The sheet is not publicly accessible (needs "Anyone with link" permission)');
-      console.log('2. The URL format is incorrect');
-      console.log('3. The sheet ID is wrong');
-    } else if (text.includes(',') && text.includes('\n')) {
-      console.log('✅ Response appears to be valid CSV');
-      console.log('First 200 chars:', preview);
-    } else {
-      console.warn('⚠️ Response format unclear');
-      console.log('First 200 chars:', preview);
-    }
-  } catch (err) {
-    console.error('❌ Failed to fetch:', err);
-  }
-  
-  console.log('=== End Debug Info ===');
-}
 
 /**
  * Force refresh data from Google Sheet
  */
 export async function forceRefreshData(): Promise<Item[]> {
-  console.log('Force refreshing data from Google Sheet...');
   try {
     const freshData = await fetchDataFromGoogleSheet();
     saveDataToLocalStorage(freshData);
@@ -578,7 +516,6 @@ export async function forceRefreshData(): Promise<Item[]> {
     lastUpdated.value = new Date().toISOString();
     return freshData.items;
   } catch (err) {
-    console.error('Force refresh failed, falling back to db.json:', err);
     const dbData = await importFromDBJson();
     saveDataToLocalStorage(dbData);
     dataSource.value = 'db.json (fallback)';
@@ -603,7 +540,6 @@ export async function initializeDataService(): Promise<Item[]> {
 
     // If we have cached data, use it for immediate display
     if (cachedData && cachedData.items && cachedData.items.length > 0) {
-      console.log('Loading cached data for immediate display');
       initialDataSource = 'localStorage (cached)';
       initialData = cachedData.items;
       dataSource.value = initialDataSource;
@@ -614,20 +550,16 @@ export async function initializeDataService(): Promise<Item[]> {
         try {
           const needsUpdate = await checkForUpdates();
           if (needsUpdate) {
-            console.log('Cache needs update, fetching from Google Sheet...');
             const freshData = await fetchDataFromGoogleSheet();
             if (freshData.items && freshData.items.length > 0) {
               saveDataToLocalStorage(freshData);
               dataSource.value = 'Google Sheet (updated)';
               lastUpdated.value = freshData.lastModified;
-              console.log(`Updated from Google Sheet - ${freshData.items.length} items`);
               // Don't trigger reload - just log the update
             }
           } else {
-            console.log('Cache is up to date');
           }
         } catch (err) {
-          console.error('Background update check failed:', err);
         }
       }, 1000); // Check after 1 second
 
@@ -636,7 +568,6 @@ export async function initializeDataService(): Promise<Item[]> {
 
     // If no cache or empty cache, try to load from db.json first for speed
     try {
-      console.log('No valid cache, loading from db.json');
       const dbData = await importFromDBJson();
       initialDataSource = 'db.json';
       initialData = dbData.items;
@@ -649,7 +580,6 @@ export async function initializeDataService(): Promise<Item[]> {
       // Always try to get fresh data from Google Sheet in background
       setTimeout(async () => {
         try {
-          console.log('Attempting to fetch latest data from Google Sheet...');
           const freshData = await fetchDataFromGoogleSheet();
 
           // Only save if we got valid data
@@ -657,13 +587,10 @@ export async function initializeDataService(): Promise<Item[]> {
             saveDataToLocalStorage(freshData);
             dataSource.value = 'Google Sheet (background update)';
             lastUpdated.value = freshData.lastModified;
-            console.log('Updated with latest data from Google Sheet - received', freshData.items.length, 'items');
             // Don't trigger reload - just log the update
           } else {
-            console.warn('Received invalid or empty data from Google Sheet, keeping existing data');
           }
         } catch (err) {
-          console.error('Background fetch failed:', err);
           // Keep using db.json data
           dataSource.value = 'db.json (Google Sheet unavailable)';
         }
@@ -672,7 +599,6 @@ export async function initializeDataService(): Promise<Item[]> {
       return initialData;
     } catch (err) {
       // If db.json fails, fetch from Google Sheet directly
-      console.error('Failed to load from db.json, fetching from Google Sheet:', err);
       const freshData = await fetchDataFromGoogleSheet();
       initialDataSource = 'googleSheet';
       initialData = freshData.items;
@@ -684,7 +610,6 @@ export async function initializeDataService(): Promise<Item[]> {
       return initialData;
     }
   } catch (err) {
-    console.error('Failed to initialize data service:', err);
     error.value = err instanceof Error ? err.message : 'Unknown error';
 
     // Try one last time with db.json as absolute fallback
@@ -694,13 +619,9 @@ export async function initializeDataService(): Promise<Item[]> {
       initialData = dbData.items;
       return initialData;
     } catch (fallbackErr) {
-      console.error('All data sources failed:', fallbackErr);
       return []; // Return empty array as last resort
     }
   } finally {
-    // Log our final data status
-    console.log(`Data initialization complete. Source: ${initialDataSource}, Items: ${initialData.length}`);
-    
     // Update reactive refs
     if (!dataSource.value || dataSource.value === 'unknown') {
       dataSource.value = initialDataSource;

@@ -106,7 +106,6 @@ export default defineComponent({
         items.value = items.value.map(item => ({ ...item, checked: false }));
         updateCount();
       } catch (err) {
-        console.error("Failed to load data:", err);
         fetchError.value = err instanceof Error ? err.message : "Unknown error";
       } finally {
         loading.value = false;
