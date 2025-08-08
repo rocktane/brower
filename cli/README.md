@@ -1,6 +1,6 @@
 # Brower VM Test Manager CLI
 
-A command-line interface for managing macOS virtual machines to test Homebrew installations and the Brower app.
+An interactive command-line interface for managing macOS virtual machines to test Homebrew installations.
 
 ## Prerequisites
 
@@ -18,18 +18,25 @@ npm install
 
 ### Interactive Menu Mode
 
-Launch the interactive CLI menu:
+Launch the interactive CLI with keyboard navigation:
 ```bash
 npm run vm
 ```
 
-This presents a numbered menu with all available operations:
-- Quick Start (auto-restore & test)
-- Create/manage VMs
-- Snapshot management
-- Run various test suites
-- VM operations (start/stop/SSH)
-- Status checks
+This presents an interactive menu with:
+- **Arrow keys** to navigate
+- **Enter** to select
+- **Escape** to go back
+
+### Menu Options
+
+- **🚀 Quick Start** - Auto-restore from snapshot and run tests
+- **📦 Create New VM** - Create a new test VM
+- **🧹 Create Clean VM** - Create VM without Homebrew
+- **📸 Snapshot Management** - Create or restore snapshots
+- **🔗 Connect via SSH** - Open SSH session to VM
+- **⚙️ VM Operations** - Start, stop, or delete VMs
+- **📊 Check Status** - View VM and snapshot status
 
 ### Direct Command Mode
 
@@ -41,27 +48,10 @@ npm run vm:status    # Check VM and snapshot status
 npm run vm:run       # Quick start (restore & test)
 npm run vm:test      # Run all tests
 
-# Direct command execution
-node cli/vm-cli.cjs create          # Create new VM
-node cli/vm-cli.cjs create-clean    # Create clean VM without Homebrew
-node cli/vm-cli.cjs snapshot        # Create snapshot
-node cli/vm-cli.cjs restore         # Restore from snapshot
-node cli/vm-cli.cjs test            # Run all tests
-node cli/vm-cli.cjs test formulae   # Test CLI tools only
-node cli/vm-cli.cjs test casks      # Test GUI apps only
-node cli/vm-cli.cjs interactive     # Start interactive session
-node cli/vm-cli.cjs ssh             # Connect via SSH
-node cli/vm-cli.cjs status          # Check status
+# Direct execution
+node cli/vm-interactive.js status    # Check status
+node cli/vm-interactive.js run       # Run tests
 ```
-
-### Alternative Ink-based CLI (requires TTY)
-
-For a more advanced terminal UI with live output streaming:
-```bash
-npm run vm:ink
-```
-
-Note: This requires a proper TTY terminal and won't work in some environments.
 
 ## Test Scripts
 
@@ -143,10 +133,11 @@ npm run vm  # Uses vm-cli.cjs instead of Ink version
 
 ## Files
 
-- `cli/vm-cli.cjs` - Main CLI implementation (CommonJS)
-- `cli/vm-manager.tsx` - Ink-based CLI (requires TTY)
+- `cli/vm-interactive.js` - Interactive CLI with keyboard navigation
 - `scripts/setup-test-vm.sh` - VM management script
 - `scripts/test-homebrew-install.sh` - Full test suite
 - `scripts/test-homebrew-install-formulae.sh` - Formulae tests
 - `scripts/test-homebrew-install-casks.sh` - Cask tests
 - `scripts/clean-vm.sh` - VM cleanup script
+- `scripts/brower-install.sh` - Brower-style installation script
+- `scripts/install-brew-interactive.sh` - Interactive Homebrew installer

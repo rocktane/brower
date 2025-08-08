@@ -11,11 +11,9 @@
     "postinstall": "npm run build",
     "update-db": "node scripts/updateDb.js",
     "vm": "node cli/vm-interactive.js",
-    "vm:simple": "node cli/vm-cli.cjs",
-    "vm:ink": "tsx cli/vm-manager.tsx",
-    "vm:test": "node cli/vm-cli.cjs test",
-    "vm:run": "node cli/vm-cli.cjs run",
-    "vm:status": "node cli/vm-cli.cjs status"
+    "vm:test": "node cli/vm-interactive.js test",
+    "vm:run": "node cli/vm-interactive.js run",
+    "vm:status": "node cli/vm-interactive.js status"
   },
   "dependencies": {
     "@types/papaparse": "^5.3.15",

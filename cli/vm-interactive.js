@@ -10,8 +10,7 @@ const mainMenuChoices = [
   { name: '📦 Create New VM', value: 'create', description: 'Create a new test VM' },
   { name: '🧹 Create Clean VM (without Homebrew)', value: 'create-clean', description: 'Create truly clean VM and snapshot' },
   { name: '📸 Snapshot Management', value: 'snapshot-menu', description: 'Create or restore snapshots' },
-  { name: '🧪 Test Options', value: 'test-menu', description: 'Various test options' },
-  { name: '🖥️  SSH into VM', value: 'ssh-direct', description: 'Open SSH session to VM' },
+  { name: '🔗 Connect via SSH', value: 'ssh-direct', description: 'Open SSH session to VM' },
   { name: '⚙️  VM Operations', value: 'vm-ops', description: 'Start, stop, delete VMs' },
   { name: '📊 Check Status', value: 'status', description: 'View VM and snapshot status' },
   new inquirer.Separator(),
@@ -25,21 +24,9 @@ const snapshotMenuChoices = [
   { name: '🔙 Back to Main Menu', value: 'back' }
 ];
 
-const testMenuChoices = [
-  { name: '🧪 Run All Tests', value: 'test', description: 'Run complete test suite' },
-  { name: '⚡ Run Tests (Fast - from snapshot)', value: 'fast-clean-run', description: 'Restore snapshot and test' },
-  { name: '🧹 Run Tests (Clean - new VM)', value: 'clean-run', description: 'Delete, recreate, and test' },
-  { name: '🔧 Test Formulae Only', value: 'test formulae', description: 'Test CLI tools only' },
-  { name: '🖼️  Test Casks Only', value: 'test casks', description: 'Test GUI apps only' },
-  new inquirer.Separator(),
-  { name: '🔙 Back to Main Menu', value: 'back' }
-];
-
 const vmOpsMenuChoices = [
   { name: '▶️  Start VM', value: 'start', description: 'Boot the VM' },
   { name: '⏹️  Stop VM', value: 'stop', description: 'Shutdown the VM' },
-  { name: '🔗 Connect via SSH (Interactive)', value: 'ssh-interactive', description: 'Open SSH session to VM' },
-  { name: '📋 Show SSH Commands', value: 'ssh', description: 'Display SSH connection info' },
   { name: '🗑️  Delete VM', value: 'delete', description: 'Remove the VM' },
   { name: '💣 Delete All (VM + Snapshots)', value: 'delete-all', description: 'Remove everything' },
   new inquirer.Separator(),
@@ -107,21 +94,6 @@ async function showSnapshotMenu() {
   return choice;
 }
 
-async function showTestMenu() {
-  console.log('\n'); // Add spacing
-  const { choice } = await inquirer.prompt([
-    {
-      type: 'list',
-      name: 'choice',
-      message: '🧪 Test Options',
-      choices: testMenuChoices,
-      pageSize: 10,
-      loop: false
-    }
-  ]);
-
-  return choice;
-}
 
 async function showVmOpsMenu() {
   console.log('\n'); // Add spacing
@@ -208,19 +180,6 @@ async function main() {
           }
           break;
 
-        case 'test-menu':
-          let backToMainTest = false;
-          while (!backToMainTest) {
-            const testChoice = await showTestMenu();
-            if (testChoice === 'back') {
-              console.clear(); // Clear screen when going back
-              backToMainTest = true;
-            } else {
-              await executeCommand(testChoice);
-              await waitForEnter();
-            }
-          }
-          break;
 
         case 'vm-ops':
           let backToMainOps = false;
@@ -238,47 +197,15 @@ async function main() {
                   await executeCommand(opsChoice);
                   await waitForEnter();
                 }
-              } else if (opsChoice === 'ssh-interactive') {
-                console.log(chalk.cyan('\n🔗 Opening SSH connection to VM...\n'));
-                console.log(chalk.gray('To exit SSH session, type "exit" and press Enter\n'));
-                
-                // Get VM IP using tart directly
-                const getIpChild = spawn('/opt/homebrew/bin/tart', ['ip', 'brower-test'], {
-                  stdio: 'pipe',
-                  shell: false
-                });
-                
-                let vmIp = '';
-                getIpChild.stdout.on('data', (data) => {
-                  vmIp = data.toString().trim();
-                });
-                
-                await new Promise(resolve => getIpChild.on('close', resolve));
-                
-                if (vmIp) {
-                  // Open SSH session directly
-                  const sshChild = spawn('ssh', [`admin@${vmIp}`], {
-                    stdio: 'inherit',
-                    shell: false
-                  });
-                  
-                  await new Promise(resolve => sshChild.on('close', resolve));
-                } else {
-                  console.log(chalk.red('Could not get VM IP. Make sure the VM is running.'));
-                  await waitForEnter();
-                }
               } else {
                 await executeCommand(opsChoice);
-                if (opsChoice !== 'ssh') {
-                  await waitForEnter();
-                }
+                await waitForEnter();
               }
             }
           }
           break;
 
         case 'ssh-direct':
-        case 'ssh-interactive':
           console.log(chalk.cyan('\n🔗 Checking VM status...\n'));
           
           // First check if VM is running
