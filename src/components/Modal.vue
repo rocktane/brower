@@ -75,7 +75,7 @@ export default defineComponent({
       'else ' +
       '  echo "- Run these commands in your terminal to add Homebrew to your PATH:"; ' +
       '  echo "    echo >> $SHELL_RCFILE"; ' +
-      '  echo "    echo 'eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)"' >> $SHELL_RCFILE"; ' +
+      '  echo "    echo \\"eval \\\\\\"\\\$(${HOMEBREW_PREFIX}/bin/brew shellenv)\\\\\\"\\\" >> $SHELL_RCFILE"; ' +
       '  echo "    eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)""; ' +
       'fi ) && ';
 
