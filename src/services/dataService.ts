@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import Papa from 'papaparse';
+import { parseCSV } from '../utils/csvParser';
 
 // Google Sheet URL in CSV format
 const GOOGLE_SHEET_URL = import.meta.env.VITE_GOOGLE_SHEET_URL;
@@ -67,10 +67,7 @@ function validateItem(item: any): boolean {
  * Parse CSV data into an array of items with validation
  */
 function parseCSVtoItems(csvData: string): Item[] {
-  const { data, errors } = Papa.parse(csvData, {
-    header: true,
-    skipEmptyLines: true
-  });
+  const { data, errors } = parseCSV(csvData);
 
   if (errors && errors.length > 0) {
     console.error('CSV parsing errors:', errors);

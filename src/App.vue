@@ -119,7 +119,7 @@ onUnmounted(() => {
   </div>
   <Modal v-if="showModal" @close="showModal = false" />
   <SearchModal v-if="showSearchModal" :items="items" @close="showSearchModal = false" />
-  <List />
+  <List :items="items" :loading="loading" :fetchError="fetchError || undefined" />
   <p class="post" :class="[$i18n.locale === 'fr' ? 'post-gold' : 'post-green']">
     {{ t("message.last_word") }}
     <a href="https://twitter.com/rcktne">@rcktne</a>

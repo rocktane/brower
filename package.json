@@ -12,10 +12,8 @@
     "update-db": "node scripts/updateDb.js"
   },
   "dependencies": {
-    "@types/papaparse": "^5.3.15",
     "dotenv": "^17.2.1",
     "express": "^4.19.2",
-    "papaparse": "^5.5.2",
     "vue": "^3.4.37",
     "vue-i18n": "^9.14.0"
   },
