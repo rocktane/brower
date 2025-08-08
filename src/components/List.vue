@@ -43,22 +43,34 @@
             $i18n.locale === 'fr' ? 'btn-gold' : 'btn-green',
             { checked: isItemChecked(item) },
           ]"
+          tabindex="0"
+          @keydown.space.prevent="toggleItem(item)"
+          @keydown.enter.prevent="toggleItem(item)"
+          role="checkbox"
+          :aria-checked="isItemChecked(item)"
         >
-          <input type="checkbox" :checked="isItemChecked(item)" @change="toggleItem(item)" />
+          <input 
+            type="checkbox" 
+            :checked="isItemChecked(item)" 
+            @change="toggleItem(item)"
+            :aria-label="`Select ${item.name} for installation`"
+          />
           <Bubble
             :description="getLocalizedDescription(item)"
-            v-if="showBubble"
+            v-if="hoveredItem === item.code"
           />
           <img
             :src="item.logo"
             :alt="item.name + ' logo'"
             :height="48"
             :ratio="1 / 1"
+            loading="lazy"
+            decoding="async"
           />
           <span
             class="name"
-            @mouseover="toggleBubble"
-            @mouseleave="toggleBubble"
+            @mouseover="showBubble(item.code)"
+            @mouseleave="hideBubble"
             >{{ item.name }}</span
           >
           <img
@@ -75,14 +87,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, computed } from "vue";
+import { defineComponent, ref, computed } from "vue";
 import { store } from "../store";
 import Bubble from "./Bubble.vue";
 import { useI18n } from "vue-i18n";
-import {
-  Item,
-  initializeDataService,
-} from "../services/dataService";
+import { Item } from "../services/dataService";
 
 const orderedCategories = [
   "internet",
@@ -100,53 +109,42 @@ export default defineComponent({
     Bubble,
     useI18n,
   },
+  props: {
+    items: {
+      type: Array as () => Item[],
+      default: () => []
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    fetchError: {
+      type: String,
+      default: null
+    }
+  },
 
-  setup() {
-    const items = ref<Item[]>([]);
-    const showBubble = ref(false);
-    const loading = ref(false);
-    const fetchError = ref<string | null>(null);
+  setup(props) {
+    const hoveredItem = ref<string | null>(null);
 
-    onMounted(async () => {
-      try {
-        loading.value = true;
-        items.value = await initializeDataService();
-      } catch (err) {
-        fetchError.value = err instanceof Error ? err.message : "Unknown error";
-      } finally {
-        loading.value = false;
-      }
-    });
+    const showBubble = (itemCode: string) => {
+      hoveredItem.value = itemCode;
+    };
 
-    const toggleBubble = (): void => {
-      showBubble.value = !showBubble.value;
+    const hideBubble = () => {
+      hoveredItem.value = null;
     };
 
     const isItemChecked = (item: Item): boolean => {
-      return store.apps.includes(item.brew);
+      return store.isItemChecked(item.brew);
     };
 
     const toggleItem = (item: Item): void => {
-      const index = store.apps.indexOf(item.brew);
-      const tapIndex = store.tapApps.indexOf(item.tap);
-
-      if (index > -1) {
-        store.apps.splice(index, 1);
-        if (item.tap && tapIndex > -1) {
-          store.tapApps.splice(tapIndex, 1);
-        }
-        store.checkedCount--;
-      } else {
-        store.apps.push(item.brew);
-        if (item.tap) {
-          store.tapApps.push(item.tap);
-        }
-        store.checkedCount++;
-      }
+      store.toggleItem(item.brew, item.tap);
     };
 
     const groupedItems = computed(() => {
-      return items.value.reduce((acc, item) => {
+      return props.items.reduce((acc, item) => {
         if (!acc[item.category]) {
           acc[item.category] = [];
         }
@@ -175,17 +173,17 @@ export default defineComponent({
     };
 
     return {
-      items,
       orderedCategories,
       toggleItem,
       isItemChecked,
-      toggleBubble,
       showBubble,
+      hideBubble,
+      hoveredItem,
       t,
       groupedItems,
       getIconUrl,
-      loading,
-      fetchError,
+      loading: computed(() => props.loading),
+      fetchError: computed(() => props.fetchError),
       hasTranslation,
       getLocalizedDescription,
     };

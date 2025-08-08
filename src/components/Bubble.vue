@@ -2,7 +2,6 @@
   <div
     class="bubble"
     :class="$i18n.locale === 'fr' ? 'bubble-gold' : 'bubble-green'"
-    v-show="isVisible"
     :style="{ left: bubbleLeft + 'px', top: bubbleTop + 'px' }"
   >
     {{ props.description }}
@@ -18,11 +17,11 @@ const props = defineProps<{
 
 const bubbleLeft = ref(0);
 const bubbleTop = ref(0);
-const isVisible = ref(false);
+let isTracking = false;
 
 const updateBubblePosition = (event: MouseEvent) => {
-  isVisible.value = true;
-
+  if (!isTracking) return;
+  
   requestAnimationFrame(() => {
     const windowWidth = window.innerWidth;
     const mouseX = event.clientX;
@@ -37,11 +36,22 @@ const updateBubblePosition = (event: MouseEvent) => {
   });
 };
 
+// Start tracking when component is mounted (bubble is shown)
 onMounted(() => {
+  isTracking = true;
   window.addEventListener("mousemove", updateBubblePosition);
+  
+  // Set initial position based on current mouse position
+  const mouseEvent = new MouseEvent('mousemove', {
+    clientX: window.innerWidth / 2,
+    clientY: window.innerHeight / 2
+  });
+  updateBubblePosition(mouseEvent);
 });
 
+// Stop tracking when component is unmounted (bubble is hidden)
 onUnmounted(() => {
+  isTracking = false;
   window.removeEventListener("mousemove", updateBubblePosition);
 });
 </script>
@@ -49,7 +59,6 @@ onUnmounted(() => {
 <style scoped>
 .bubble {
   position: fixed;
-  display: none;
   width: 200px;
   text-wrap: balance;
   height: fit-content;

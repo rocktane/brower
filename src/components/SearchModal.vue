@@ -14,16 +14,29 @@ const emit = defineEmits<{
 
 const { locale } = useI18n();
 const searchQuery = ref('');
+const debouncedSearchQuery = ref('');
 const selectedIndex = ref(0);
 const searchInput = ref<HTMLInputElement>();
 const itemRefs = ref<HTMLElement[]>([]);
+let debounceTimer: number | undefined;
+
+// Debounce search query
+watch(searchQuery, (newQuery) => {
+  if (debounceTimer) {
+    clearTimeout(debounceTimer);
+  }
+  debounceTimer = setTimeout(() => {
+    debouncedSearchQuery.value = newQuery;
+    selectedIndex.value = 0;
+  }, 150) as unknown as number;
+});
 
 const filteredItems = computed(() => {
-  if (!searchQuery.value.trim()) {
+  if (!debouncedSearchQuery.value.trim()) {
     return props.items;
   }
 
-  const query = searchQuery.value.toLowerCase();
+  const query = debouncedSearchQuery.value.toLowerCase();
   return props.items.filter(item => {
     const name = item.name.toLowerCase();
     const description = locale.value === 'fr'
@@ -37,31 +50,18 @@ const filteredItems = computed(() => {
   });
 });
 
-watch(searchQuery, () => {
-  selectedIndex.value = 0;
+onUnmounted(() => {
+  if (debounceTimer) {
+    clearTimeout(debounceTimer);
+  }
 });
 
 // Remove the automatic scrolling on selection change
 // We'll handle scrolling manually in the keyboard navigation
 
 const toggleItem = (item: Item) => {
-  const index = store.apps.indexOf(item.brew);
-  const tapIndex = store.tapApps.indexOf(item.tap);
-
-  if (index > -1) {
-    store.apps.splice(index, 1);
-    if (item.tap && tapIndex > -1) {
-      store.tapApps.splice(tapIndex, 1);
-    }
-    store.checkedCount--;
-  } else {
-    store.apps.push(item.brew);
-    if (item.tap) {
-      store.tapApps.push(item.tap);
-    }
-    store.checkedCount++;
-  }
-
+  store.toggleItem(item.brew, item.tap);
+  
   // Keep focus on search input to maintain keyboard navigation
   nextTick(() => {
     searchInput.value?.focus();
@@ -69,7 +69,7 @@ const toggleItem = (item: Item) => {
 };
 
 const isChecked = (item: Item) => {
-  return store.apps.includes(item.brew);
+  return store.isItemChecked(item.brew);
 };
 
 const scrollToItem = async (index: number) => {
@@ -139,7 +139,10 @@ const handleGlobalKeyDown = (event: KeyboardEvent) => {
 };
 
 onMounted(() => {
-  searchInput.value?.focus();
+  // Focus search input and trap focus in modal
+  nextTick(() => {
+    searchInput.value?.focus();
+  });
   document.addEventListener('keydown', handleGlobalKeyDown);
 });
 
@@ -155,8 +158,8 @@ const setItemRef = (el: any, index: number) => {
 </script>
 
 <template>
-  <div class="search-modal-overlay" @click.self="$emit('close')" @keydown="handleKeyDown" tabindex="-1">
-    <div class="search-modal">
+  <div class="search-modal-overlay" @click.self="$emit('close')" @keydown="handleKeyDown" tabindex="-1" role="dialog" aria-modal="true" :aria-label="locale === 'fr' ? 'Rechercher des applications' : 'Search applications'">
+    <div class="search-modal" role="document">
       <div class="search-header">
         <input
           ref="searchInput"

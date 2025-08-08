@@ -3,7 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 import https from 'https';
-import Papa from 'papaparse';
+import { parseCSV } from './csvParser.js';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 
@@ -66,10 +66,11 @@ function fetchDataFromGoogleSheet() {
  * Parse CSV data into an array of items
  */
 function parseCSVtoItems(csvData) {
-  const { data } = Papa.parse(csvData, {
-    header: true,
-    skipEmptyLines: true
-  });
+  const { data, errors } = parseCSV(csvData);
+  
+  if (errors.length > 0) {
+    console.error('CSV parsing errors:', errors);
+  }
 
   return data.map((row) => ({
     name: row.name || '',
