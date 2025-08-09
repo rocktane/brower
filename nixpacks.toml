@@ -5,7 +5,7 @@
 nixPkgs = ["nodejs_20", "npm-9_x"]
 
 [phases.install]
-cmds = ["npm ci --omit=dev"]
+cmds = ["npm ci"]
 
 [phases.build]
 cmds = ["npm run build"]
