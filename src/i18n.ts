@@ -46,6 +46,12 @@ const messages = {
         "Copy then paste the following command in the terminal and press <kbd>⮐</kbd> to make magic happen",
       copy: "Copy the command",
       already_brew: "I already have brew!",
+      warnings: {
+        interactive:
+          "📝 The installation will ask you to: <strong>1.</strong> Press Enter to confirm <strong>2.</strong> Enter your admin password (sudo)",
+        gatekeeper:
+          "🔒 If an app is blocked by Gatekeeper, go to System Preferences > Security and click \"Open Anyway\".",
+      },
       legend: {
         star: "Essentials",
         new: "Latest arrivals",
@@ -98,6 +104,12 @@ const messages = {
         "Copiez puis collez le code suivant dans le terminal et appuyez sur <kbd>⮐</kbd> pour que la magie opère",
       copy: "Copier la commande",
       already_brew: "J'ai déjà brew !",
+      warnings: {
+        interactive:
+          "📝 L'installation vous demandera de : <strong>1.</strong> Appuyer sur Entrée pour confirmer <strong>2.</strong> Entrer votre mot de passe administrateur (sudo)",
+        gatekeeper:
+          "🔒 Si une app est bloquée par Gatekeeper, allez dans Préférences Système > Sécurité et cliquez sur « Ouvrir quand même ».",
+      },
       legend: {
         star: "Incontournables",
         new: "Dernières arrivées",
