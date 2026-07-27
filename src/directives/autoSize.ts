@@ -5,23 +5,29 @@ declare global {
   }
 }
 
+const resize = (ta: HTMLTextAreaElement) => {
+  ta.style.height = "auto";
+  ta.style.height = `${ta.scrollHeight + 2}px`;
+};
+
 const autoSize = {
   mounted(ta: HTMLTextAreaElement) {
-    const resize = () => {
-      ta.style.height = "auto";
-      ta.style.height = `${ta.scrollHeight + 2}px`;
-    };
+    const onResize = () => resize(ta);
 
     // Ajustement initial
-    resize();
+    onResize();
 
     // Ajustement lors du redimensionnement de la fenêtre
-    window.addEventListener("resize", resize);
+    window.addEventListener("resize", onResize);
 
     // Nettoyage lors du démontage
     ta.__resizeCleanup__ = () => {
-      window.removeEventListener("resize", resize);
+      window.removeEventListener("resize", onResize);
     };
+  },
+  // Le contenu change quand on bascule entre commande complète et simplifiée
+  updated(ta: HTMLTextAreaElement) {
+    resize(ta);
   },
   unmounted(ta: HTMLTextAreaElement) {
     if (ta.__resizeCleanup__) {

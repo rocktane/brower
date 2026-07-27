@@ -19,20 +19,25 @@
       <p v-html="t('message.install_macos')"></p>
       <p v-html="t('message.instructions')"></p>
 
-      <div class="warnings">
+      <!-- Ces avertissements ne concernent que l'installation complète :
+           la version simplifiée n'installe ni brew ni les Xcode CLT. -->
+      <div class="warnings" v-if="!simplified">
         <p class="warning" v-html="t('message.warnings.interactive')"></p>
         <p class="warning" v-html="t('message.warnings.gatekeeper')"></p>
       </div>
 
-      <textarea readonly id="install-command" v-auto-size>{{
-        commandWithBrew
-      }}</textarea>
+      <textarea
+        readonly
+        id="install-command"
+        v-auto-size
+        :value="currentCommand"
+      ></textarea>
       <div class="buttons">
         <button
           type="button"
           class="btn"
           :class="[$i18n.locale === 'fr' ? 'btn-gold' : 'btn-green']"
-          @click="copyWithBrew"
+          @click="copyCommand"
         >
           {{ t("message.copy") }}
         </button>
@@ -40,18 +45,24 @@
           type="button"
           class="btn"
           :class="[$i18n.locale === 'fr' ? 'btn-green' : 'btn-gold']"
-          @click="copyWithoutBrew"
+          @click="simplified = !simplified"
         >
-          {{ t("message.already_brew") }}
+          {{ simplified ? t("message.full_command") : t("message.already_brew") }}
         </button>
       </div>
+
+      <transition name="toast">
+        <p class="toast" v-if="copied" role="status" aria-live="polite">
+          {{ t("message.copied") }}
+        </p>
+      </transition>
       <slot></slot>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted } from "vue";
+import { computed, defineComponent, onMounted, onUnmounted, ref } from "vue";
 import { store } from "../store";
 import { useI18n } from "vue-i18n";
 import autoSize from "../directives/autoSize";
@@ -153,22 +164,32 @@ export default defineComponent({
     // Command without brew (for users who already have it)
     const commandWithoutBrew = bundleCommand;
 
-    const copyWithBrew = () => {
-      navigator.clipboard.writeText(commandWithBrew.trimEnd());
+    // Toggled by the "I already have brew!" button: swaps what the textarea
+    // shows (and what gets copied) instead of copying a hidden variant.
+    const simplified = ref(false);
+    const currentCommand = computed(() =>
+      (simplified.value ? commandWithoutBrew : commandWithBrew).trimEnd()
+    );
+
+    const copied = ref(false);
+    let copiedTimeout: ReturnType<typeof setTimeout> | undefined;
+
+    const copyCommand = async () => {
+      await navigator.clipboard.writeText(currentCommand.value);
+      copied.value = true;
+      clearTimeout(copiedTimeout);
+      copiedTimeout = setTimeout(() => (copied.value = false), 2000);
     };
 
-    const copyWithoutBrew = () => {
-      navigator.clipboard.writeText(commandWithoutBrew.trimEnd());
-    };
+    onUnmounted(() => clearTimeout(copiedTimeout));
 
     return {
       store,
       closeModal,
-      installBrew,
-      copyWithBrew,
-      copyWithoutBrew,
-      commandWithBrew,
-      commandWithoutBrew,
+      copyCommand,
+      copied,
+      simplified,
+      currentCommand,
       t,
     };
   },
@@ -246,6 +267,30 @@ textarea {
 .buttons {
   display: flex;
   gap: 1em;
+}
+
+.toast {
+  position: absolute;
+  bottom: 1em;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 0.5em 1.25em;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.85);
+  pointer-events: none;
+}
+
+.toast-enter-active,
+.toast-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.toast-enter-from,
+.toast-leave-to {
+  opacity: 0;
 }
 
 .warnings {
