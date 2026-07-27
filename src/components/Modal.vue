@@ -18,6 +18,12 @@
       <h2 v-html="t('message.last_step')"></h2>
       <p v-html="t('message.install_macos')"></p>
       <p v-html="t('message.instructions')"></p>
+
+      <div class="warnings">
+        <p class="warning" v-html="t('message.warnings.interactive')"></p>
+        <p class="warning" v-html="t('message.warnings.gatekeeper')"></p>
+      </div>
+
       <textarea readonly id="install-command" v-auto-size>{{
         commandWithBrew
       }}</textarea>
@@ -77,46 +83,75 @@ export default defineComponent({
 
     const { t } = useI18n();
 
-    const installBrew =
-      'command -v brew &> /dev/null && brew update || ( /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" && ' +
-      'HOMEBREW_PREFIX="$(/opt/homebrew/bin/brew --prefix 2>/dev/null || /usr/local/bin/brew --prefix 2>/dev/null || echo /opt/homebrew)" && ' +
-      'SHELL_RCFILE="$([ -n "$ZSH_VERSION" ] && echo ~/.zshrc || ([ -n "$BASH_VERSION" ] && echo ~/.bashrc || echo ~/.profile))" && ' +
-      'if grep -qs "eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)""; then ' +
-      '  if ! command -v brew >/dev/null; then ' +
-      '    echo "- Run this command in your terminal to add Homebrew to your PATH:"; ' +
-      '    echo "    eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)""; ' +
-      '  fi; ' +
-      'else ' +
-      '  echo "- Run these commands in your terminal to add Homebrew to your PATH:"; ' +
-      '  echo "    echo >> $SHELL_RCFILE"; ' +
-      '  echo "    echo \\"eval \\\\\\"\\\$(${HOMEBREW_PREFIX}/bin/brew shellenv)\\\\\\"\\"\\" >> $SHELL_RCFILE"; ' +
-      '  echo "    eval "$(${HOMEBREW_PREFIX}/bin/brew shellenv)""; ' +
-      'fi ) && ';
+    // Build the Brewfile fed to `brew bundle` on stdin.
+    // Declaring taps/formulae/casks lets brew resolve everything in a single
+    // invocation, skip what is already installed, keep going when one entry
+    // fails, and print a recap of the failures at the end.
+    const buildBrewfile = () => {
+      const casks = store.apps
+        .filter((app) => app.startsWith("--cask"))
+        .map((app) => app.replace("--cask ", ""));
+      const formulae = store.apps.filter((app) => !app.startsWith("--cask"));
+      const taps = store.tapApps.filter((tap): tap is string => Boolean(tap));
 
-    const tapApps = store.tapApps;
-    const caskApps = store.apps.filter((app) => app.startsWith("--cask"));
-    const nonCaskApps = store.apps.filter((app) => !app.startsWith("--cask"));
+      return [
+        ...taps.map((tap) => `tap "${tap}"`),
+        ...formulae.map((app) => `brew "${app}"`),
+        ...casks.map((app) => `cask "${app}"`),
+      ].join("\n");
+    };
 
-    const caskAppsCleaned = caskApps.map((app) => app.replace("--cask ", ""));
+    // Heredoc is quoted ('BREWFILE') so no shell expansion happens inside the
+    // app list, and --file=- reads it from stdin instead of writing a temp
+    // file on the user's machine.
+    const bundleCommand = [
+      "brew bundle --file=- <<'BREWFILE'",
+      buildBrewfile(),
+      "BREWFILE",
+    ].join("\n");
 
-    const tapCommand =
-      tapApps.length > 0 ? `brew tap ${tapApps.join(" && brew tap")}` : "";
-    const caskCommand =
-      caskAppsCleaned.length > 0
-        ? `brew install --cask ${caskAppsCleaned.join(" ")}`
-        : "";
-    const nonCaskCommand =
-      nonCaskApps.length > 0 ? `brew install ${nonCaskApps.join(" ")}` : "";
+    // Pre-checks (Failles 8 & 9 - Solution B)
+    const preChecks = [
+      // macOS version check (Faille 9)
+      '[[ $(sw_vers -productVersion | cut -d. -f1) -ge 11 ]] || { echo "❌ macOS 11.0+ required"; exit 1; }',
+      // Disk space check - at least 10GB (Faille 8)
+      '[[ $(df -g / | awk \'NR==2{print $4}\') -ge 10 ]] || { echo "❌ Insufficient disk space (<10 GB)"; exit 1; }',
+    ].join("\n");
 
-    const commandWithBrew =
-      installBrew +
-      [tapCommand, caskCommand, nonCaskCommand]
-        .filter((part) => part !== "")
-        .join(" && ");
+    // Xcode CLT installation (Faille 2 - Solution B)
+    // `< /dev/tty` so the prompt still works when the script is piped to bash.
+    const xcodeCheck = [
+      "xcode-select -p &>/dev/null || {",
+      '  echo "📦 Installing Xcode Command Line Tools..."',
+      "  xcode-select --install",
+      '  read -r -p "⏳ Press Enter once the CLT installation completes... " < /dev/tty',
+      "}",
+    ].join("\n");
 
-    const commandWithoutBrew = [tapCommand, caskCommand, nonCaskCommand]
-      .filter((part) => part !== "")
-      .join(" && ");
+    // Homebrew installation (Faille 1 - Solution A)
+    const installBrew = [
+      "command -v brew &>/dev/null || \\",
+      '  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"',
+    ].join("\n");
+
+    // `brew shellenv` is the official way to locate brew and fix the PATH,
+    // on both Apple Silicon (/opt/homebrew) and Intel (/usr/local).
+    const brewPathSetup = [
+      'eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || /usr/local/bin/brew shellenv)"',
+      "export HOMEBREW_NO_ENV_HINTS=1",
+    ].join("\n");
+
+    const commandWithBrew = [
+      "#!/bin/bash",
+      preChecks,
+      xcodeCheck,
+      installBrew,
+      brewPathSetup,
+      bundleCommand,
+    ].join("\n\n");
+
+    // Command without brew (for users who already have it)
+    const commandWithoutBrew = bundleCommand;
 
     const copyWithBrew = () => {
       navigator.clipboard.writeText(commandWithBrew.trimEnd());
@@ -190,6 +225,10 @@ export default defineComponent({
 textarea {
   width: 100%;
   /* height: auto; */
+  /* The generated script is multi-line: cap the growth from v-auto-size and
+     scroll past it, so a long selection cannot push the buttons off-screen. */
+  max-height: 40vh;
+  overflow-y: auto;
   margin-bottom: 1em;
   padding: 12px 21px;
   font-size: 14px;
@@ -207,5 +246,27 @@ textarea {
 .buttons {
   display: flex;
   gap: 1em;
+}
+
+.warnings {
+  background-color: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 4px;
+  padding: 0.75em 1em;
+  margin-bottom: 1em;
+  font-size: 0.9em;
+}
+
+.warning {
+  margin: 0.5em 0;
+  line-height: 1.4;
+}
+
+.warning:first-child {
+  margin-top: 0;
+}
+
+.warning:last-child {
+  margin-bottom: 0;
 }
 </style>
