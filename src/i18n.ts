@@ -45,7 +45,9 @@ const messages = {
       instructions:
         "Copy then paste the following command in the terminal and press <kbd>⮐</kbd> to make magic happen",
       copy: "Copy the command",
+      copied: "Command copied!",
       already_brew: "I already have brew!",
+      full_command: "Show the full command",
       warnings: {
         interactive:
           "📝 The installation will ask you to: <strong>1.</strong> Press Enter to confirm <strong>2.</strong> Enter your admin password (sudo)",
@@ -103,7 +105,9 @@ const messages = {
       instructions:
         "Copiez puis collez le code suivant dans le terminal et appuyez sur <kbd>⮐</kbd> pour que la magie opère",
       copy: "Copier la commande",
+      copied: "Commande copiée !",
       already_brew: "J'ai déjà brew !",
+      full_command: "Voir la commande complète",
       warnings: {
         interactive:
           "📝 L'installation vous demandera de : <strong>1.</strong> Appuyer sur Entrée pour confirmer <strong>2.</strong> Entrer votre mot de passe administrateur (sudo)",
