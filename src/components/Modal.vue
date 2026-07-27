@@ -83,67 +83,75 @@ export default defineComponent({
 
     const { t } = useI18n();
 
-    // Helper to build commands with error handling (Faille 4 - Solution A)
-    const buildAppCommands = (brewPath: string) => {
-      const tapApps = store.tapApps;
-      const caskApps = store.apps.filter((app) => app.startsWith("--cask"));
-      const nonCaskApps = store.apps.filter((app) => !app.startsWith("--cask"));
-      const caskAppsCleaned = caskApps.map((app) => app.replace("--cask ", ""));
+    // Build the Brewfile fed to `brew bundle` on stdin.
+    // Declaring taps/formulae/casks lets brew resolve everything in a single
+    // invocation, skip what is already installed, keep going when one entry
+    // fails, and print a recap of the failures at the end.
+    const buildBrewfile = () => {
+      const casks = store.apps
+        .filter((app) => app.startsWith("--cask"))
+        .map((app) => app.replace("--cask ", ""));
+      const formulae = store.apps.filter((app) => !app.startsWith("--cask"));
+      const taps = store.tapApps.filter((tap): tap is string => Boolean(tap));
 
-      const commands: string[] = [];
-
-      // Tap commands with error handling
-      tapApps.forEach((tap) => {
-        commands.push(`${brewPath} tap ${tap} || echo "⚠️ Failed: tap ${tap}"`);
-      });
-
-      // Cask commands with error handling (each app separately)
-      caskAppsCleaned.forEach((app) => {
-        commands.push(`${brewPath} install --cask ${app} || echo "⚠️ Failed: ${app}"`);
-      });
-
-      // Formula commands with error handling (each app separately)
-      nonCaskApps.forEach((app) => {
-        commands.push(`${brewPath} install ${app} || echo "⚠️ Failed: ${app}"`);
-      });
-
-      return commands.join("; ");
+      return [
+        ...taps.map((tap) => `tap "${tap}"`),
+        ...formulae.map((app) => `brew "${app}"`),
+        ...casks.map((app) => `cask "${app}"`),
+      ].join("\n");
     };
 
+    // Heredoc is quoted ('BREWFILE') so no shell expansion happens inside the
+    // app list, and --file=- reads it from stdin instead of writing a temp
+    // file on the user's machine.
+    const bundleCommand = [
+      "brew bundle --file=- <<'BREWFILE'",
+      buildBrewfile(),
+      "BREWFILE",
+    ].join("\n");
+
     // Pre-checks (Failles 8 & 9 - Solution B)
-    const preChecks =
+    const preChecks = [
       // macOS version check (Faille 9)
-      '[[ $(sw_vers -productVersion | cut -d. -f1) -ge 11 ]] || { echo "❌ macOS 11.0+ required"; exit 1; } && ' +
+      '[[ $(sw_vers -productVersion | cut -d. -f1) -ge 11 ]] || { echo "❌ macOS 11.0+ required"; exit 1; }',
       // Disk space check - at least 10GB (Faille 8)
-      '[ $(df -g / | tail -1 | awk \'{print $4}\') -ge 10 ] || { echo "❌ Insufficient disk space (<10 GB)"; exit 1; }';
+      '[[ $(df -g / | awk \'NR==2{print $4}\') -ge 10 ]] || { echo "❌ Insufficient disk space (<10 GB)"; exit 1; }',
+    ].join("\n");
 
     // Xcode CLT installation (Faille 2 - Solution B)
-    const xcodeCheck =
-      'xcode-select -p &>/dev/null || { echo "📦 Installing Xcode Command Line Tools..."; xcode-select --install; echo "⏳ Press Enter after CLT installation completes..."; read; }';
+    // `< /dev/tty` so the prompt still works when the script is piped to bash.
+    const xcodeCheck = [
+      "xcode-select -p &>/dev/null || {",
+      '  echo "📦 Installing Xcode Command Line Tools..."',
+      "  xcode-select --install",
+      '  read -r -p "⏳ Press Enter once the CLT installation completes... " < /dev/tty',
+      "}",
+    ].join("\n");
 
-    // Homebrew installation with absolute path (Faille 1 - Solution A)
-    const installBrew =
-      'if command -v brew &>/dev/null; then brew update; ' +
-      'else /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; fi';
+    // Homebrew installation (Faille 1 - Solution A)
+    const installBrew = [
+      "command -v brew &>/dev/null || \\",
+      '  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"',
+    ].join("\n");
 
-    // Determine brew path (Faille 1 - Solution A: absolute paths)
-    const brewPathSetup =
-      'BREW_PATH="$([[ -x /opt/homebrew/bin/brew ]] && echo /opt/homebrew/bin/brew || echo /usr/local/bin/brew)"';
-
-    // Build the full command with brew installation
-    const appCommands = buildAppCommands('$BREW_PATH');
+    // `brew shellenv` is the official way to locate brew and fix the PATH,
+    // on both Apple Silicon (/opt/homebrew) and Intel (/usr/local).
+    const brewPathSetup = [
+      'eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || /usr/local/bin/brew shellenv)"',
+      "export HOMEBREW_NO_ENV_HINTS=1",
+    ].join("\n");
 
     const commandWithBrew = [
+      "#!/bin/bash",
       preChecks,
       xcodeCheck,
       installBrew,
       brewPathSetup,
-      appCommands
-    ].join(' && ');
+      bundleCommand,
+    ].join("\n\n");
 
     // Command without brew (for users who already have it)
-    const commandWithoutBrewApps = buildAppCommands('brew');
-    const commandWithoutBrew = commandWithoutBrewApps;
+    const commandWithoutBrew = bundleCommand;
 
     const copyWithBrew = () => {
       navigator.clipboard.writeText(commandWithBrew.trimEnd());
@@ -217,6 +225,10 @@ export default defineComponent({
 textarea {
   width: 100%;
   /* height: auto; */
+  /* The generated script is multi-line: cap the growth from v-auto-size and
+     scroll past it, so a long selection cannot push the buttons off-screen. */
+  max-height: 40vh;
+  overflow-y: auto;
   margin-bottom: 1em;
   padding: 12px 21px;
   font-size: 14px;
