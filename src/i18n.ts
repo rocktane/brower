@@ -48,6 +48,23 @@ const messages = {
       copied: "Command copied!",
       already_brew: "I already have brew!",
       full_command: "Show the full command",
+      // Comments injected into the generated shell script itself.
+      // Keep them short: they are read in a terminal-width textarea.
+      script: {
+        macos: "Stop right away if macOS is too old for Homebrew",
+        disk: "Stop right away if less than 10 GB are free",
+        xcode:
+          "Homebrew needs Apple's Command Line Tools: install them if missing",
+        brew: "Install Homebrew, unless it is already there",
+        path: "Make the brew command available (Apple Silicon or Intel)",
+        bundle:
+          "Install everything below in one go (already-installed apps are skipped)",
+        // Messages printed by the script while it runs.
+        err_macos: "❌ macOS 11.0+ required",
+        err_disk: "❌ Insufficient disk space (<10 GB)",
+        log_xcode: "📦 Installing Xcode Command Line Tools...",
+        prompt_xcode: "⏳ Press Enter once the installation completes... ",
+      },
       warnings: {
         interactive:
           "📝 The installation will ask you to: <strong>1.</strong> Press Enter to confirm <strong>2.</strong> Enter your admin password (sudo)",
@@ -108,6 +125,23 @@ const messages = {
       copied: "Commande copiée !",
       already_brew: "J'ai déjà brew !",
       full_command: "Voir la commande complète",
+      // Commentaires injectés dans le script shell généré.
+      // À garder courts : ils sont lus dans un textarea étroit.
+      script: {
+        macos: "On s'arrête tout de suite si macOS est trop ancien pour Homebrew",
+        disk: "On s'arrête tout de suite s'il reste moins de 10 Go",
+        xcode:
+          "Homebrew a besoin des Command Line Tools d'Apple : on les installe si besoin",
+        brew: "Installe Homebrew, sauf s'il est déjà là",
+        path: "Rend la commande brew accessible (Apple Silicon ou Intel)",
+        bundle:
+          "Installe tout ce qui suit d'un coup (les apps déjà présentes sont ignorées)",
+        // Messages affichés par le script pendant son exécution.
+        err_macos: "❌ macOS 11.0+ requis",
+        err_disk: "❌ Espace disque insuffisant (moins de 10 Go)",
+        log_xcode: "📦 Installation des Xcode Command Line Tools...",
+        prompt_xcode: "⏳ Appuyez sur Entrée une fois l'installation terminée... ",
+      },
       warnings: {
         interactive:
           "📝 L'installation vous demandera de : <strong>1.</strong> Appuyer sur Entrée pour confirmer <strong>2.</strong> Entrer votre mot de passe administrateur (sudo)",

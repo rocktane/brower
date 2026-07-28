@@ -112,54 +112,77 @@ export default defineComponent({
       ].join("\n");
     };
 
+    // Each block of the generated script is prefixed with a `#` comment so the
+    // user can read what they are about to paste. The comments come from i18n,
+    // hence the computed: they follow the locale switcher.
+    const comment = (key: string) => `# ${t(`message.script.${key}`)}`;
+    // Same for the messages the script prints while it runs. They land inside
+    // double-quoted shell strings, so a stray `"` would break the script.
+    const msg = (key: string) => t(`message.script.${key}`).replace(/"/g, "'");
+
     // Heredoc is quoted ('BREWFILE') so no shell expansion happens inside the
     // app list, and --file=- reads it from stdin instead of writing a temp
     // file on the user's machine.
-    const bundleCommand = [
-      "brew bundle --file=- <<'BREWFILE'",
-      buildBrewfile(),
-      "BREWFILE",
-    ].join("\n");
+    const bundleCommand = computed(() =>
+      [
+        comment("bundle"),
+        "brew bundle --file=- <<'BREWFILE'",
+        buildBrewfile(),
+        "BREWFILE",
+      ].join("\n")
+    );
 
-    // Pre-checks (Failles 8 & 9 - Solution B)
-    const preChecks = [
-      // macOS version check (Faille 9)
-      '[[ $(sw_vers -productVersion | cut -d. -f1) -ge 11 ]] || { echo "❌ macOS 11.0+ required"; exit 1; }',
-      // Disk space check - at least 10GB (Faille 8)
-      '[[ $(df -g / | awk \'NR==2{print $4}\') -ge 10 ]] || { echo "❌ Insufficient disk space (<10 GB)"; exit 1; }',
-    ].join("\n");
+    const commandWithBrew = computed(() => {
+      // Pre-checks (Failles 8 & 9 - Solution B)
+      const preChecks = [
+        // macOS version check (Faille 9)
+        comment("macos"),
+        `[[ $(sw_vers -productVersion | cut -d. -f1) -ge 11 ]] || { echo "${msg(
+          "err_macos"
+        )}"; exit 1; }`,
+        "",
+        // Disk space check - at least 10GB (Faille 8)
+        comment("disk"),
+        `[[ $(df -g / | awk 'NR==2{print $4}') -ge 10 ]] || { echo "${msg(
+          "err_disk"
+        )}"; exit 1; }`,
+      ].join("\n");
 
-    // Xcode CLT installation (Faille 2 - Solution B)
-    // `< /dev/tty` so the prompt still works when the script is piped to bash.
-    const xcodeCheck = [
-      "xcode-select -p &>/dev/null || {",
-      '  echo "📦 Installing Xcode Command Line Tools..."',
-      "  xcode-select --install",
-      '  read -r -p "⏳ Press Enter once the CLT installation completes... " < /dev/tty',
-      "}",
-    ].join("\n");
+      // Xcode CLT installation (Faille 2 - Solution B)
+      // `< /dev/tty` so the prompt still works when the script is piped to bash.
+      const xcodeCheck = [
+        comment("xcode"),
+        "xcode-select -p &>/dev/null || {",
+        `  echo "${msg("log_xcode")}"`,
+        "  xcode-select --install",
+        `  read -r -p "${msg("prompt_xcode")}" < /dev/tty`,
+        "}",
+      ].join("\n");
 
-    // Homebrew installation (Faille 1 - Solution A)
-    const installBrew = [
-      "command -v brew &>/dev/null || \\",
-      '  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"',
-    ].join("\n");
+      // Homebrew installation (Faille 1 - Solution A)
+      const installBrew = [
+        comment("brew"),
+        "command -v brew &>/dev/null || \\",
+        '  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"',
+      ].join("\n");
 
-    // `brew shellenv` is the official way to locate brew and fix the PATH,
-    // on both Apple Silicon (/opt/homebrew) and Intel (/usr/local).
-    const brewPathSetup = [
-      'eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || /usr/local/bin/brew shellenv)"',
-      "export HOMEBREW_NO_ENV_HINTS=1",
-    ].join("\n");
+      // `brew shellenv` is the official way to locate brew and fix the PATH,
+      // on both Apple Silicon (/opt/homebrew) and Intel (/usr/local).
+      const brewPathSetup = [
+        comment("path"),
+        'eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || /usr/local/bin/brew shellenv)"',
+        "export HOMEBREW_NO_ENV_HINTS=1",
+      ].join("\n");
 
-    const commandWithBrew = [
-      "#!/bin/bash",
-      preChecks,
-      xcodeCheck,
-      installBrew,
-      brewPathSetup,
-      bundleCommand,
-    ].join("\n\n");
+      return [
+        "#!/bin/bash",
+        preChecks,
+        xcodeCheck,
+        installBrew,
+        brewPathSetup,
+        bundleCommand.value,
+      ].join("\n\n");
+    });
 
     // Command without brew (for users who already have it)
     const commandWithoutBrew = bundleCommand;
@@ -168,7 +191,10 @@ export default defineComponent({
     // shows (and what gets copied) instead of copying a hidden variant.
     const simplified = ref(false);
     const currentCommand = computed(() =>
-      (simplified.value ? commandWithoutBrew : commandWithBrew).trimEnd()
+      (simplified.value
+        ? commandWithoutBrew.value
+        : commandWithBrew.value
+      ).trimEnd()
     );
 
     const copied = ref(false);
